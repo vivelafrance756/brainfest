@@ -97,11 +97,9 @@ Fichiers concernés : `sante-naturelle.html`, `memoire.html`, et tout autre fich
 - [ ] **5.** Configurer le domaine personnalisé dans les paramètres GitHub Pages
 - [ ] **6.** Configurer les DNS chez le registrar de brainfest.eu
 - [ ] **7.** Vérifier la propagation DNS et activer HTTPS
-- [ ] **8.** Mettre à jour les URLs canoniques dans tous les fichiers HTML concernés
-- [ ] **9.** Pousser la mise à jour des canonicals sur GitHub
+- [x] **8.** Mettre à jour les URLs canoniques dans tous les fichiers HTML concernés
+- [x] **9.** Pousser la mise à jour des canonicals sur GitHub
 
 
 
-*Dernière mise à jour : 2026-03-26 — Étapes 1–4 complétées : bugs corrigés, CNAME créé, tout poussé sur GitHub.*
-Read PLAN.md and continue. We are now on step 8: update all canonical URLs in all HTML files from the old URLs to https://brainfest.eu. Then push to GitHub on account vivelafrance756/brainfest.
-Read PLAN.md and continue. We are now on step 8: update all canonical URLs in all HTML files from the old URLs to https://brainfest.eu. Then push to GitHub on account vivelafrance756/brainfest.
+*Dernière mise à jour : 2026-03-27 — Étapes 8–9 complétées : URLs canoniques mises à jour vers brainfest.eu. Push en attente d'auth vivelafrance756.*
