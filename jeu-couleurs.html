@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BrainFest — Mémoire des Couleurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#f7f3ec; --charcoal:#2a2520; --grey:#7a7268;
+  --grey-light:#f0ede8; --white:#fff; --sage:#3d6b4a;
+  --gold:#c9a84c; --terra:#c4784a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);}
+.layout{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
+
+/* HEADER */
+.header{flex-shrink:0;background:var(--charcoal);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;}
+.brand-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.game-title{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,3.5vw,18px);color:white;font-weight:300;}
+.game-title em{font-style:italic;color:rgba(201,168,76,0.85);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.level-badge{background:rgba(255,255,255,0.1);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:white;}
+.icon-btn{background:rgba(255,255,255,0.1);border:none;border-radius:20px;padding:4px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,0.75);cursor:pointer;letter-spacing:0.5px;}
+
+/* SEQ DOTS */
+.seq-zone{flex-shrink:0;padding:6px 18px 4px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.seq-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.seq-dots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;min-height:20px;}
+.seq-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(0,0,0,0.08);transition:transform 0.15s;}
+.seq-dot.lit{transform:scale(1.35);box-shadow:0 0 10px rgba(0,0,0,0.2);}
+
+/* STATUS */
+.status-zone{flex-shrink:0;text-align:center;padding:4px 18px;min-height:36px;}
+.status-msg{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,4vw,22px);font-weight:400;line-height:1.3;}
+.status-sub{font-size:11px;color:var(--grey);margin-top:2px;}
+
+/* GRID */
+.grid-zone{flex:1;display:flex;align-items:center;justify-content:center;padding:6px 12px;min-height:0;overflow:hidden;}
+.color-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;height:100%;max-width:320px;max-height:calc(100% - 4px);}
+.color-btn{
+  aspect-ratio:1;border-radius:20px;border:3px solid rgba(255,255,255,0.35);
+  cursor:pointer;transition:transform 0.1s,box-shadow 0.15s,border-color 0.15s;
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);position:relative;
+}
+.color-btn:active{transform:scale(0.93);}
+.color-btn.flash{transform:scale(1.07);box-shadow:0 8px 26px rgba(0,0,0,0.28);border-color:rgba(255,255,255,0.9);}
+.color-btn.correct-flash{border-color:white;box-shadow:0 0 0 4px rgba(255,255,255,0.45);}
+.color-btn.wrong-flash{animation:shake 0.35s ease;}
+.color-btn:disabled{cursor:default;opacity:0.7;}
+.color-label{font-size:clamp(10px,2.5vw,12px);font-weight:700;color:rgba(255,255,255,0.9);letter-spacing:0.8px;text-transform:uppercase;text-shadow:0 1px 3px rgba(0,0,0,0.35);}
+
+/* INTRO / RESULT */
+.center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 18px;gap:16px;text-align:center;}
+.big-emoji{font-size:54px;}
+.big-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,5vw,30px);font-weight:400;line-height:1.3;}
+.big-title em{font-style:italic;color:var(--terra);}
+.intro-sub{font-size:13px;color:var(--grey);line-height:1.7;max-width:300px;}
+.rule-box{background:var(--grey-light);border-radius:12px;padding:12px 16px;font-size:12px;line-height:1.8;color:var(--charcoal);max-width:320px;width:100%;text-align:left;}
+.result-num{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;color:var(--charcoal);line-height:1;}
+.result-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.result-msg{font-size:13px;color:var(--grey);line-height:1.7;max-width:300px;}
+.best-badge{background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:6px 18px;font-size:12px;color:#7a5a00;font-weight:600;}
+
+/* BOTTOM */
+.bottom-bar{flex-shrink:0;padding:8px 18px;background:var(--white);border-top:1px solid var(--grey-light);}
+.btn{width:100%;padding:13px;border-radius:50px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.btn-dark{background:var(--charcoal);color:white;}
+.btn-sage{background:var(--sage);color:white;}
+
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}50%{transform:translateX(5px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fadein{animation:fadeUp 0.3s ease;}
+</style>
+</head>
+<body>
+
+
+<div class="layout">
+  <div class="header">
+    <div>
+      <div class="brand-tag">BrainFest · <span id="hCat"></span></div>
+      <div class="game-title" id="hTitle"></div>
+    </div>
+    <div class="header-right">
+      <div class="level-badge" id="lvlBadge">Niv. 1</div>
+      <button class="icon-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+    </div>
+  </div>
+
+  <div class="seq-zone">
+    <div class="seq-label" id="seqLabel"></div>
+    <div class="seq-dots" id="seqDots"></div>
+  </div>
+
+  <div class="status-zone">
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="status-sub" id="statusSub"></div>
+  </div>
+
+  <div class="grid-zone" id="gridZone"></div>
+  <div class="bottom-bar" id="bb"></div>
+</div>
+
+<script>
+// ══════════════════
+// DATA
+// ══════════════════
+const COLORS = [
+  {id:'red',    hex:'#d94f4f', fr:'Rouge',  en:'Red'},
+  {id:'blue',   hex:'#4a7fb5', fr:'Bleu',   en:'Blue'},
+  {id:'green',  hex:'#4a9a5e', fr:'Vert',   en:'Green'},
+  {id:'yellow', hex:'#d4aa30', fr:'Jaune',  en:'Yellow'},
+  {id:'purple', hex:'#8a5ab5', fr:'Violet', en:'Purple'},
+  {id:'orange', hex:'#d97030', fr:'Orange', en:'Orange'},
+];
+
+const T = {
+  fr:{
+    cat:'Entraînez votre mémoire',
+    title:'Mémoire des <em>Couleurs</em>',
+    intro_title:'Votre mémoire a de la <em>couleur</em>',
+    intro_sub:'Regardez la séquence s\'allumer, puis reproduisez-la dans l\'ordre. Chaque niveau ajoute une couleur.',
+    rule:'👁 Regardez la séquence · 🎨 Reproduisez-la dans l\'ordre · ∞ Sans limite !',
+    btn_start:'Commencer 🎨',
+    btn_replay:'🔄 Rejouer',
+    watch:'Regardez bien...',
+    your_turn:'À vous !',
+    click_hint:'Cliquez sur la bonne couleur',
+    bravo:'Bravo !',
+    oops:'Oops !',
+    next:'Niveau suivant...',
+    wrong_was:'C\'était :',
+    seq:'Séquence',
+    lvl:'Niv.',
+    result_lbl:'niveau atteint',
+    result_great:'Mémoire d\'exception ! 🏆',
+    result_good:'Belle performance ! 🌟',
+    result_ok:'Bonne tentative ! 🌱',
+    msg_great:'Votre mémoire de travail est remarquable. Les neuroscientifiques seraient légèrement jaloux.',
+    msg_good:'Solide ! La moyenne humaine tourne autour du niveau 7.',
+    msg_ok:'La mémoire se muscle comme le reste. Chaque partie compte.',
+    best:'Meilleur',
+  },
+  en:{
+    cat:'Train your memory',
+    title:'Memory of <em>Colours</em>',
+    intro_title:'Your memory is full of <em>colour</em>',
+    intro_sub:'Watch the sequence light up, then reproduce it in order. Each level adds one colour.',
+    rule:'👁 Watch the sequence · 🎨 Reproduce it in order · ∞ No limit!',
+    btn_start:'Start 🎨',
+    btn_replay:'🔄 Play again',
+    watch:'Watch carefully...',
+    your_turn:'Your turn!',
+    click_hint:'Click the right colour',
+    bravo:'Bravo!',
+    oops:'Oops!',
+    next:'Next level...',
+    wrong_was:'It was:',
+    seq:'Sequence',
+    lvl:'Lv.',
+    result_lbl:'level reached',
+    result_great:'Exceptional memory! 🏆',
+    result_good:'Great performance! 🌟',
+    result_ok:'Good attempt! 🌱',
+    msg_great:'Your working memory is remarkable. Neuroscientists would be impressed.',
+    msg_good:'Solid! The human average is around level 7.',
+    msg_ok:'Memory works like a muscle. Every game counts.',
+    best:'Best',
+  }
+};
+
+// ══════════════════
+// STATE
+// ══════════════════
+let lang = 'fr';
+let G = {
+  phase: 'intro',
+  sequence: [],
+  inputStep: 0,
+  level: 1,
+  best: 0,
+  musicOn: false,
+  audioCtx: null,
+  gainNode: null,
+};
+
+try { G.best = parseInt(localStorage.getItem('bf_col_best')||'0')||0; } catch(e){}
+
+// ══════════════════
+// LANG
+// ══════════════════
+function setLang(l) {
+  lang = l;
+  document.getElementById('hCat').textContent = T[lang].cat;
+  document.getElementById('hTitle').innerHTML = T[lang].title;
+  render();
+}
+
+// ══════════════════
+// MUSIC
+// ══════════════════
+const NOTE_FREQS = [261.63,293.66,329.63,349.23,392.00,440.00];
+let ambLoop = null;
+
+function initAudio() {
+  if (G.audioCtx) return;
+  G.audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  G.gainNode = G.audioCtx.createGain();
+  G.gainNode.gain.value = 0;
+  G.gainNode.connect(G.audioCtx.destination);
+}
+
+function tone(freq, t, dur, vol) {
+  if (!G.audioCtx) return;
+  const o = G.audioCtx.createOscillator();
+  const g = G.audioCtx.createGain();
+  o.connect(g); g.connect(G.gainNode);
+  o.type = 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.04);
+  g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+  o.start(t); o.stop(t+dur+0.1);
+}
+
+function colorSound(ci) {
+  if (!G.audioCtx) return;
+  initAudio();
+  tone(NOTE_FREQS[ci % NOTE_FREQS.length], G.audioCtx.currentTime, 0.35, 0.15);
+}
+
+function toggleMusic() {
+  initAudio();
+  G.musicOn = !G.musicOn;
+  document.getElementById('musicBtn').textContent = G.musicOn ? '🔇' : '🎵';
+  if (G.musicOn) { G.gainNode.gain.value = 0.8; playAmb(); }
+  else { G.gainNode.gain.value = 0; clearTimeout(ambLoop); }
+}
+
+function playAmb() {
+  if (!G.musicOn) return;
+  const now = G.audioCtx.currentTime;
+  [329.63,261.63,392.00,440.00,329.63,293.66].forEach((f,i) => tone(f, now+i*0.85, 1.0, 0.04));
+  ambLoop = setTimeout(playAmb, 5200);
+}
+
+// ══════════════════
+// SPEECH SYNTHESIS
+// ══════════════════
+function speakGoodbye(onEnd) {
+  const text = lang === 'fr'
+    ? 'Tu peux rejouer quand tu veux... à bientôt !'
+    : 'You can play again whenever you like... see you soon!';
+  if (!window.speechSynthesis) { if (onEnd) setTimeout(onEnd, 400); return; }
+  window.speechSynthesis.cancel();
+  function go() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'fr' ? 'fr-FR' : 'en-GB';
+    u.rate = 0.88; u.pitch = 1.15; u.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const pref = ['Amélie','Lea','Léa','Marie','Audrey','Julie','Alice','Samantha','Karen','Fiona','Victoria'];
+    const v = voices.find(v => v.lang.startsWith(lang==='fr'?'fr':'en') && pref.some(p => v.name.includes(p)))
+           || voices.find(v => v.lang.startsWith(lang==='fr'?'fr':'en'));
+    if (v) u.voice = v;
+    if (onEnd) { u.onend = onEnd; u.onerror = () => setTimeout(onEnd, 400); }
+    window.speechSynthesis.speak(u);
+  }
+  const vv = window.speechSynthesis.getVoices();
+  if (vv.length) go(); else window.speechSynthesis.onvoiceschanged = go;
+}
+
+function speak(text, onEnd) {
+  if (!window.speechSynthesis) { if (onEnd) setTimeout(onEnd, 400); return; }
+  window.speechSynthesis.cancel();
+  function go() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'fr' ? 'fr-FR' : 'en-GB';
+    u.rate = 1.05; u.pitch = 1.25; u.volume = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const pref = ['Amélie','Lea','Léa','Marie','Audrey','Julie','Alice','Samantha','Karen','Fiona','Victoria','Nicky','Tessa'];
+    const v = voices.find(v => v.lang.startsWith(lang==='fr'?'fr':'en') && pref.some(p => v.name.includes(p)))
+           || voices.find(v => v.lang.startsWith(lang==='fr'?'fr':'en'));
+    if (v) u.voice = v;
+    if (onEnd) { u.onend = onEnd; u.onerror = () => setTimeout(onEnd, 300); }
+    window.speechSynthesis.speak(u);
+  }
+  const vv = window.speechSynthesis.getVoices();
+  if (vv.length) go();
+  else window.speechSynthesis.onvoiceschanged = go;
+}
+
+// ══════════════════
+// GAME
+// ══════════════════
+function startGame() {
+  G.phase = 'watch';
+  G.sequence = [];
+  G.level = 1;
+  G.inputStep = 0;
+  addColor();
+  render();
+  setTimeout(playSequence, 600);
+}
+
+function addColor() {
+  const max = COLORS.length;
+  const last = G.sequence.length > 0 ? G.sequence[G.sequence.length-1] : -1;
+  let next;
+  let tries = 0;
+  do {
+    next = Math.floor(Math.random() * max);
+    tries++;
+  } while (next === last && tries < 20);
+  G.sequence.push(next);
+}
+
+function playSequence() {
+  G.phase = 'watch';
+  setStatus(T[lang].watch, '');
+  disableGrid(true);
+  updateSeqDots();
+  let i = 0;
+  const speed = Math.max(550, 900 - G.level * 25);
+  function next() {
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('flash'));
+    if (i >= G.sequence.length) {
+      setTimeout(startInput, 500);
+      return;
+    }
+    const ci = G.sequence[i];
+    const btn = document.querySelector(`[data-ci="${ci}"]`);
+    if (btn) btn.classList.add('flash');
+    colorSound(ci);
+    updateSeqDots(i);
+    i++;
+    setTimeout(next, speed);
+  }
+  next();
+}
+
+function startInput() {
+  G.phase = 'input';
+  G.inputStep = 0;
+  document.querySelectorAll('.color-btn').forEach(b => { b.classList.remove('flash'); b.disabled = false; });
+  setStatus(T[lang].your_turn, T[lang].click_hint);
+  updateSeqDots(-1);
+}
+
+function handlePick(ci) {
+  if (G.phase !== 'input') return;
+  const expected = G.sequence[G.inputStep];
+  const btn = document.querySelector(`[data-ci="${ci}"]`);
+
+  if (ci === expected) {
+    if (btn) { btn.classList.add('correct-flash'); setTimeout(() => btn.classList.remove('correct-flash'), 400); }
+    colorSound(ci);
+    G.inputStep++;
+    updateSeqDots(G.inputStep-1, true);
+
+    if (G.inputStep >= G.sequence.length) {
+      G.phase = 'watch';
+      disableGrid(true);
+      setStatus(T[lang].bravo, T[lang].next);
+      setTimeout(() => {
+        G.level++;
+        document.getElementById('lvlBadge').textContent = T[lang].lvl+' '+G.level;
+        addColor();
+        G.inputStep = 0;
+        setTimeout(playSequence, 400);
+      }, 700);
+    }
+  } else {
+    G.phase = 'result';
+    disableGrid(true);
+    if (btn) btn.classList.add('wrong-flash');
+    const expName = lang === 'fr' ? COLORS[expected].fr : COLORS[expected].en;
+    setStatus(T[lang].oops, T[lang].wrong_was+' '+expName);
+    speakGoodbye(() => {
+      setTimeout(() => {
+        if (G.level > G.best) { G.best = G.level; try { localStorage.setItem('bf_col_best', G.best); } catch(e) {} }
+        setTimeout(render, 600);
+      }, 700);
+    });
+  }
+}
+
+// ══════════════════
+// RENDER
+// ══════════════════
+function render() {
+  const gz = document.getElementById('gridZone');
+  const bb = document.getElementById('bb');
+  gz.innerHTML = ''; bb.innerHTML = '';
+  document.getElementById('lvlBadge').textContent = T[lang].lvl+' '+G.level;
+  document.getElementById('seqLabel').textContent = G.sequence.length ? T[lang].seq+' — '+G.sequence.length : '';
+
+  if (G.phase === 'intro') renderIntro(gz, bb);
+  else if (G.phase === 'result') renderResult(gz, bb);
+  else renderGrid(gz, bb);
+}
+
+function renderIntro(gz, bb) {
+  setStatus('', '');
+  updateSeqDots();
+  gz.innerHTML = `<div class="center-wrap fadein">
+    <div class="big-emoji">🎨</div>
+    <div class="big-title">${T[lang].intro_title}</div>
+    <div class="intro-sub">${T[lang].intro_sub}</div>
+    <div class="rule-box">${T[lang].rule}</div>
+  </div>`;
+  bb.innerHTML = `<button class="btn btn-dark" onclick="startGame()">${T[lang].btn_start}</button>`;
+}
+
+function renderGrid(gz, bb) {
+  const g = document.createElement('div');
+  g.className = 'color-grid fadein';
+  COLORS.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'color-btn';
+    btn.setAttribute('data-ci', i);
+    btn.style.background = c.hex;
+    btn.disabled = (G.phase !== 'input');
+    btn.innerHTML = `<span class="color-label">${lang==='fr'?c.fr:c.en}</span>`;
+    btn.onclick = () => handlePick(i);
+    g.appendChild(btn);
+  });
+  gz.appendChild(g);
+}
+
+function renderResult(gz, bb) {
+  setStatus('', '');
+  const l = G.level;
+  const tk = l>=8 ? 'result_great' : l>=5 ? 'result_good' : 'result_ok';
+  const mk = l>=8 ? 'msg_great' : l>=5 ? 'msg_good' : 'msg_ok';
+  gz.innerHTML = `<div class="center-wrap fadein">
+    <div class="result-num">${l}</div>
+    <div class="result-lbl">${T[lang].result_lbl}</div>
+    <div class="big-title">${T[lang][tk]}</div>
+    <div class="result-msg">${T[lang][mk]}</div>
+    ${G.best>0 ? `<div class="best-badge">🏅 ${T[lang].best} : ${G.best}</div>` : ''}
+  </div>`;
+  bb.innerHTML = `<button class="btn btn-sage" onclick="restartGame()">${T[lang].btn_replay}</button>`;
+}
+
+// ══════════════════
+// HELPERS
+// ══════════════════
+function setStatus(msg, sub) {
+  document.getElementById('statusMsg').textContent = msg;
+  document.getElementById('statusSub').textContent = sub;
+}
+
+function disableGrid(dis) {
+  document.querySelectorAll('.color-btn').forEach(b => b.disabled = dis);
+}
+
+function updateSeqDots(activeIdx, done) {
+  const d = document.getElementById('seqDots');
+  if (!d) return;
+  d.innerHTML = '';
+  G.sequence.forEach((ci, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'seq-dot' + (i===activeIdx ? ' lit' : '');
+    const filled = (G.phase==='watch' && i<=activeIdx) || (G.phase==='input' && i<G.inputStep);
+    dot.style.background = filled ? COLORS[ci].hex : 'var(--grey-light)';
+    if (filled) dot.style.borderColor = 'rgba(0,0,0,0.1)';
+    d.appendChild(dot);
+  });
+}
+
+function restartGame() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  G.phase = 'intro';
+  G.sequence = [];
+  G.level = 1;
+  G.inputStep = 0;
+  render();
+}
+
+// Boot
+setLang('fr');
+if (window.speechSynthesis) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
+</script>
+</body>
+</html>

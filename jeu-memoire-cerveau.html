@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BrainFest — Le Cerveau en Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:#3d6b4a; --sage-light:#e8f5ec; --sage-mid:#6b9e78;
+  --terra:#c4784a; --gold:#c9a84c; --gold-light:rgba(201,168,76,0.15);
+  --cream:#f7f3ec; --charcoal:#2a2520; --grey:#7a7268; --grey-light:#f0ede8;
+  --white:#ffffff;
+  --timer-full:#4a8c5c; --timer-warn:#c9a84c; --timer-danger:#b04040;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);}
+.layout{display:flex;flex-direction:column;height:100vh;width:100%;max-width:680px;margin:0 auto;}
+
+/* LANG SCREEN */
+.lang-screen{position:fixed;inset:0;background:var(--sage);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;z-index:100;transition:opacity 0.5s;}
+.lang-screen.hidden{opacity:0;pointer-events:none;}
+.lang-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,6vw,42px);color:var(--white);font-weight:400;text-align:center;line-height:1.2;}
+.lang-logo em{font-style:italic;color:rgba(201,168,76,0.9);}
+.lang-sub{font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;text-transform:uppercase;}
+.lang-btns{display:flex;gap:16px;}
+.lang-btn{padding:14px 32px;border-radius:50px;border:2px solid rgba(255,255,255,0.3);background:transparent;color:white;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.lang-btn:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.6);}
+.lang-btn.selected{background:white;color:var(--sage);border-color:white;}
+
+/* HEADER */
+.header{flex-shrink:0;background:var(--sage);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;}
+.header-left{display:flex;flex-direction:column;}
+.brand-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.game-title{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,3.5vw,20px);color:white;font-weight:400;line-height:1.2;}
+.game-title em{font-style:italic;color:rgba(201,168,76,0.9);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.score-badge{background:rgba(255,255,255,0.15);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;color:white;}
+.music-btn{background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.music-btn:hover{background:rgba(255,255,255,0.25);}
+.lang-switch{background:rgba(255,255,255,0.12);border:none;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,0.8);cursor:pointer;letter-spacing:1px;}
+.lang-switch:hover{background:rgba(255,255,255,0.2);}
+
+/* TIMER BAR */
+.timer-wrap{display:none;}
+
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-height:0;}
+.content::-webkit-scrollbar{width:3px;}
+.content::-webkit-scrollbar-thumb{background:var(--grey-light);border-radius:3px;}
+
+/* INTRO */
+.intro-emoji{text-align:center;font-size:52px;margin:8px 0;}
+.intro-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5vw,28px);font-weight:600;text-align:center;line-height:1.3;}
+.intro-sub{font-size:13px;line-height:1.7;color:var(--grey);text-align:center;}
+.difficulty-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-light);border:1px solid rgba(201,168,76,0.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:#7a5a00;align-self:center;}
+.rules-box{background:var(--sage-light);border-left:3px solid var(--sage);border-radius:10px;padding:12px 16px;font-size:12px;line-height:1.7;color:var(--sage);}
+
+/* QUESTION */
+.q-header{display:flex;align-items:center;justify-content:space-between;}
+.q-num{font-size:10px;color:var(--grey);letter-spacing:1px;text-transform:uppercase;}
+.q-diff{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.diff-easy{background:#e8f5ec;color:#3d6b4a;}
+.diff-medium{background:#fff3e0;color:#b36a00;}
+.diff-hard{background:#fce4ec;color:#ad1457;}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,4vw,22px);font-weight:600;line-height:1.45;}
+.timer-text{display:none;}
+
+
+
+/* VOICE */
+.voice-zone{display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px;}
+.mic-btn{width:72px;height:72px;border-radius:50%;background:var(--terra);border:none;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;box-shadow:0 4px 16px rgba(196,120,74,0.3);}
+.mic-btn:hover{transform:scale(1.05);box-shadow:0 6px 20px rgba(196,120,74,0.4);}
+.mic-btn.listening{background:var(--timer-danger);animation:pulse 1s ease-in-out infinite;}
+.mic-btn.disabled{background:var(--grey-light);box-shadow:none;cursor:default;}
+.mic-label{font-size:11px;color:var(--grey);letter-spacing:1px;text-transform:uppercase;}
+.transcript-box{background:var(--white);border:1.5px solid var(--grey-light);border-radius:12px;padding:10px 16px;font-size:14px;color:var(--charcoal);min-height:40px;text-align:center;font-style:italic;width:100%;}
+.transcript-box.active{border-color:var(--terra);}
+
+/* OPTIONS (alternative to voice) */
+.or-divider{display:flex;align-items:center;gap:10px;font-size:10px;color:var(--grey);letter-spacing:1px;text-transform:uppercase;}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--grey-light);}
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:12px;border:1.5px solid var(--grey-light);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--charcoal);text-align:left;transition:all 0.18s;width:100%;line-height:1.45;}
+.opt:hover:not(:disabled){border-color:var(--terra);background:#fdf6f2;}
+.opt-letter{width:28px;height:28px;border-radius:50%;background:var(--grey-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;transition:all 0.18s;}
+.opt.correct{border-color:var(--sage);background:var(--sage-light);}
+.opt.correct .opt-letter{background:var(--sage);color:white;}
+.opt.wrong{border-color:#b04040;background:rgba(176,64,64,0.06);}
+.opt.wrong .opt-letter{background:#b04040;color:white;}
+.opt:disabled{cursor:default;}
+
+/* FEEDBACK */
+.feedback{font-size:13px;line-height:1.65;padding:12px 16px;border-radius:12px;border-left:3px solid;}
+.feedback.ok{background:rgba(74,140,92,0.08);border-color:var(--sage);color:#1a4a2a;}
+.feedback.ko{background:rgba(176,64,64,0.06);border-color:#b04040;color:#6a2020;}
+.feedback.timeout{background:rgba(201,168,76,0.1);border-color:var(--gold);color:#7a5a00;}
+.wit-box{font-size:11px;line-height:1.6;padding:8px 14px;border-radius:10px;background:var(--gold-light);border-left:2px solid var(--gold);color:var(--charcoal);font-style:italic;}
+
+/* RESULTS */
+.result-score{font-family:'Cormorant Garamond',serif;font-size:60px;font-weight:600;color:var(--sage);text-align:center;line-height:1;}
+.result-pct{font-size:12px;color:var(--grey);text-align:center;letter-spacing:1px;margin-bottom:4px;}
+.result-title{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,4vw,24px);font-weight:600;text-align:center;line-height:1.3;}
+.result-msg{font-size:13px;line-height:1.65;padding:12px 16px;border-radius:12px;text-align:center;}
+.result-good{background:rgba(74,140,92,0.1);color:#1a4a2a;}
+.result-avg{background:rgba(201,168,76,0.1);color:#7a5a00;}
+.result-low{background:rgba(176,64,64,0.06);color:#6a2020;}
+.stats-row{display:flex;gap:8px;}
+.stat-box{flex:1;background:var(--white);border-radius:12px;padding:10px;text-align:center;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--sage);}
+.stat-label{font-size:10px;color:var(--grey);letter-spacing:0.5px;}
+
+/* BOTTOM */
+.bottom-bar{flex-shrink:0;padding:10px 18px;background:var(--white);border-top:1px solid var(--grey-light);}
+.btn{width:100%;padding:14px 20px;border-radius:50px;border:none;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;display:block;text-align:center;}
+.btn-primary{background:var(--terra);color:white;}
+.btn-sage{background:var(--sage);color:white;}
+.btn-outline{background:transparent;color:var(--sage);border:1.5px solid var(--sage);}
+
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 4px 16px rgba(176,64,64,0.3);}50%{transform:scale(1.08);box-shadow:0 6px 24px rgba(176,64,64,0.5);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fadein{animation:fadeUp 0.3s ease;}
+</style>
+</head>
+<body>
+
+<!-- LANG SELECTION -->
+<div class="lang-screen" id="langScreen">
+  <div class="lang-logo">BrainFest<br><em>Le Cerveau en Questions</em><br><span style="font-size:0.6em;font-style:normal;color:rgba(255,255,255,0.5);font-family:'DM Sans',sans-serif;letter-spacing:2px;text-transform:uppercase;">The Brain in Questions</span></div>
+  <div class="lang-sub">Choose your language / Choisissez votre langue</div>
+  <div class="lang-btns">
+    <button class="lang-btn" id="btnFR" onclick="setLang('fr')">🇫🇷 Français</button>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">🇬🇧 English</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="header">
+    <div class="header-left">
+      <div class="brand-tag">BrainFest · <span id="hCat"></span></div>
+      <div class="game-title" id="hTitle"></div>
+    </div>
+    <div class="header-right">
+      <div class="score-badge" id="scoreBadge">0 pts</div>
+      <button class="lang-switch" id="langSwitchBtn" onclick="showLangScreen()"></button>
+      <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Musique">🎵</button>
+    </div>
+  </div>
+  <div class="timer-wrap"><div class="timer-bar" id="timerBar"></div></div>
+  <div class="content" id="ct"></div>
+  <div class="bottom-bar" id="bb"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONTENT — FR & EN
+// ═══════════════════════════════════════
+const T = {
+  fr: {
+    cat: "Mémoire & Cerveau",
+    title: "Le Cerveau en <em>Questions</em>",
+    intro_title: "Votre cerveau vous réserve des surprises",
+    intro_sub: "Un quiz chrono sur la mémoire, les neurosciences et le fonctionnement du cerveau. La difficulté s'adapte à vos réponses — et quelques vérités surprenantes vous attendent.",
+    rules: "🧠 <strong>Règle :</strong> Répondez à votre rythme. La difficulté évolue selon votre niveau. Les questions sont lues à voix haute — activez le son !",
+    diff_auto: "🧠 Difficulté adaptative",
+    btn_start: "Activer mes neurones 🧠",
+    btn_next: "Question suivante →",
+    btn_restart: "🔄 Rejouer",
+    btn_voice: "Répondre à voix haute 🎤",
+    btn_click: "Répondre en cliquant",
+    mic_listen: "J'écoute...",
+    mic_tap: "Appuyez pour parler",
+    mic_result: "J'ai entendu :",
+    mic_notfound: "Pas compris — cliquez sur une réponse",
+    or: "ou",
+    easy: "Débutant·e", medium: "Confirmé·e", hard: "Expert·e",
+    timeout_title: "Temps écoulé !",
+    score_label: "pts",
+    result_title_great: "Cerveau d'exception ! 🏆",
+    result_title_good: "Beau parcours ! 🌟",
+    result_title_ok: "Les neurones chauffent ! 🌱",
+    result_sub_great: "Vous connaissez votre cerveau mieux que la plupart des neurologues en vacances.",
+    result_sub_good: "Solide ! Quelques zones grises — mais c'est précisément là qu'on apprend.",
+    result_sub_ok: "Votre cerveau a survécu. C'est déjà remarquable.",
+    stat_correct: "Bonnes réponses",
+    stat_speed: "Vitesse moy.",
+    stat_score: "Score total",
+    cta_title: "🌿 Pour aller plus loin",
+    cta_text: "Un accompagnement en naturopathie peut soutenir vos capacités cognitives naturellement.",
+    cta_btn: "En savoir plus"
+  },
+  en: {
+    cat: "Memory & Brain",
+    title: "The Brain in <em>Questions</em>",
+    intro_title: "Your brain has a few surprises in store",
+    intro_sub: "A timed quiz on memory, neuroscience and how the brain works. Difficulty adapts to your answers — and a few surprising truths await.",
+    rules: "🧠 <strong>Rule:</strong> Answer at your own pace. Difficulty evolves with your level. Questions are read aloud — turn on your sound!",
+    diff_auto: "🧠 Adaptive difficulty",
+    btn_start: "Activate my neurons 🧠",
+    btn_next: "Next question →",
+    btn_restart: "🔄 Play again",
+    btn_voice: "Answer out loud 🎤",
+    btn_click: "Click to answer",
+    mic_listen: "Listening...",
+    mic_tap: "Tap to speak",
+    mic_result: "I heard:",
+    mic_notfound: "Not understood — click an answer",
+    or: "or",
+    easy: "Beginner", medium: "Intermediate", hard: "Expert",
+    timeout_title: "Time's up!",
+    score_label: "pts",
+    result_title_great: "Exceptional brain! 🏆",
+    result_title_good: "Great performance! 🌟",
+    result_title_ok: "Neurons warming up! 🌱",
+    result_sub_great: "You know your brain better than most neurologists on holiday.",
+    result_sub_good: "Solid! A few grey areas — but that's precisely where learning happens.",
+    result_sub_ok: "Your brain survived. That's already remarkable.",
+    stat_correct: "Correct answers",
+    stat_speed: "Avg. speed",
+    stat_score: "Total score",
+    cta_title: "🌿 Go further",
+    cta_text: "Naturopathy can naturally support your cognitive abilities.",
+    cta_btn: "Learn more"
+  }
+};
+
+// ═══════════════════════════════════════
+// QUESTIONS — FR & EN (10 questions, 3 levels)
+// ═══════════════════════════════════════
+const QS = {
+  fr: [
+    // EASY
+    {d:'easy',t:15,q:"Quelle partie du cerveau est surnommée le 'chef d'orchestre' des émotions ?",o:["Le cervelet","L'amygdale","Le thalamus","Le corps calleux"],c:1,ok:"✅ L'amygdale traite et régule les émotions — notamment la peur et le plaisir. Elle travaille même pendant votre sommeil, sans préavis.",ko:"❌ C'est l'amygdale — pas l'amygdale de la gorge, celle du cerveau. Un nom trompeur qui a causé bien des confusions anatomiques.",wit:"L'amygdale est en réunion permanente. Elle ne prend jamais de congés."},
+    {d:'easy',t:15,q:"Combien de neurones possède environ le cerveau humain ?",o:["86 milliards","1 milliard","500 millions","1 trillion"],c:0,ok:"✅ 86 milliards de neurones — plus que les étoiles visibles à l'œil nu depuis la Terre. Votre crâne contient un univers.",ko:"❌ 86 milliards ! C'est le chiffre retenu par les neurosciences modernes. Pas mal pour 1,4 kg de matière grise.",wit:"86 milliards de neurones et on oublie encore où on a mis ses clés."},
+    {d:'easy',t:15,q:"Quelle est la durée moyenne d'un cycle de sommeil complet ?",o:["30 minutes","90 minutes","3 heures","45 minutes"],c:1,ok:"✅ 90 minutes par cycle, avec plusieurs phases dont le sommeil paradoxal où les rêves se produisent.",ko:"❌ Un cycle dure 90 minutes. On en fait généralement 4 à 6 par nuit — idéalement.",wit:"90 minutes : la durée d'un film moyen. Votre cerveau est un cinéphile involontaire."},
+    // MEDIUM
+    {d:'medium',t:12,q:"La 'potentialisation à long terme' (LTP) est le mécanisme biologique de :",o:["La digestion","La formation des souvenirs","La régulation hormonale","La vision nocturne"],c:1,ok:"✅ La LTP renforce les connexions synaptiques lors de stimulations répétées — c'est littéralement le substrat neurologique de l'apprentissage.",ko:"❌ La LTP est le mécanisme qui consolide les souvenirs en renforçant les synapses. Hebb l'a résumé : 'Les neurones qui s'activent ensemble, se connectent ensemble.'",wit:"La LTP : votre cerveau qui prend des notes... sans stylo."},
+    {d:'medium',t:12,q:"L'hippocampe joue un rôle central dans :",o:["La régulation de la faim","La mémoire épisodique et la navigation spatiale","La production de dopamine","La coordination motrice"],c:1,ok:"✅ L'hippocampe est essentiel pour la mémoire épisodique (vos souvenirs autobiographiques) et la navigation — les chauffeurs de taxi londonniens ont un hippocampe plus développé.",ko:"❌ L'hippocampe gère la mémoire épisodique et l'orientation spatiale. Sans lui, comme H.M. — le patient le plus étudié de l'histoire — vous ne pourriez plus former de nouveaux souvenirs.",wit:"L'hippocampe des chauffeurs de taxi londoniens est légèrement plus grand. Le GPS a tout gâché."},
+    {d:'medium',t:12,q:"Le cortex préfrontal atteint sa pleine maturité vers quel âge ?",o:["14 ans","18 ans","25 ans","30 ans"],c:2,ok:"✅ 25 ans ! Ce qui explique scientifiquement pourquoi certaines décisions prises à 19 ans méritaient une relecture.",ko:"❌ Le cortex préfrontal — siège du jugement, de la planification, du contrôle des impulsions — n'est pleinement mature qu'à 25 ans.",wit:"25 ans. Les compagnies d'assurance le savaient avant les neuroscientifiques."},
+    // HARD
+    {d:'hard',t:10,q:"Le phénomène de 'consolidation synaptique' implique principalement :",o:["La myélinisation des axones","La synthèse protéique post-apprentissage","La pruning neuronal en adolescence","L'activation des astrocytes"],c:1,ok:"✅ La consolidation synaptique nécessite une synthèse protéique — c'est pourquoi le sommeil est crucial : c'est pendant lui que les protéines de consolidation sont produites.",ko:"❌ La consolidation synaptique requiert une synthèse de nouvelles protéines. Les inhibiteurs de cette synthèse bloquent la formation de souvenirs à long terme.",wit:"Votre cerveau fait de la biochimie la nuit pendant que vous rêvez. Un vrai chimiste clandestin."},
+    {d:'hard',t:10,q:"Le réseau du 'mode par défaut' (DMN) est actif principalement quand :",o:["On résout un problème complexe","On ne fait rien de particulier — rêvasserie, pensée spontanée","On mémorise une liste","On effectue une tâche motrice précise"],c:1,ok:"✅ Le DMN s'active au repos — pendant la rêvasserie, la projection dans le futur, la pensée autobiographique. Il consomme 20% de l'énergie cérébrale même 'au repos'.",ko:"❌ Le DMN (Default Mode Network) s'active précisément quand on ne fait 'rien'. C'est lui qui génère la créativité, l'empathie et la construction du sens de soi.",wit:"Votre cerveau consomme 20% de vos calories même sans rien faire. Il facture le temps de pause."},
+    {d:'hard',t:10,q:"La neurogenèse adulte — formation de nouveaux neurones — est aujourd'hui confirmée dans :",o:["Le cortex visuel","L'hippocampe (gyrus denté)","Le cervelet","Le cortex moteur"],c:1,ok:"✅ La neurogenèse adulte se produit dans le gyrus denté de l'hippocampe. L'exercice physique et un environnement enrichi la stimulent — une découverte qui a révolutionné les neurosciences.",ko:"❌ La neurogenèse adulte a longtemps été un dogme impossible — 'on naît avec tous ses neurones'. Faux ! Elle se produit dans l'hippocampe, stimulée par l'exercice et la nouveauté.",wit:"Votre hippocampe fabrique de nouveaux neurones. Surtout si vous faites du sport. Aucune excuse."},
+    {d:'hard',t:10,q:"La 'myéline' qui entoure les axones neuronaux augmente principalement :",o:["La taille des neurones","La vitesse de conduction des influx nerveux","La production de neurotransmetteurs","La plasticité synaptique"],c:1,ok:"✅ La myéline agit comme un isolant électrique, permettant des vitesses de conduction jusqu'à 120 m/s — contre 0,5 m/s sans myéline. Une autoroute contre un chemin de campagne.",ko:"❌ La myéline est l'isolant des câbles neuronaux. Elle multiplie la vitesse de conduction par 240. La sclérose en plaques est une démyélinisation progressive.",wit:"120 m/s. Votre pensée va plus vite que vous ne le pensez. C'est presque philosophique."}
+  ],
+  en: [
+    {d:'easy',t:15,q:"Which part of the brain is nicknamed the 'conductor' of emotions?",o:["The cerebellum","The amygdala","The thalamus","The corpus callosum"],c:1,ok:"✅ The amygdala processes and regulates emotions — especially fear and pleasure. It keeps working during your sleep, without notice.",ko:"❌ It's the amygdala — not the tonsil in your throat, the one in your brain. A misleading name that has caused quite a bit of anatomical confusion.",wit:"The amygdala is in permanent session. It never takes days off."},
+    {d:'easy',t:15,q:"Approximately how many neurons does the human brain contain?",o:["86 billion","1 billion","500 million","1 trillion"],c:0,ok:"✅ 86 billion neurons — more than the stars visible to the naked eye from Earth. Your skull contains a universe.",ko:"❌ 86 billion! That's the figure retained by modern neuroscience. Not bad for 1.4 kg of grey matter.",wit:"86 billion neurons and we still forget where we put our keys."},
+    {d:'easy',t:15,q:"What is the average duration of a complete sleep cycle?",o:["30 minutes","90 minutes","3 hours","45 minutes"],c:1,ok:"✅ 90 minutes per cycle, with several phases including REM sleep where dreams occur.",ko:"❌ A cycle lasts 90 minutes. We typically go through 4 to 6 per night — ideally.",wit:"90 minutes: the length of an average film. Your brain is an involuntary cinephile."},
+    {d:'medium',t:12,q:"'Long-term potentiation' (LTP) is the biological mechanism behind:",o:["Digestion","Memory formation","Hormonal regulation","Night vision"],c:1,ok:"✅ LTP strengthens synaptic connections through repeated stimulation — it is literally the neurological substrate of learning.",ko:"❌ LTP is the mechanism that consolidates memories by strengthening synapses. Hebb summarised it: 'Neurons that fire together, wire together.'",wit:"LTP: your brain taking notes... without a pen."},
+    {d:'medium',t:12,q:"The hippocampus plays a central role in:",o:["Regulating hunger","Episodic memory and spatial navigation","Dopamine production","Motor coordination"],c:1,ok:"✅ The hippocampus is essential for episodic memory (your autobiographical memories) and navigation — London cab drivers have a measurably larger hippocampus.",ko:"❌ The hippocampus manages episodic memory and spatial orientation. Without it — like patient H.M., the most studied person in history — you could no longer form new memories.",wit:"London cab drivers have a slightly larger hippocampus. GPS ruined everything."},
+    {d:'medium',t:12,q:"The prefrontal cortex reaches full maturity at approximately what age?",o:["14","18","25","30"],c:2,ok:"✅ Age 25! Which scientifically explains why certain decisions made at 19 deserved a second look.",ko:"❌ The prefrontal cortex — seat of judgement, planning and impulse control — is not fully mature until age 25.",wit:"Age 25. Insurance companies knew this before neuroscientists did."},
+    {d:'hard',t:10,q:"'Synaptic consolidation' primarily involves:",o:["Axon myelination","Post-learning protein synthesis","Adolescent neural pruning","Astrocyte activation"],c:1,ok:"✅ Synaptic consolidation requires protein synthesis — which is why sleep is crucial: consolidation proteins are produced during sleep.",ko:"❌ Synaptic consolidation requires new protein synthesis. Inhibitors of this synthesis block long-term memory formation.",wit:"Your brain does biochemistry at night while you dream. A true underground chemist."},
+    {d:'hard',t:10,q:"The 'Default Mode Network' (DMN) is primarily active when:",o:["Solving a complex problem","Doing nothing in particular — daydreaming, spontaneous thought","Memorising a list","Performing a precise motor task"],c:1,ok:"✅ The DMN activates at rest — during daydreaming, future projection, autobiographical thinking. It consumes 20% of brain energy even 'at rest'.",ko:"❌ The DMN activates precisely when we're doing 'nothing'. It generates creativity, empathy and the construction of the sense of self.",wit:"Your brain consumes 20% of your calories even doing nothing. It charges for break time."},
+    {d:'hard',t:10,q:"Adult neurogenesis — the formation of new neurons — is now confirmed in:",o:["The visual cortex","The hippocampus (dentate gyrus)","The cerebellum","The motor cortex"],c:1,ok:"✅ Adult neurogenesis occurs in the dentate gyrus of the hippocampus. Physical exercise and an enriched environment stimulate it — a discovery that revolutionised neuroscience.",ko:"❌ Adult neurogenesis was long considered impossible — 'you're born with all your neurons'. Wrong! It occurs in the hippocampus, stimulated by exercise and novelty.",wit:"Your hippocampus makes new neurons. Especially if you exercise. No excuses."},
+    {d:'hard',t:10,q:"The 'myelin' surrounding neuronal axons primarily increases:",o:["Neuron size","The speed of nerve impulse conduction","Neurotransmitter production","Synaptic plasticity"],c:1,ok:"✅ Myelin acts as electrical insulation, enabling conduction speeds up to 120 m/s — vs 0.5 m/s without myelin. A motorway versus a country lane.",ko:"❌ Myelin is the insulation of neural cables. It multiplies conduction speed by 240. Multiple sclerosis is progressive demyelination.",wit:"120 m/s. Your thoughts travel faster than you think. That's almost philosophical."}
+  ]
+};
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let lang = 'fr';
+let S = {
+  screen: 'intro',
+  qi: 0,
+  order: [],
+  answered: false,
+  sel: null,
+  score: 0,
+  correct: 0,
+  times: [],
+  timerInterval: null,
+  timeLeft: 15,
+  totalTime: 15,
+  diffLevel: 0, // 0=easy, 1=medium, 2=hard
+  streak: 0,
+  voiceMode: false,
+  listening: false,
+  recognition: null,
+  musicPlaying: false,
+  audioCtx: null,
+  gainNode: null,
+  musicNodes: []
+};
+
+// ═══════════════════════════════════════
+// LANG
+// ═══════════════════════════════════════
+function setLang(l) {
+  lang = l;
+  document.getElementById('langScreen').classList.add('hidden');
+  document.getElementById('langSwitchBtn').textContent = l === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR';
+  document.getElementById('hCat').textContent = T[lang].cat;
+  document.getElementById('hTitle').innerHTML = T[lang].title;
+  render();
+}
+function showLangScreen() {
+  document.getElementById('langScreen').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════
+// MUSIC — Web Audio API generative
+// ═══════════════════════════════════════
+function initAudio() {
+  if (S.audioCtx) return;
+  S.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  S.gainNode = S.audioCtx.createGain();
+  S.gainNode.gain.value = 0;
+  S.gainNode.connect(S.audioCtx.destination);
+}
+
+function playNote(freq, start, dur, vol=0.08) {
+  if (!S.audioCtx || !S.musicPlaying) return;
+  const osc = S.audioCtx.createOscillator();
+  const g = S.audioCtx.createGain();
+  osc.connect(g); g.connect(S.gainNode);
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  g.gain.setValueAtTime(0, start);
+  g.gain.linearRampToValueAtTime(vol, start + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+  osc.start(start);
+  osc.stop(start + dur + 0.1);
+  S.musicNodes.push(osc);
+}
+
+function startMusic() {
+  initAudio();
+  S.musicPlaying = true;
+  S.gainNode.gain.value = 0.7;
+  loopAmbient();
+  document.getElementById('musicBtn').textContent = '🔇';
+}
+
+function stopMusic() {
+  S.musicPlaying = false;
+  if (S.gainNode) S.gainNode.gain.value = 0;
+  document.getElementById('musicBtn').textContent = '🎵';
+}
+
+function toggleMusic() {
+  if (S.musicPlaying) stopMusic(); else startMusic();
+}
+
+let ambientLoop = null;
+function loopAmbient() {
+  if (!S.musicPlaying) return;
+  // Pentatonic scale — gentle, European, contemplative
+  const notes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33];
+  const now = S.audioCtx.currentTime;
+  // Soft pad chord
+  [261.63, 329.63, 392.00].forEach(f => playNote(f, now, 3.5, 0.04));
+  // Gentle melody
+  const mel = [notes[4], notes[2], notes[5], notes[3], notes[1], notes[4], notes[0], notes[2]];
+  mel.forEach((f, i) => playNote(f, now + i * 0.7, 0.9, 0.06));
+  ambientLoop = setTimeout(loopAmbient, 6000);
+}
+
+// ═══════════════════════════════════════
+// ADAPTIVE DIFFICULTY
+// ═══════════════════════════════════════
+function getNextQuestion() {
+  const qs = QS[lang];
+  const levels = ['easy','medium','hard'];
+  const targetLevel = levels[Math.min(S.diffLevel, 2)];
+  
+  // Filter unasked questions at target level, then adjacent
+  const used = S.order;
+  let candidates = qs.map((q,i)=>({q,i}))
+    .filter(({i}) => !used.includes(i))
+    .filter(({q}) => q.d === targetLevel);
+  
+  if (candidates.length === 0) {
+    // Try any unused
+    candidates = qs.map((q,i)=>({q,i})).filter(({i}) => !used.includes(i));
+  }
+  if (candidates.length === 0) return null;
+  
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+  S.order.push(pick.i);
+  return pick.i;
+}
+
+function updateDifficulty(correct, timeRatio) {
+  if (correct && timeRatio > 0.5) {
+    S.streak++;
+    if (S.streak >= 2 && S.diffLevel < 2) { S.diffLevel++; S.streak = 0; }
+  } else if (!correct) {
+    S.streak = 0;
+    if (S.diffLevel > 0) S.diffLevel--;
+  }
+}
+
+// ═══════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════
+function startTimer(seconds) {
+  S.timeLeft = seconds;
+  S.totalTime = seconds;
+  clearInterval(S.timerInterval);
+  S.timerInterval = setInterval(() => {
+    S.timeLeft -= 0.1;
+  
+    if (S.timeLeft <= 0) {
+      clearInterval(S.timerInterval);
+      handleTimeout();
+    }
+  }, 100);
+}
+
+function stopTimer() { clearInterval(S.timerInterval); }
+
+function updateTimerUI() {
+  const pct = Math.max(0, (S.timeLeft / S.totalTime) * 100);
+  const bar = document.getElementById('timerBar');
+  if (!bar) return;
+  bar.style.width = pct + '%';
+  if (pct > 50) bar.style.background = 'var(--timer-full)';
+  else if (pct > 25) bar.style.background = 'var(--timer-warn)';
+  else bar.style.background = 'var(--timer-danger)';
+  const txt = document.getElementById('timerTxt');
+  if (txt) {
+    const t = Math.ceil(S.timeLeft);
+    txt.textContent = t + 's';
+    txt.className = 'timer-text' + (pct < 50 ? ' warn' : '') + (pct < 25 ? ' danger' : '');
+  }
+}
+
+function handleTimeout() {}
+
+// ═══════════════════════════════════════
+// VOICE RECOGNITION
+// ═══════════════════════════════════════
+function initVoice() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return false;
+  S.recognition = new SpeechRecognition();
+  S.recognition.lang = lang === 'fr' ? 'fr-FR' : 'en-GB';
+  S.recognition.continuous = false;
+  S.recognition.interimResults = true;
+  return true;
+}
+
+function startListening() {
+  if (!S.recognition) return;
+  S.listening = true;
+  S.recognition.lang = lang === 'fr' ? 'fr-FR' : 'en-GB';
+  const micBtn = document.getElementById('micBtn');
+  const tranBox = document.getElementById('tranBox');
+  if (micBtn) { micBtn.classList.add('listening'); micBtn.textContent = '⏹'; }
+  if (tranBox) { tranBox.textContent = T[lang].mic_listen; tranBox.classList.add('active'); }
+  
+  S.recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript.toLowerCase().trim();
+    if (tranBox) tranBox.textContent = T[lang].mic_result + ' "' + transcript + '"';
+    if (e.results[0].isFinal) {
+      stopListening();
+      matchVoiceAnswer(transcript);
+    }
+  };
+  S.recognition.onerror = () => {
+    stopListening();
+    if (tranBox) tranBox.textContent = T[lang].mic_notfound;
+  };
+  S.recognition.onend = () => { if (S.listening) stopListening(); };
+  try { S.recognition.start(); } catch(e) { stopListening(); }
+}
+
+function stopListening() {
+  S.listening = false;
+  if (S.recognition) try { S.recognition.stop(); } catch(e){}
+  const micBtn = document.getElementById('micBtn');
+  if (micBtn) { micBtn.classList.remove('listening'); micBtn.textContent = '🎤'; }
+}
+
+function matchVoiceAnswer(transcript) {
+  const qi = S.order[S.order.length - 1];
+  const q = QS[lang][qi];
+  let bestMatch = -1;
+  let bestScore = 0;
+  q.o.forEach((opt, i) => {
+    const optWords = opt.toLowerCase().split(' ');
+    const matches = optWords.filter(w => w.length > 3 && transcript.includes(w)).length;
+    const score = matches / optWords.length;
+    if (score > bestScore) { bestScore = score; bestMatch = i; }
+  });
+  if (bestMatch >= 0 && bestScore > 0.2) {
+    pickAnswer(bestMatch);
+  } else {
+    const tranBox = document.getElementById('tranBox');
+    if (tranBox) tranBox.textContent = T[lang].mic_notfound;
+  }
+}
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+function add(p, h) { const d = document.createElement('div'); d.innerHTML = h; while(d.firstChild) p.appendChild(d.firstChild); }
+
+function render() {
+  const c = document.getElementById('ct'), b = document.getElementById('bb');
+  if (!c || !b) return;
+  c.innerHTML = ''; b.innerHTML = ''; c.scrollTop = 0;
+  document.getElementById('timerBar').style.width = '0%';
+  
+  const screens = { intro, question, result };
+  screens[S.screen](c, b);
+}
+
+function intro(c, b) {
+  add(c, `
+    <div class="intro-emoji fadein">🧠</div>
+    <div class="intro-title fadein">${T[lang].intro_title}</div>
+    <div class="intro-sub fadein">${T[lang].intro_sub}</div>
+    <div class="difficulty-badge fadein">${T[lang].diff_auto}</div>
+    <div class="rules-box fadein">${T[lang].rules}</div>
+  `);
+  add(b, `<button class="btn btn-primary" onclick="startGame()">${T[lang].btn_start}</button>`);
+}
+
+function question(c, b) {
+  const qi = S.order[S.order.length - 1];
+  const q = QS[lang][qi];
+  const diffLabels = { easy: T[lang].easy, medium: T[lang].medium, hard: T[lang].hard };
+  const diffClass = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
+  const qNum = S.order.length;
+  const total = 10;
+
+  add(c, `
+    <div class="q-header fadein">
+      <div class="q-num">Q${qNum}/${total}</div>
+      <div class="q-diff ${diffClass[q.d]}">${diffLabels[q.d]}</div>
+    </div>
+    <div class="q-text fadein">${q.q}</div>
+    <div id="timerTxt" class="timer-text fadein">${q.t}s</div>
+  `);
+
+  if (!S.answered) {
+    // Voice zone
+    if (S.voiceMode) {
+      const voiceDiv = document.createElement('div');
+      voiceDiv.className = 'voice-zone fadein';
+      voiceDiv.innerHTML = `
+        <button class="mic-btn" id="micBtn" onclick="startListening()">🎤</button>
+        <div class="mic-label">${T[lang].mic_tap}</div>
+        <div class="transcript-box" id="tranBox"></div>
+      `;
+      c.appendChild(voiceDiv);
+      add(c, `<div class="or-divider">${T[lang].or}</div>`);
+    }
+    // Options
+    const od = document.createElement('div'); od.className = 'options fadein';
+    ['A','B','C','D'].forEach((lt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = `<span class="opt-letter">${lt}</span><span>${q.o[i]}</span>`;
+      btn.onclick = () => pickAnswer(i);
+      od.appendChild(btn);
+    });
+    c.appendChild(od);
+  } else {
+    // Show result
+    const opts = document.createElement('div'); opts.className = 'options';
+    ['A','B','C','D'].forEach((lt, i) => {
+      const btn = document.createElement('button');
+      let cls = '';
+      if (i === q.c) cls = 'correct';
+      else if (i === S.sel && S.sel !== q.c) cls = 'wrong';
+      btn.className = `opt ${cls}`;
+      btn.disabled = true;
+      btn.innerHTML = `<span class="opt-letter">${lt}</span><span>${q.o[i]}</span>`;
+      opts.appendChild(btn);
+    });
+    c.appendChild(opts);
+
+    if (S.sel === null) {
+      // Timeout
+      add(c, `<div class="feedback timeout fadein">⏱️ <strong>${T[lang].timeout_title}</strong> ${lang==='fr'?'La bonne réponse était : <strong>'+q.o[q.c]+'</strong>':'The correct answer was: <strong>'+q.o[q.c]+'</strong>'}</div>`);
+    } else if (S.sel === q.c) {
+      const pts = calcPoints(q, S.times[S.times.length-1]);
+      add(c, `<div class="feedback ok fadein">${q.ok}</div>`);
+      add(c, `<div class="wit-box fadein">💭 ${q.wit}</div>`);
+    } else {
+      add(c, `<div class="feedback ko fadein">${q.ko}</div>`);
+      add(c, `<div class="wit-box fadein">💭 ${q.wit}</div>`);
+    }
+    add(b, `<button class="btn btn-sage" onclick="nextQuestion()">${S.order.length >= 10 ? (lang==='fr'?'Voir mon score 🏆':'See my score 🏆') : T[lang].btn_next}</button>`);
+  }
+}
+
+function result(c, b) {
+  const total = S.order.length;
+  const pct = Math.round((S.correct / total) * 100);
+  const avgTime = S.times.length ? Math.round(S.times.reduce((a,b)=>a+b,0)/S.times.length) : 0;
+  const titleKey = pct >= 80 ? 'result_title_great' : pct >= 55 ? 'result_title_good' : 'result_title_ok';
+  const subKey = pct >= 80 ? 'result_sub_great' : pct >= 55 ? 'result_sub_good' : 'result_sub_ok';
+  const msgClass = pct >= 80 ? 'result-good' : pct >= 55 ? 'result-avg' : 'result-low';
+
+  add(c, `
+    <div class="result-score fadein">${S.score}</div>
+    <div class="result-pct fadein">${T[lang].score_label}</div>
+    <div class="result-title fadein">${T[lang][titleKey]}</div>
+    <div class="result-msg ${msgClass} fadein">${T[lang][subKey]}</div>
+    <div class="stats-row fadein">
+      <div class="stat-box"><div class="stat-num">${S.correct}/${total}</div><div class="stat-label">${T[lang].stat_correct}</div></div>
+      <div class="stat-box"><div class="stat-num">${avgTime}s</div><div class="stat-label">${T[lang].stat_speed}</div></div>
+      <div class="stat-box"><div class="stat-num">${S.score}</div><div class="stat-label">${T[lang].stat_score}</div></div>
+    </div>
+    <div class="rules-box fadein" style="background:var(--gold-light);border-color:var(--gold);color:#7a5a00;">
+      <strong>${T[lang].cta_title}</strong><br>${T[lang].cta_text}
+    </div>
+  `);
+  add(b, `<button class="btn btn-outline" onclick="restartGame()">${T[lang].btn_restart}</button>`);
+}
+
+// ═══════════════════════════════════════
+// GAME LOGIC
+// ═══════════════════════════════════════
+function calcPoints(q, timeUsed) {
+  return { easy: 100, medium: 150, hard: 200 }[q.d];
+}
+
+function startGame() {
+  S.screen = 'question';
+  S.qi = 0;
+  S.order = [];
+  S.answered = false;
+  S.sel = null;
+  S.score = 0;
+  S.correct = 0;
+  S.times = [];
+  S.diffLevel = 0;
+  S.streak = 0;
+  S.voiceMode = initVoice();
+  const qi = getNextQuestion();
+  const q = QS[lang][qi];
+  render();
+  speakQuestion();
+}
+
+function pickAnswer(i) {
+  if (S.answered) return;
+  stopSpeaking();
+  const timeUsed = 5;
+  S.times.push(5);
+  S.answered = true;
+  S.sel = i;
+  const qi = S.order[S.order.length - 1];
+  const q = QS[lang][qi];
+  const correct = i === q.c;
+  if (correct) {
+    S.correct++;
+    const pts = calcPoints(q, timeUsed);
+    S.score += pts;
+  }
+  const timeRatio = timeUsed / q.t;
+  updateDifficulty(correct, 1 - (timeRatio / q.t));
+  document.getElementById('scoreBadge').textContent = S.score + ' ' + T[lang].score_label;
+  renderQuestion(false, false);
+}
+
+function renderQuestion(fromRender, timeout) {
+  const c = document.getElementById('ct'), b = document.getElementById('bb');
+  if (!c || !b) return;
+  c.innerHTML = ''; b.innerHTML = '';
+  question(c, b);
+}
+
+function nextQuestion() {
+  if (S.order.length >= 10) {
+    S.screen = 'result';
+    stopTimer();
+    render();
+    return;
+  }
+  S.answered = false;
+  S.sel = null;
+  const qi = getNextQuestion();
+  if (qi === null) { S.screen = 'result'; render(); return; }
+  const q = QS[lang][qi];
+  render();
+  speakQuestion();
+}
+
+function restartGame() {
+  S.screen = 'intro';
+  S.voiceInitDone = false;
+  stopMusic();
+  stopSpeaking();
+  render();
+}
+
+function speakQuestion() {
+  const qi = S.order[S.order.length - 1];
+  if (qi === undefined) return;
+  const q = QS[lang][qi];
+  if (!q) return;
+  stopSpeaking();
+  if (!window.speechSynthesis) return;
+  const utter = new SpeechSynthesisUtterance(q.q);
+  utter.lang = lang === 'fr' ? 'fr-FR' : 'en-GB';
+  utter.rate = 0.92;
+  utter.pitch = 1.05;
+  utter.volume = 1;
+  S.currentUtterance = utter;
+  window.speechSynthesis.speak(utter);
+}
+
+function stopSpeaking() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+// Init
+document.getElementById('hCat').textContent = '';
+document.getElementById('hTitle').innerHTML = '';
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Jeux de mémoire gratuits — BrainFest</title>
+<meta name="description" content="Entraînez votre mémoire avec des jeux cognitifs gratuits : séquences de couleurs, notes de musique, paires de plantes. Sans limite. Bilingue FR/EN.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://catherinepiault.github.io/quiz-brainfest/memoire.html">
+<meta property="og:title" content="Jeux de mémoire gratuits — BrainFest">
+<meta property="og:description" content="Entraînez votre mémoire avec des jeux cognitifs gratuits. Sans limite. Bilingue.">
+<meta property="og:url" content="https://catherinepiault.github.io/quiz-brainfest/memoire.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sage:#3d6b4a;--sage-mid:#6b9e78;--sage-light:#e8f5ec;
+  --gold:#c9a84c;--cream:#f7f3ec;--charcoal:#2a2520;
+  --grey:#7a7268;--grey-light:#f0ede8;--white:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);}
+body{min-height:100vh;}
+#hubPage{max-width:560px;margin:0 auto;}
+/* On desktop, keep background full width but content centered */
+.hub-header{max-width:560px;margin:0 auto;left:0;right:0;}
+
+/* HEADER */
+.hub-header-wrap{position:sticky;top:0;z-index:50;background:rgba(247,243,236,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--grey-light);}
+.hub-header{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;}
+.brand{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--sage);}
+.brand span{color:var(--charcoal);font-weight:300;}
+.lang-toggle{background:none;border:1px solid var(--grey-light);border-radius:20px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--charcoal);}
+
+/* HERO — SEO */
+.hero{padding:20px 16px 12px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,6vw,30px);font-weight:300;line-height:1.35;color:var(--charcoal);margin-bottom:6px;}
+.hero h1 em{font-style:italic;color:var(--sage);}
+.hero h2{font-size:13px;font-weight:400;color:var(--grey);line-height:1.6;}
+
+/* SECTION LABEL */
+.section-label{padding:0 16px;margin-bottom:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+
+/* CARDS */
+.cards-strip{display:flex;gap:10px;overflow-x:auto;padding:0 16px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.cards-strip::-webkit-scrollbar{display:none;}
+.game-card{flex-shrink:0;width:148px;background:var(--white);border-radius:14px;padding:12px;cursor:pointer;border:2px solid transparent;transition:all 0.18s;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.game-card:active:not(.soon){transform:scale(0.96);}
+.game-card:not(.soon):hover{border-color:var(--sage-mid);}
+.game-card.soon{opacity:0.38;cursor:default;}
+.card-top{display:flex;align-items:center;gap:8px;}
+.card-icon{font-size:22px;line-height:1;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;line-height:1.25;color:var(--charcoal);}
+.card-badge{align-self:flex-start;padding:2px 8px;border-radius:20px;font-size:8px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;}
+.badge-ok{background:var(--sage-light);color:var(--sage);}
+.badge-soon{background:var(--grey-light);color:var(--grey);}
+
+/* FEATURED */
+.featured{margin:16px 16px 0;background:var(--white);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07);}
+.featured-top{position:relative;}
+.featured-img{width:100%;height:220px;object-fit:contain;display:block;background:#f7f3ec;}
+.featured-placeholder{width:100%;height:220px;display:none;align-items:center;justify-content:center;font-size:72px;background:linear-gradient(135deg,#d4eeda,var(--cream));}
+.btn-share{position:absolute;top:10px;right:10px;background:var(--sage);color:white;border:none;border-radius:50px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer;}
+.featured-body{padding:13px 16px 15px;}
+.feat-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);margin-bottom:3px;}
+.feat-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;line-height:1.3;margin-bottom:5px;}
+.feat-title em{font-style:italic;color:var(--sage);}
+.feat-desc{font-size:12px;color:var(--grey);line-height:1.7;margin-bottom:13px;}
+.btn-play{width:100%;padding:13px;border-radius:50px;border:none;background:var(--sage);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;}
+.btn-play:active{opacity:0.85;}
+
+/* CROSS-SELL */
+.crossell{margin:14px 16px 0;background:linear-gradient(135deg,#f0f7f2,var(--cream));border:1px solid var(--sage-light);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.18s;}
+.crossell:hover{border-color:var(--sage-mid);}
+.crossell-text{}
+.crossell-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--sage);margin-bottom:3px;}
+.crossell-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--charcoal);}
+.crossell-arrow{font-size:20px;color:var(--sage);flex-shrink:0;}
+
+/* FOOTER */
+.footer{margin:18px 16px 24px;text-align:center;}
+.footer-line{font-size:11px;color:var(--grey);line-height:1.8;}
+.footer-link{color:var(--sage);text-decoration:underline;text-underline-offset:2px;}
+
+/* GAME LAYER */
+#gamePage{display:none;position:fixed;inset:0;z-index:100;background:#000;flex-direction:column;}
+#gamePage.open{display:flex;}
+.game-topbar{flex-shrink:0;background:var(--charcoal);}.game-topbar-inner{max-width:560px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:8px 14px;}
+.btn-back{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);border:none;border-radius:50px;padding:7px 14px;color:white;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;}
+.topbar-title{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,0.85);font-weight:300;flex:1;text-align:center;padding:0 8px;}
+.btn-topshare{background:rgba(255,255,255,0.1);border:none;border-radius:50px;padding:7px 12px;color:white;font-size:11px;font-weight:600;cursor:pointer;}
+#gameFrame{flex:1;border:none;width:100%;min-height:0;}
+</style>
+</head>
+<body>
+
+<div id="hubPage">
+
+  <!-- HEADER -->
+  <div class="hub-header-wrap"><div class="hub-header">
+    <div class="brand">Brain<span>Fest</span></div>
+    <button class="lang-toggle" id="langBtn" onclick="toggleLang()">🇬🇧 EN</button>
+  </div></div>
+
+  <!-- HERO SEO -->
+  <div class="hero">
+    <h1 id="heroH1">Entraînez votre <em>mémoire</em> en jouant</h1>
+    <h2 id="heroH2">Jeux cognitifs gratuits · Séquences, couleurs, sons · Sans limite · FR / EN</h2>
+  </div>
+
+  <!-- CARDS -->
+  <div class="section-label" id="sectionLabel">Choisissez un jeu</div>
+  <div class="cards-strip">
+    <div class="game-card" id="card-couleurs" onclick="launchGame('jeu-couleurs.html','Mémoire des Couleurs')">
+      <div class="card-top"><span class="card-icon">🎨</span><div class="card-name" id="cn1">Mémoire des Couleurs</div></div>
+      <span class="card-badge badge-ok" id="cb1">Disponible</span>
+    </div>
+    <div class="game-card" id="card-notes" onclick="launchGame('jeu-notes.html','L\'Oreille Absolue')">
+      <div class="card-top"><span class="card-icon">🎵</span><div class="card-name" id="cn2">Suites de Notes</div></div>
+      <span class="card-badge badge-ok" id="cb2">Disponible</span>
+    </div>
+    <div class="game-card soon">
+      <div class="card-top"><span class="card-icon">🌿</span><div class="card-name" id="cn3">Paires de Plantes</div></div>
+      <span class="card-badge badge-soon" id="cb3">Bientôt</span>
+    </div>
+    <div class="game-card soon">
+      <div class="card-top"><span class="card-icon">🧩</span><div class="card-name" id="cn4">Puzzle Aliments</div></div>
+      <span class="card-badge badge-soon" id="cb4">Bientôt</span>
+    </div>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="featured">
+    <div class="featured-top">
+      <img class="featured-img" id="featImg"
+        src="https://catherinepiault.github.io/quiz-brainfest/cover%20jeu%20couleurs.png"
+        onerror="this.style.display='none';document.getElementById('featPh').style.display='flex';" alt="">
+      <div class="featured-placeholder" id="featPh">🎨</div>
+      <button class="btn-share" onclick="shareGame('jeu-couleurs.html')">↗ <span id="shareLabel">Partager</span></button>
+    </div>
+    <div class="featured-body">
+      <div class="feat-label" id="featLabel">À jouer maintenant</div>
+      <div class="feat-title" id="featTitle">Mémoire des <em>Couleurs</em></div>
+      <div class="feat-desc" id="featDesc">Mémorisez une séquence de couleurs, reproduisez-la dans l'ordre. La séquence grandit à chaque niveau — sans limite.</div>
+      <button class="btn-play" id="featBtn" onclick="launchGame('jeu-couleurs.html','Mémoire des Couleurs')">▶ Jouer</button>
+    </div>
+  </div>
+
+  <!-- CROSS-SELL -->
+  <div class="crossell" onclick="goTo('sante')">
+    <div class="crossell-text">
+      <div class="crossell-label" id="xsLabel">Aussi sur BrainFest</div>
+      <div class="crossell-title" id="xsTitle">🌿 Cultivez vos savoirs santé →</div>
+    </div>
+    <div class="crossell-arrow">›</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-line" id="footerLine">
+      Nouveaux jeux à venir · <a class="footer-link" id="footerLink" href="https://catherinepiault.fr/newsletter" target="_blank">Inscrivez-vous à la newsletter</a>
+    </div>
+    <div class="footer-line" style="margin-top:6px;font-size:10px;color:#b0aba4;" id="footerSub">pour être notifié·e en avant-première</div>
+  </div>
+
+</div>
+
+<!-- GAME LAYER -->
+<div id="gamePage">
+  <div class="game-topbar"><div class="game-topbar-inner">
+    <button class="btn-back" onclick="closeGame()">← <span id="backLabel">Retour</span></button>
+    <div class="topbar-title" id="gameTitle"></div>
+    <button class="btn-topshare" onclick="shareCurrentGame()">↗</button>
+  </div></div>
+  <iframe id="gameFrame" src="" allowfullscreen allow="autoplay"></iframe>
+</div>
+
+<script>
+var lang='fr';
+var currentFile='';
+var BASE='https://catherinepiault.github.io/quiz-brainfest/';
+
+var TX={
+  fr:{
+    heroH1:'Entraînez votre <em>mémoire</em> en jouant',
+    heroH2:'Jeux cognitifs gratuits · Séquences, couleurs, sons · Sans limite · FR / EN',
+    sectionLabel:'Choisissez un jeu',
+    cn1:'Mémoire des Couleurs',cn2:'Suites de Notes',cn3:'Paires de Plantes',cn4:'Puzzle Aliments',
+    cb1:'Disponible',cb2:'Disponible',cb3:'Bientôt',cb4:'Bientôt',
+    featLabel:'À jouer maintenant',
+    featTitle:'Mémoire des <em>Couleurs</em>',
+    featDesc:'Mémorisez une séquence de couleurs, reproduisez-la dans l\'ordre. La séquence grandit à chaque niveau — sans limite.',
+    featBtn:'▶ Jouer',
+    shareLabel:'Partager',backLabel:'Retour',langBtn:'🇬🇧 EN',
+    xsLabel:'Aussi sur BrainFest',xsTitle:'🌿 Cultivez vos savoirs santé →',
+    footerLine:'Nouveaux jeux à venir · ',footerLinkTxt:'Inscrivez-vous à la newsletter',
+    footerSub:'pour être notifié·e en avant-première',
+  },
+  en:{
+    heroH1:'Train your <em>memory</em> while playing',
+    heroH2:'Free cognitive games · Sequences, colours, sounds · No limit · FR / EN',
+    sectionLabel:'Choose a game',
+    cn1:'Colour Memory',cn2:'Note Sequences',cn3:'Plant Pairs',cn4:'Food Puzzle',
+    cb1:'Available',cb2:'Available',cb3:'Coming soon',cb4:'Coming soon',
+    featLabel:'Play now',
+    featTitle:'Colour <em>Memory</em>',
+    featDesc:'Memorise a colour sequence and reproduce it in order. The sequence grows with each level — no limit.',
+    featBtn:'▶ Play',
+    shareLabel:'Share',backLabel:'Back',langBtn:'🇫🇷 FR',
+    xsLabel:'Also on BrainFest',xsTitle:'🌿 Discover natural health →',
+    footerLine:'New games coming · ',footerLinkTxt:'Subscribe to the newsletter',
+    footerSub:'to be notified first',
+  }
+};
+
+function applyLang(){
+  var t=TX[lang];
+  document.getElementById('heroH1').innerHTML=t.heroH1;
+  document.getElementById('heroH2').textContent=t.heroH2;
+  document.getElementById('sectionLabel').textContent=t.sectionLabel;
+  ['1','2','3','4'].forEach(function(n){
+    document.getElementById('cn'+n).textContent=t['cn'+n];
+    document.getElementById('cb'+n).textContent=t['cb'+n];
+  });
+  document.getElementById('featLabel').textContent=t.featLabel;
+  document.getElementById('featTitle').innerHTML=t.featTitle;
+  document.getElementById('featDesc').textContent=t.featDesc;
+  document.getElementById('featBtn').textContent=t.featBtn;
+  document.getElementById('shareLabel').textContent=t.shareLabel;
+  document.getElementById('backLabel').textContent=t.backLabel;
+  document.getElementById('langBtn').textContent=t.langBtn;
+  document.getElementById('xsLabel').textContent=t.xsLabel;
+  document.getElementById('xsTitle').textContent=t.xsTitle;
+  document.getElementById('footerLine').innerHTML=t.footerLine+'<a class="footer-link" id="footerLink" href="https://catherinepiault.fr/newsletter" target="_blank">'+t.footerLinkTxt+'</a>';
+  document.getElementById('footerSub').textContent=t.footerSub;
+}
+function toggleLang(){lang=lang==='fr'?'en':'fr';applyLang();}
+
+function launchGame(file,title){
+  currentFile=file;
+  document.getElementById('gameTitle').textContent=title;
+  document.getElementById('gameFrame').src=BASE+file;
+  document.getElementById('gamePage').classList.add('open');
+  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
+}
+function closeGame(){
+  document.getElementById('gamePage').classList.remove('open');
+  document.getElementById('gameFrame').src='';
+  currentFile='';
+  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
+}
+function shareGame(file){
+  var url=BASE+file;
+  if(navigator.share){navigator.share({title:'BrainFest',url:url});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(url);alert('Lien copié !');}
+}
+function shareCurrentGame(){
+  if(!currentFile)return;
+  shareGame(currentFile);
+}
+function goTo(dest){
+  window.location.href=BASE+(dest==='sante'?'sante-naturelle.html':'memoire.html');
+}
+applyLang();
+</script>
+</body>
+</html>

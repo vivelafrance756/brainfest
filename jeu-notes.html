@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BrainFest — L'Oreille Absolue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a1612; --bg2:#211e19; --bg3:#2a2520;
+  --gold:#c9a84c; --gold-light:rgba(201,168,76,0.15); --gold-dim:rgba(201,168,76,0.4);
+  --cream:#f7f3ec; --grey:#7a7268; --grey-light:rgba(255,255,255,0.08);
+  --white:#fff; --sage:#4a9a6a; --terra:#c4784a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);}
+.layout{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;}
+
+/* LANG */
+.lang-screen{display:none!important;}
+.lang-screen.hidden{opacity:0;pointer-events:none;}
+.lang-logo{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,6vw,36px);color:var(--cream);text-align:center;line-height:1.35;font-weight:300;}
+.lang-logo em{font-style:italic;color:var(--gold);}
+.lang-sub{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2.5px;text-transform:uppercase;}
+.lang-btns{display:flex;gap:14px;}
+.lang-btn{padding:11px 26px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.2s;}
+.lang-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.45);}
+
+/* HEADER */
+.header{flex-shrink:0;background:var(--bg2);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);}
+.brand-tag{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.game-title{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,3.5vw,18px);color:var(--cream);font-weight:300;}
+.game-title em{font-style:italic;color:var(--gold);}
+.header-right{display:flex;align-items:center;gap:7px;}
+.lvl-badge{background:var(--gold-light);border:1px solid var(--gold-dim);border-radius:20px;padding:3px 11px;font-size:10px;font-weight:600;color:var(--gold);}
+.icon-btn{background:rgba(255,255,255,0.07);border:none;border-radius:20px;padding:4px 9px;font-size:9px;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;letter-spacing:0.5px;}
+
+/* SEQUENCE DISPLAY */
+.seq-zone{flex-shrink:0;padding:7px 16px 5px;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.seq-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.seq-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;min-height:18px;}
+.seq-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.1);transition:all 0.2s;}
+.seq-dot.lit{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px var(--gold-dim);transform:scale(1.25);}
+.seq-dot.done{background:var(--sage);border-color:var(--sage);}
+
+/* STATUS */
+.status-zone{flex-shrink:0;text-align:center;padding:5px 16px;min-height:38px;}
+.status-msg{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,3.8vw,20px);color:var(--cream);font-weight:300;line-height:1.3;}
+.status-sub{font-size:10px;color:var(--grey);margin-top:2px;letter-spacing:0.5px;}
+
+/* INSTRUMENT GRID — 3x3 */
+.grid-zone{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 16px;min-height:0;overflow:hidden;}
+.inst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:min(340px, calc(100vh - 260px));aspect-ratio:1;}
+.inst-btn{
+  border-radius:16px;border:2px solid rgba(255,255,255,0.08);
+  background:var(--bg3);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  transition:transform 0.1s,box-shadow 0.15s,border-color 0.15s,background 0.15s;
+  padding:8px 4px;position:relative;overflow:hidden;
+}
+.inst-btn::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,rgba(255,255,255,0.04),transparent 70%);opacity:0;transition:opacity 0.2s;}
+.inst-btn:active{transform:scale(0.93);}
+.inst-btn.flash{transform:scale(1.06);border-color:var(--gold);background:rgba(201,168,76,0.12);box-shadow:0 0 20px rgba(201,168,76,0.25);}
+.inst-btn.flash::before{opacity:1;}
+.inst-btn.correct{border-color:var(--sage);background:rgba(74,154,106,0.12);box-shadow:0 0 16px rgba(74,154,106,0.2);}
+.inst-btn.wrong{animation:shake 0.32s ease;border-color:var(--terra);background:rgba(196,120,74,0.1);}
+.inst-btn:disabled{cursor:default;opacity:0.6;}
+.inst-emoji{font-size:clamp(22px,5.5vw,30px);line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));}
+.inst-name{font-size:clamp(8px,2vw,10px);font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.8px;text-transform:uppercase;text-align:center;}
+/* Wave animation */
+.wave-ring{position:absolute;border-radius:50%;border:2px solid var(--gold);opacity:0;width:60%;height:60%;animation:none;}
+.inst-btn.flash .wave-ring{animation:ripple 0.5s ease-out;}
+@keyframes ripple{0%{opacity:0.6;transform:scale(0.5);}100%{opacity:0;transform:scale(2);}}
+
+/* BOTTOM */
+.bottom-bar{flex-shrink:0;padding:8px 16px;background:var(--bg2);border-top:1px solid rgba(255,255,255,0.06);}
+.btn{width:100%;padding:13px;border-radius:50px;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-gold{background:var(--gold);color:var(--bg);}
+.btn-sage{background:var(--sage);color:white;}
+.btn-outline{background:transparent;color:var(--gold);border:1.5px solid var(--gold-dim);}
+
+/* INTRO / RESULT */
+.center-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 16px;gap:14px;text-align:center;}
+.cover-img{width:140px;height:140px;object-fit:contain;display:block;margin:0 auto;border-radius:16px;}
+.big-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5vw,28px);color:var(--cream);font-weight:300;line-height:1.3;}
+.big-title em{font-style:italic;color:var(--gold);}
+.intro-sub{font-size:12px;color:var(--grey);line-height:1.75;max-width:290px;}
+.rule-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:11px 15px;font-size:11px;line-height:1.8;color:rgba(255,255,255,0.6);max-width:310px;width:100%;text-align:left;}
+.result-num{font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:300;color:var(--gold);line-height:1;}
+.result-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);}
+.result-msg{font-size:12px;color:var(--grey);line-height:1.7;max-width:290px;}
+.best-badge{background:var(--gold-light);border:1px solid var(--gold-dim);border-radius:20px;padding:5px 16px;font-size:11px;color:var(--gold);font-weight:600;}
+
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}50%{transform:translateX(4px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fadein{animation:fadeUp 0.3s ease;}
+</style>
+</head>
+<body>
+
+<!-- LANG -->
+<div class="lang-screen" id="langScreen">
+  <div class="lang-logo">BrainFest<br><em>L'Oreille Absolue</em><br><span style="font-size:0.5em;font-style:normal;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;letter-spacing:2px;text-transform:uppercase;">The Perfect Ear</span></div>
+  <div class="lang-sub">Choisissez / Choose</div>
+  <div class="lang-btns">
+    <button class="lang-btn" onclick="setLang('fr')">🇫🇷 Français</button>
+    <button class="lang-btn" onclick="setLang('en')">🇬🇧 English</button>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="header">
+    <div>
+      <div class="brand-tag">BrainFest · <span id="hCat"></span></div>
+      <div class="game-title" id="hTitle"></div>
+    </div>
+    <div class="header-right">
+      <div class="lvl-badge" id="lvlBadge">Niv. 1</div>
+      <button class="icon-btn" id="langSw" onclick="showLang()"></button>
+    </div>
+  </div>
+
+  <div class="seq-zone">
+    <div class="seq-label" id="seqLabel"></div>
+    <div class="seq-dots" id="seqDots"></div>
+  </div>
+
+  <div class="status-zone">
+    <div class="status-msg" id="statusMsg"></div>
+    <div class="status-sub" id="statusSub"></div>
+  </div>
+
+  <div class="grid-zone" id="gridZone"></div>
+  <div class="bottom-bar" id="bb"></div>
+</div>
+
+<script>
+// ══════════════════════════════
+// INSTRUMENTS + SOUNDS
+// ══════════════════════════════
+const INSTRUMENTS = [
+  { id:'piano',    emoji:'🎹', fr:'Piano',    en:'Piano',    freq:261.63, wave:'triangle', harmonics:[1,0.5,0.25] },
+  { id:'violon',   emoji:'🎻', fr:'Violon',   en:'Violin',   freq:329.63, wave:'sawtooth', harmonics:[1,0.6,0.3,0.15] },
+  { id:'flute',    emoji:'🪈', fr:'Flûte',    en:'Flute',    freq:392.00, wave:'sine',     harmonics:[1,0.15,0.05] },
+  { id:'harpe',    emoji:'🪕', fr:'Harpe',    en:'Harp',     freq:440.00, wave:'triangle', harmonics:[1,0.4,0.2,0.08] },
+  { id:'guitare',  emoji:'🎸', fr:'Guitare',  en:'Guitar',   freq:220.00, wave:'sawtooth', harmonics:[1,0.7,0.4,0.2,0.1] },
+  { id:'trompette',emoji:'🎺', fr:'Trompette',en:'Trumpet',  freq:493.88, wave:'square',   harmonics:[1,0.5,0.25,0.12] },
+  { id:'tambour',  emoji:'🥁', fr:'Tambour',  en:'Drum',     freq:80.00,  wave:'sine',     harmonics:[1,0.3,0.1],noise:true },
+  { id:'cor',      emoji:'📯', fr:'Cor',      en:'Horn',     freq:349.23, wave:'sawtooth', harmonics:[1,0.55,0.28,0.14] },
+  { id:'cloche',   emoji:'🔔', fr:'Cloche',   en:'Bell',     freq:523.25, wave:'sine',     harmonics:[1,0.6,0.4,0.25,0.1], decay:2.5 },
+];
+
+// ══════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════
+const T = {
+  fr:{
+    cat:'Entraînez votre mémoire',
+    title:'L\'Oreille <em>Absolue</em>',
+    intro_title:'Votre oreille a de la <em>mémoire</em>',
+    intro_sub:'Écoutez la séquence d\'instruments, puis reproduisez-la dans l\'ordre. La séquence grandit à chaque niveau — sans limite.',
+    rule:'👂 Écoutez · 🎵 Reproduisez l\'ordre · ∞ Sans limite',
+    btn_start:'Écouter 🎵',
+    btn_replay:'🔄 Rejouer',
+    watch:'Écoutez bien...',
+    your_turn:'À vous !',
+    hint:'Reproduisez la séquence',
+    bravo:'Bravo !',
+    next:'Niveau suivant...',
+    oops:'Oops !',
+    was:'C\'était :',
+    seq:'Séquence',
+    lvl:'Niv.',
+    result_lbl:'niveau atteint',
+    result_great:'Oreille d\'or ! 🏆',
+    result_good:'Belle oreille ! 🌟',
+    result_ok:'L\'oreille se muscle ! 🌱',
+    msg_great:'Votre mémoire auditive est remarquable. Mozart serait jaloux.',
+    msg_good:'Solide ! La plupart s\'arrêtent bien avant ce niveau.',
+    msg_ok:'L\'oreille musicale s\'entraîne. Chaque partie compte.',
+    best:'Meilleur',
+  },
+  en:{
+    cat:'Train your memory',
+    title:'The Perfect <em>Ear</em>',
+    intro_title:'Your ear has a long <em>memory</em>',
+    intro_sub:'Listen to the sequence of instruments, then reproduce it in order. The sequence grows with each level — no limit.',
+    rule:'👂 Listen · 🎵 Reproduce the order · ∞ No limit',
+    btn_start:'Listen 🎵',
+    btn_replay:'🔄 Play again',
+    watch:'Listen carefully...',
+    your_turn:'Your turn!',
+    hint:'Reproduce the sequence',
+    bravo:'Bravo!',
+    next:'Next level...',
+    oops:'Oops!',
+    was:'It was:',
+    seq:'Sequence',
+    lvl:'Lv.',
+    result_lbl:'level reached',
+    result_great:'Golden ear! 🏆',
+    result_good:'Great ear! 🌟',
+    result_ok:'The ear is training! 🌱',
+    msg_great:'Your auditory memory is remarkable. Mozart would be jealous.',
+    msg_good:'Solid! Most players stop well before this level.',
+    msg_ok:'Musical memory trains with practice. Every game counts.',
+    best:'Best',
+  }
+};
+
+// ══════════════════════════════
+// STATE
+// ══════════════════════════════
+let lang = 'fr';
+let audioCtx = null;
+let G = {
+  phase: 'intro', // intro|watch|input|result
+  sequence: [],
+  inputStep: 0,
+  level: 1,
+  best: 0,
+};
+try { G.best = parseInt(localStorage.getItem('bf_notes_best')||'0')||0; } catch(e){}
+
+// ══════════════════════════════
+// LANG
+// ══════════════════════════════
+function setLang(l){
+  lang=l;
+  document.getElementById('langScreen').classList.add('hidden');
+  document.getElementById('langSw').textContent = l==='fr'?'🇬🇧':'🇫🇷';
+  document.getElementById('hCat').textContent = T[l].cat;
+  document.getElementById('hTitle').innerHTML = T[l].title;
+  render();
+}
+function showLang(){ /* lang screen removed */; }
+
+// ══════════════════════════════
+// AUDIO — Web Audio synthesis
+// Each instrument has a distinct timbre
+// ══════════════════════════════
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playInstrument(idx, duration){
+  const ctx = getCtx();
+  const inst = INSTRUMENTS[idx];
+  const now = ctx.currentTime;
+  const dur = duration || (inst.decay || 1.2);
+  const masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(0, now);
+  masterGain.gain.linearRampToValueAtTime(0.22, now + 0.02);
+  masterGain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+  masterGain.connect(ctx.destination);
+
+  if(inst.noise){
+    // Drum: noise burst
+    const bufSize = ctx.sampleRate * 0.3;
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/(bufSize*0.1));
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    // Bass thump
+    const bpf = ctx.createBiquadFilter();
+    bpf.type='bandpass'; bpf.frequency.value=inst.freq; bpf.Q.value=0.5;
+    src.connect(bpf); bpf.connect(masterGain);
+    src.start(now); src.stop(now+0.35);
+  } else {
+    // Harmonic synthesis for each instrument
+    inst.harmonics.forEach((amp, hi) => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = inst.wave;
+      osc.frequency.value = inst.freq * (hi+1);
+      // slight detune for warmth on strings
+      if(inst.id==='violon'||inst.id==='guitare') osc.detune.value = hi*2;
+      g.gain.value = amp * 0.3;
+      osc.connect(g); g.connect(masterGain);
+      osc.start(now); osc.stop(now + dur + 0.1);
+    });
+    // Add reverb-like tail for bell
+    if(inst.id==='cloche'){
+      const osc2 = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      osc2.frequency.value = inst.freq * 2.756; // inharmonic partial
+      osc2.type='sine';
+      g2.gain.setValueAtTime(0.08, now);
+      g2.gain.exponentialRampToValueAtTime(0.001, now+dur);
+      osc2.connect(g2); g2.connect(masterGain);
+      osc2.start(now); osc2.stop(now+dur+0.1);
+    }
+  }
+}
+
+// ══════════════════════════════
+// GAME LOGIC
+// ══════════════════════════════
+function startGame(){
+  G.phase='watch'; G.sequence=[]; G.level=1; G.inputStep=0;
+  addNote();
+  render();
+  setTimeout(playSequence, 700);
+}
+
+function addNote(){
+  const last = G.sequence.length ? G.sequence[G.sequence.length-1] : -1;
+  let next; let t=0;
+  do{ next=Math.floor(Math.random()*INSTRUMENTS.length); t++; }
+  while(next===last && t<20);
+  G.sequence.push(next);
+}
+
+function playSequence(){
+  G.phase='watch';
+  setStatus(T[lang].watch,'');
+  disableGrid(true);
+  updateSeqDots();
+  let i=0;
+  const speed = Math.max(600, 950 - G.level*30);
+  function next(){
+    unflashAll();
+    if(i>=G.sequence.length){ setTimeout(startInput,500); return; }
+    const ii=G.sequence[i];
+    flashBtn(ii);
+    playInstrument(ii);
+    updateSeqDots(i);
+    i++;
+    setTimeout(next, speed);
+  }
+  next();
+}
+
+function startInput(){
+  G.phase='input'; G.inputStep=0;
+  unflashAll(); disableGrid(false);
+  setStatus(T[lang].your_turn, T[lang].hint);
+  updateSeqDots(-1);
+}
+
+function handlePick(ii){
+  if(G.phase!=='input') return;
+  const expected = G.sequence[G.inputStep];
+  playInstrument(ii, 0.6);
+
+  if(ii===expected){
+    flashBtn(ii, 'correct');
+    G.inputStep++;
+    updateSeqDots(G.inputStep-1, true);
+    if(G.inputStep>=G.sequence.length){
+      G.phase='watch'; disableGrid(true);
+      setStatus(T[lang].bravo, T[lang].next);
+      setTimeout(()=>{
+        G.level++;
+        document.getElementById('lvlBadge').textContent=T[lang].lvl+' '+G.level;
+        addNote(); G.inputStep=0;
+        setTimeout(playSequence,400);
+      },1000);
+    }
+  } else {
+    G.phase='result'; disableGrid(true);
+    flashBtn(ii,'wrong');
+    const expName = lang==='fr'?INSTRUMENTS[expected].fr:INSTRUMENTS[expected].en;
+    setStatus(T[lang].oops, T[lang].was+' '+expName);
+    // Save best score immediately
+    if(G.level>G.best){ G.best=G.level; try{localStorage.setItem('bf_notes_best',G.best);}catch(e){} }
+    // Warm goodbye voice after short pause
+    setTimeout(()=>{
+      speakGoodbye(()=>{ setTimeout(render, 800); });
+    }, 600);
+  }
+}
+
+// ══════════════════════════════
+// RENDER
+// ══════════════════════════════
+function render(){
+  const gz=document.getElementById('gridZone');
+  const bb=document.getElementById('bb');
+  gz.innerHTML=''; bb.innerHTML='';
+  document.getElementById('lvlBadge').textContent=T[lang].lvl+' '+G.level;
+  document.getElementById('seqLabel').textContent=G.sequence.length?T[lang].seq+' — '+G.sequence.length:'';
+
+  if(G.phase==='intro') renderIntro(gz,bb);
+  else if(G.phase==='result') renderResult(gz,bb);
+  else renderGrid(gz,bb);
+}
+
+function renderIntro(gz,bb){
+  setStatus('','');
+  updateSeqDots();
+  gz.innerHTML=`<div class="center-wrap fadein">
+    <img class="cover-img" src="https://catherinepiault.github.io/quiz-brainfest/cover%20jeu%20notes.png"
+      onerror="this.style.fontSize='56px';this.style.background='none';this.outerHTML='<div style=\\'font-size:56px;text-align:center\\'>🎵</div>'">
+    <div class="big-title">${T[lang].intro_title}</div>
+    <div class="intro-sub">${T[lang].intro_sub}</div>
+    <div class="rule-box">${T[lang].rule}</div>
+  </div>`;
+  bb.innerHTML=`<button class="btn btn-gold" onclick="startGame()">${T[lang].btn_start}</button>`;
+}
+
+function renderGrid(gz,bb){
+  const g=document.createElement('div');
+  g.className='inst-grid fadein';
+  INSTRUMENTS.forEach((inst,i)=>{
+    const btn=document.createElement('button');
+    btn.className='inst-btn';
+    btn.setAttribute('data-ii',i);
+    btn.disabled=(G.phase!=='input');
+    btn.innerHTML=`<div class="wave-ring"></div><div class="inst-emoji">${inst.emoji}</div><div class="inst-name">${lang==='fr'?inst.fr:inst.en}</div>`;
+    btn.onclick=()=>handlePick(i);
+    g.appendChild(btn);
+  });
+  gz.appendChild(g);
+}
+
+function renderResult(gz,bb){
+  setStatus('','');
+  const l=G.level;
+  const tk=l>=8?'result_great':l>=5?'result_good':'result_ok';
+  const mk=l>=8?'msg_great':l>=5?'msg_good':'msg_ok';
+  gz.innerHTML=`<div class="center-wrap fadein">
+    <div class="result-num">${l}</div>
+    <div class="result-lbl">${T[lang].result_lbl}</div>
+    <div class="big-title">${T[lang][tk]}</div>
+    <div class="result-msg">${T[lang][mk]}</div>
+    ${G.best>0?`<div class="best-badge">🏅 ${T[lang].best} : ${G.best}</div>`:''}
+  </div>`;
+  bb.innerHTML=`<button class="btn btn-gold" onclick="restartGame()">${T[lang].btn_replay}</button>`;
+}
+
+// ══════════════════════════════
+// HELPERS
+// ══════════════════════════════
+function setStatus(msg,sub){
+  document.getElementById('statusMsg').textContent=msg;
+  document.getElementById('statusSub').textContent=sub;
+}
+function disableGrid(dis){
+  document.querySelectorAll('.inst-btn').forEach(b=>b.disabled=dis);
+}
+function flashBtn(ii, type){
+  const btn=document.querySelector(`[data-ii="${ii}"]`);
+  if(!btn) return;
+  btn.classList.remove('flash','correct','wrong');
+  btn.classList.add(type||'flash');
+  if(!type) setTimeout(()=>btn.classList.remove('flash'),350);
+}
+function unflashAll(){
+  document.querySelectorAll('.inst-btn').forEach(b=>b.classList.remove('flash','correct','wrong'));
+}
+function updateSeqDots(activeIdx, done){
+  const d=document.getElementById('seqDots');
+  if(!d) return;
+  d.innerHTML='';
+  G.sequence.forEach((ii,i)=>{
+    const dot=document.createElement('div');
+    const isDone = G.phase==='input' && i<G.inputStep;
+    const isLit = i===activeIdx;
+    dot.className='seq-dot'+(isLit?' lit':'')+(isDone?' done':'');
+    d.appendChild(dot);
+  });
+}
+function restartGame(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  G.phase='intro'; G.sequence=[]; G.level=1; G.inputStep=0;
+  render();
+}
+
+// SPEAK GOODBYE — warm, natural farewell only at end of game
+function speakGoodbye(onEnd){
+  const text = lang==='fr'
+    ? 'Tu peux rejouer quand tu veux... à bientôt !'
+    : 'You can play again whenever you like... see you soon!';
+  if(!window.speechSynthesis){ if(onEnd) setTimeout(onEnd,400); return; }
+  window.speechSynthesis.cancel();
+  function go(){
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=lang==='fr'?'fr-FR':'en-GB';
+    u.rate=0.88;   // slower = more natural, warmer
+    u.pitch=1.15;  // slightly high = feminine, gentle
+    u.volume=1;
+    const voices=window.speechSynthesis.getVoices();
+    // Priority list — most natural voices available
+    const pref=['Amélie','Lea','Léa','Marie','Audrey','Julie','Alice',
+                'Samantha','Karen','Fiona','Victoria','Nicky','Tessa','Moira'];
+    const v=voices.find(v=>v.lang.startsWith(lang==='fr'?'fr':'en')&&pref.some(p=>v.name.includes(p)))
+          ||voices.find(v=>v.lang.startsWith(lang==='fr'?'fr':'en')&&!v.localService)
+          ||voices.find(v=>v.lang.startsWith(lang==='fr'?'fr':'en'));
+    if(v) u.voice=v;
+    if(onEnd){ u.onend=onEnd; u.onerror=()=>setTimeout(onEnd,400); }
+    window.speechSynthesis.speak(u);
+  }
+  const vv=window.speechSynthesis.getVoices();
+  if(vv.length) go(); else window.speechSynthesis.onvoiceschanged=go;
+}
+
+// SPEAK — female voice
+function speak(text, onEnd){
+  if(!window.speechSynthesis){ if(onEnd) setTimeout(onEnd,400); return; }
+  window.speechSynthesis.cancel();
+  function go(){
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=lang==='fr'?'fr-FR':'en-GB';
+    u.rate=1.0; u.pitch=1.25; u.volume=1;
+    const voices=window.speechSynthesis.getVoices();
+    const pref=['Amélie','Lea','Léa','Marie','Audrey','Julie','Alice','Samantha','Karen','Fiona','Victoria','Nicky','Tessa'];
+    const v=voices.find(v=>v.lang.startsWith(lang==='fr'?'fr':'en')&&pref.some(p=>v.name.includes(p)))
+          ||voices.find(v=>v.lang.startsWith(lang==='fr'?'fr':'en'));
+    if(v) u.voice=v;
+    if(onEnd){ u.onend=onEnd; u.onerror=()=>setTimeout(onEnd,300); }
+    window.speechSynthesis.speak(u);
+  }
+  const vv=window.speechSynthesis.getVoices();
+  if(vv.length) go(); else{ window.speechSynthesis.onvoiceschanged=go; }
+}
+
+// Boot — auto start in FR
+setLang('fr');
+document.getElementById('hCat').textContent='';
+document.getElementById('hTitle').innerHTML='';
+if(window.speechSynthesis){ window.speechSynthesis.getVoices(); window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices(); }
+</script>
+</body>
+</html>

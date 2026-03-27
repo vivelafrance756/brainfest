@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Quiz Peau & Naturopathie — BrainFest</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sage:#3d6b4a;--sage-mid:#6b9e78;--sage-light:#e8f5ec;
+  --terra:#c4784a;--terra-light:#f5e6dc;
+  --gold:#c9a84c;--cream:#f7f3ec;
+  --charcoal:#2a2520;--grey:#7a7268;--grey-light:#f0ede8;
+  --white:#ffffff;--success:#4a8c5c;--error:#b04040;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);}
+.layout{display:flex;flex-direction:column;height:100vh;width:100%;max-width:680px;margin:0 auto;}
+.top-bar{flex-shrink:0;background:var(--sage);padding:10px 16px 8px;}
+
+.level-pills{flex-shrink:0;display:flex;gap:6px;padding:8px 16px;background:var(--white);border-bottom:1px solid var(--grey-light);overflow-x:auto;scrollbar-width:none;}
+.level-pills::-webkit-scrollbar{display:none;}
+.lvl-pill{flex-shrink:0;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid var(--grey-light);color:var(--grey);background:var(--grey-light);transition:all 0.2s;white-space:nowrap;}
+.lvl-pill.active{background:var(--terra);border-color:var(--terra);color:white;}
+.lvl-pill.done{background:var(--sage);border-color:var(--sage);color:white;}
+.progress-bar-wrap{flex-shrink:0;height:3px;background:var(--grey-light);}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--sage),var(--terra));transition:width 0.5s ease;}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 16px;display:flex;flex-direction:column;gap:8px;min-height:0;}
+.content::-webkit-scrollbar{width:3px;}
+.content::-webkit-scrollbar-thumb{background:var(--grey-light);border-radius:3px;}
+.big-emoji{text-align:center;font-size:32px;margin:2px 0;}
+.cover-img{width:auto;max-width:100%;height:180px;object-fit:contain;display:block;margin:0 auto;border-radius:14px;}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5vw,28px);font-weight:600;text-align:center;line-height:1.3;}
+.screen-sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-align:center;}
+.screen-text{font-size:14px;line-height:1.7;color:var(--grey);text-align:center;}
+.rule-box{background:var(--sage-light);border-left:3px solid var(--sage);border-radius:10px;padding:12px 16px;font-size:13px;line-height:1.65;color:var(--sage);font-style:italic;}
+.q-meta-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:-2px;}
+.q-num{font-size:11px;color:var(--grey);letter-spacing:1px;text-transform:uppercase;}
+.q-tag{font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;letter-spacing:0.5px;}
+.retry-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(201,132,58,0.12);color:var(--terra);font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;font-weight:600;align-self:flex-start;}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,4vw,22px);font-weight:600;line-height:1.45;}
+.options{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:1.5px solid var(--grey-light);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--charcoal);text-align:left;transition:all 0.18s ease;width:100%;line-height:1.45;}
+.opt:active:not(:disabled){transform:scale(0.98);}
+.opt:hover:not(:disabled){border-color:var(--terra);background:var(--terra-light);}
+.opt-letter{width:30px;height:30px;border-radius:50%;background:var(--grey-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;transition:all 0.18s;}
+.opt.correct{border-color:var(--success);background:rgba(74,140,92,0.08);}
+.opt.correct .opt-letter{background:var(--success);color:white;}
+.opt.wrong{border-color:var(--error);background:rgba(176,64,64,0.06);}
+.opt.wrong .opt-letter{background:var(--error);color:white;}
+.opt:disabled{cursor:default;}
+.feedback{font-size:13px;line-height:1.65;padding:12px 16px;border-radius:12px;border-left:3px solid;}
+.feedback.ok{background:rgba(74,140,92,0.08);border-color:var(--success);color:#1a4a2a;}
+.feedback.ko{background:rgba(176,64,64,0.06);border-color:var(--error);color:#6a2020;}
+.encourage{font-size:12px;line-height:1.65;padding:10px 14px;border-radius:10px;background:rgba(201,168,76,0.1);border-left:2px solid var(--gold);color:var(--charcoal);font-style:italic;}
+.score-big{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;color:var(--sage);text-align:center;line-height:1;}
+.score-of{font-size:12px;color:var(--grey);text-align:center;letter-spacing:1px;margin-bottom:4px;}
+.result-msg{font-size:13px;line-height:1.65;padding:12px 16px;border-radius:10px;}
+.result-msg.good{background:rgba(74,140,92,0.1);color:#1a4a2a;}
+.result-msg.retry-msg{background:rgba(201,132,58,0.1);color:#7a4a00;}
+.debrief-section{background:var(--white);border-radius:12px;padding:14px 16px;}
+.section-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--sage);margin-bottom:10px;}
+.debrief-items{display:flex;flex-direction:column;gap:8px;}
+.debrief-item{font-size:13px;line-height:1.65;color:var(--charcoal);padding-left:12px;border-left:2px solid var(--sage-mid);}
+.supp-section{background:var(--sage-light);border-radius:12px;padding:14px 16px;}
+.supp-items{display:flex;flex-direction:column;gap:6px;}
+.supp-item{font-size:13px;line-height:1.5;color:var(--charcoal);}
+.supp-item strong{color:var(--sage);}
+.final-score-big{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:600;color:var(--sage);text-align:center;line-height:1;}
+.final-pct{text-align:center;font-size:13px;color:var(--grey);margin-bottom:4px;}
+.cta-box{background:var(--sage);border-radius:14px;padding:16px 18px;text-align:center;}
+.cta-box h3{font-family:'Cormorant Garamond',serif;font-size:18px;color:white;margin-bottom:8px;}
+.cta-box p{font-size:13px;color:rgba(255,255,255,0.85);line-height:1.65;margin-bottom:12px;}
+.btn{width:100%;padding:14px 20px;border-radius:50px;border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;display:block;text-align:center;}
+.btn-primary{background:var(--terra);color:white;}
+.btn-sage{background:var(--sage);color:white;}
+.btn-outline{background:transparent;color:var(--sage);border:1.5px solid var(--sage);}
+.btn-white{background:white;color:var(--sage);}
+.bottom-bar{flex-shrink:0;padding:10px 18px;background:var(--white);border-top:1px solid var(--grey-light);}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <div class="level-pills" id="lp"></div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="pb" style="width:0%"></div></div>
+  <div class="content" id="ct"></div>
+  <div class="bottom-bar" id="bb"></div>
+</div>
+<script>
+const LV=[
+{id:1,name:"Débutant·e",emoji:"🌱",ct:"#4a8c5c",bg:"#e8f5ec",
+intro:"On commence en douceur ! Reconnaissance des trois grandes dermatoses et leurs mécanismes de base.",
+debrief:["L'acné, l'eczéma et le psoriasis ont des origines et mécanismes radicalement différents.","En naturopathie, la peau est un émonctoire : quand foie et intestin sont surchargés, la peau peut déborder.","Le psoriasis n'est pas contagieux — une information précieuse pour réduire la stigmatisation."],
+supp:{title:"Compléments de base",items:[{l:"Zinc bisglycinate",d:"Cicatrisation et régulation du sébum."},{l:"Probiotiques cutanés",d:"Soutien de l'axe intestin-peau."},{l:"Oméga-3 EPA/DHA",d:"Anti-inflammatoires naturels essentiels."}]},
+questions:[
+{t:"L'acné est principalement due à quel phénomène ?",o:["Un manque de vitamines uniquement","Une obstruction des follicules pileux avec la bactérie Cutibacterium acnes","Une allergie cutanée systématique","Trop de douches ou de savon"],c:1,ok:"✅ L'acné résulte d'un trio : excès de sébum, kératinisation anormale du follicule, et prolifération de C. acnes. C'est cette combinaison qui crée le bouton.",ko:"❌ L'acné n'est pas une allergie ni un problème d'hygiène. C'est une obstruction du follicule où Cutibacterium acnes prolifère, déclenchant l'inflammation.",enc:"Les bases vont s'ancrer naturellement — continuez !"},
+{t:"Le psoriasis est une maladie :",o:["Infectieuse et contagieuse au contact","Auto-immune chronique avec accélération du renouvellement cellulaire cutané","Causée uniquement par le stress chronique","Purement héréditaire, sans facteur déclenchant"],c:1,ok:"✅ Dans le psoriasis, le système immunitaire s'emballe et accélère le cycle cutané (3-5 jours au lieu de 28). Il n'est absolument pas contagieux.",ko:"❌ Le psoriasis est auto-immune — impossible de l'attraper. Le système immunitaire attaque les propres cellules cutanées.",enc:"Le psoriasis est souvent mal compris — vous apprenez quelque chose d'important !"},
+{t:"En naturopathie, l'acné est souvent associée à un déséquilibre de :",o:["Les reins et les poumons","Le foie et l'intestin (émonctoires principaux)","La rate et le pancréas","Les glandes salivaires"],c:1,ok:"✅ La peau est un émonctoire secondaire. Quand le foie et l'intestin sont surchargés, la peau prend le relais.",ko:"❌ En naturopathie, foie et intestin sont directement liés à l'acné. Le foie filtre les androgènes ; l'intestin abrite le microbiome qui influence la peau.",enc:"Le concept d'émonctoires est central en naturopathie !"},
+{t:"Quel aliment est reconnu pour son action anti-inflammatoire bénéfique pour la peau ?",o:["Le sucre blanc raffiné","Les charcuteries transformées","Les poissons gras riches en oméga-3 (sardines, saumon, maquereau)","Les sodas et jus industriels"],c:2,ok:"✅ Les oméga-3 (EPA et DHA) ont une action anti-inflammatoire bien documentée. Ils modulent les prostaglandines pro-inflammatoires.",ko:"❌ Sucre, charcuteries et sodas aggravent l'inflammation. Ce sont les oméga-3 des poissons gras qui ont prouvé leur action bénéfique sur la peau.",enc:"L'alimentation est votre premier médicament !"}
+],
+retry:[
+{t:"PIÈGE : Un ami dit 'L'acné c'est parce que tu ne te laves pas assez'. Que lui répondez-vous ?",o:["Tu as raison, il faut se laver 5 fois par jour","L'acné est causée par une obstruction folliculaire et une bactérie, pas par un manque d'hygiène","Oui, c'est aussi à cause du chocolat","Les dermatologues ne savent pas vraiment"],c:1,ok:"✅ Se laver trop agressivement aggrave même l'acné. La cause est microbiologique et hormonale.",ko:"❌ L'acné n'est pas liée à l'hygiène. Une toilette excessive peut aggraver les choses en détruisant le film hydrolipidique protecteur.",enc:"Corriger les idées reçues fait partie de l'éducation santé !"},
+{t:"PIÈGE : 'Le psoriasis, j'évite de prêter mes serviettes pour ne pas contaminer.' Justifié ?",o:["Oui, il se transmet par contact cutané","Oui, les squames sont infectieuses","Non, le psoriasis est absolument non contagieux","Seulement chez les immunodéprimés"],c:2,ok:"✅ Aucune précaution n'est nécessaire. Le psoriasis est une dérégulation immunitaire, pas une infection.",ko:"❌ Cette précaution renforce la stigmatisation. Le psoriasis ne se transmet par aucune voie — c'est auto-immune.",enc:"Déconstruire les mythes aide vraiment les personnes atteintes !"},
+{t:"PIÈGE : Lequel est le PLUS bénéfique pour la peau inflammatoire ?",o:["Un verre de lait demi-écrémé chaque matin","Un soda sans sucre (édulcorants)","Des sardines à l'huile d'olive","Des biscuits enrichis en vitamines"],c:2,ok:"✅ Les sardines cumulent oméga-3, vitamine D et sélénium — un concentré de bienfaits pour la peau !",ko:"❌ Le lait stimule IGF-1, les édulcorants perturbent le microbiome, les biscuits apportent des pro-inflammatoires. Les sardines sont les championnes !",enc:"Les vrais super-aliments sont souvent les plus simples !"}
+]},
+{id:2,name:"Curieux·se",emoji:"🔍",ct:"#b36a00",bg:"#fff3e0",
+intro:"Mécanismes biologiques, rôle de l'alimentation, nutriments clés. Comprenez pourquoi votre peau réagit ainsi.",
+debrief:["L'index glycémique influence directement insuline et IGF-1, qui stimulent la production de sébum.","La vitamine D est un puissant immunomodulateur — son déficit aggrave souvent psoriasis et eczéma.","L'eczéma de contact et l'eczéma atopique sont deux maladies distinctes — identifier lequel est essentiel.","Microbiome intestinal et peau dialoguent en permanence : l'axe intestin-peau."],
+supp:{title:"Compléments intermédiaires",items:[{l:"Vitamine D3 + K2",d:"Immunomodulation. Dosage selon bilan sanguin."},{l:"Zinc bisglycinate",d:"Inhibe la 5α-réductase, réduit C. acnes."},{l:"Huile de bourrache (GLA)",d:"Restaure la barrière lipidique dans l'eczéma."},{l:"Probiotiques multi-souches",d:"Soutien de l'axe intestin-peau."}]},
+questions:[
+{t:"L'index glycémique élevé peut aggraver l'acné car :",o:["Il assèche la peau directement","Il augmente insuline et IGF-1 qui stimulent androgènes et production de sébum","Il colmate les pores de l'extérieur","Il détruit les bonnes bactéries du visage"],c:1,ok:"✅ IG élevé → pic d'insuline → hausse IGF-1 → stimulation androgènes → excès de sébum → acné. Une chaîne bien documentée depuis l'étude australienne de 2007.",ko:"❌ Le sucre agit de l'intérieur : pic d'insuline → IGF-1 → androgènes → excès de sébum.",enc:"La connexion alimentation-peau est fascinante !"},
+{t:"La vitamine D joue quel rôle dans les maladies cutanées inflammatoires ?",o:["Aucun rôle, elle ne concerne que les os","Elle module le système immunitaire et régule les kératinocytes ; son déficit est fréquent dans psoriasis et eczéma","Elle augmente la production de mélanine","Elle sèche les lésions acnéiques"],c:1,ok:"✅ La vitamine D régule la réponse immunitaire Th1/Th2 et contrôle la maturation des cellules cutanées. Son déficit est plus fréquent dans l'eczéma et le psoriasis.",ko:"❌ La vitamine D va bien au-delà des os ! Dans l'eczéma (Th2 exacerbé) et le psoriasis (Th1/Th17), son action régulatrice est précieuse.",enc:"La vitamine D est souvent sous-estimée — maintenant vous savez pourquoi !"},
+{t:"L'eczéma de contact diffère de l'eczéma atopique parce que :",o:["Il ne provoque jamais de démangeaisons","Il est déclenché par un allergène externe précis, identifiable par patch-test","Il ne touche jamais les mains","Il est dû à un virus cutané"],c:1,ok:"✅ L'eczéma de contact réagit à un allergène spécifique (nickel, parfum, caoutchouc…). Le patch-test permet d'identifier précisément le coupable.",ko:"❌ Les deux eczémas provoquent des démangeaisons. Ce qui les distingue : le contact réagit à un élément précis de l'environnement, identifiable par patch-test.",enc:"Identifier le bon type d'eczéma est la clé !"},
+{t:"Quel lien existe entre psoriasis et microbiome intestinal ?",o:["Aucun — le psoriasis est purement cutané","Des études montrent une dysbiose avec moins de bactéries anti-inflammatoires (ex: Faecalibacterium prausnitzii)","Le microbiome n'influence que l'eczéma","Le psoriasis crée la dysbiose mais pas l'inverse"],c:1,ok:"✅ Dans le psoriasis, on observe fréquemment une dysbiose avec réduction de F. prausnitzii. Soutenir le microbiome fait partie des approches naturopathiques.",ko:"❌ L'axe intestin-peau est bien documenté. Dans le psoriasis, la dysbiose caractéristique est une piste thérapeutique sérieuse.",enc:"L'axe intestin-peau est l'une des découvertes les plus prometteuses de ces 10 ans !"}
+],
+retry:[
+{t:"PIÈGE : 'Le chocolat cause l'acné' — est-ce scientifiquement exact ?",o:["Oui, le chocolat cause directement l'acné","Non — c'est le sucre et le lait dans le chocolat industriel, pas le cacao pur","Oui, la théobromine obstrue les pores","Non, aucun aliment n'influence jamais l'acné"],c:1,ok:"✅ Le cacao pur (chocolat 85%+) n'est pas problématique. C'est le sucre (IG élevé) et le lait (IGF-1) des chocolats industriels qui aggravent l'acné.",ko:"❌ Le cacao est riche en antioxydants. C'est le sucre et le lait des chocolats industriels qui posent problème.",enc:"La nuance est essentielle en naturopathie !"},
+{t:"PIÈGE : Un patient avec eczéma sévère demande s'il doit prendre de la vitamine D. La meilleure réponse ?",o:["Non, ça ne sert à rien pour la peau","Oui, mais commencer par doser le 25-OH-D3 sanguin avant de supplémenter","200 UI par jour suffit pour tout le monde","C'est dangereux, déconseillé dans l'eczéma"],c:1,ok:"✅ Le dosage sanguin (25-OH-D3) est indispensable avant toute supplémentation. En cas de déficit avéré, la supplémentation peut apporter un bénéfice réel.",ko:"❌ Supplémenter sans dosage préalable n'est pas recommandé. Idéalement : bilan sanguin, identification du déficit, adaptation de la dose.",enc:"La personnalisation est l'essence même de la naturopathie !"},
+{t:"PIÈGE : Lequel protège le mieux le microbiome intestinal bénéfique pour la peau ?",o:["Les édulcorants artificiels (aspartame, sucralose)","Les légumes lactofermentés (choucroute crue, kimchi, kéfir)","Les antibiotiques en prévention","Les aliments ultra-transformés enrichis en probiotiques"],c:1,ok:"✅ Les aliments lactofermentés apportent bactéries vivantes et prébiotiques naturels, bien supérieurs aux probiotiques industriels pasteurisés.",ko:"❌ Les édulcorants perturbent le microbiome, les ultra-transformés l'appauvrissent, les antibiotiques l'éliminent ! Ce sont les lactofermentés qui nourrissent vraiment la flore.",enc:"Votre cuisine peut devenir votre meilleure pharmacie !"}
+]},
+{id:3,name:"Éclairé·e",emoji:"✨",ct:"#ad1457",bg:"#fce4ec",
+intro:"Plantes, protocoles naturopathiques concrets et outils du quotidien. Ce que vous pouvez faire — et pourquoi ça fonctionne.",
+debrief:["Le calendula cicatrise et apaise. Le curcuma module NF-κB. L'aloe vera hydrate et régénère.","La cohérence cardiaque (3×5 min/jour, 6 resp/min) réduit le cortisol — qui aggrave les 3 dermatoses.","Le protocole d'éviction-réintroduction (4-6 semaines) permet d'identifier vos déclencheurs personnels.","Une exposition solaire modérée (15-20 min/jour) produit vitamine D et module l'immunité."],
+supp:{title:"Phytothérapie & soins naturels",items:[{l:"Curcuma + pipérine",d:"Anti-NF-κB. La pipérine augmente l'absorption de 2000%."},{l:"Huile de calendula bio",d:"Cicatrisante, apaisante, anti-inflammatoire cutanée."},{l:"Gel d'aloe vera pur",d:"Hydratation et régénération des peaux eczémateuses."},{l:"Nettoyant doux surgras",d:"Sans SLS ni parfum — pour ne pas aggraver."}]},
+questions:[
+{t:"Le curcuma est utilisé dans les dermatoses inflammatoires principalement pour :",o:["Colorer la peau en jaune","Inhiber NF-κB, le facteur de transcription central de l'inflammation","Stimuler la production de sébum","Agir comme antihistaminique direct"],c:1,ok:"✅ La curcumine inhibe NF-κB, réduisant les cytokines pro-inflammatoires (IL-1β, TNF-α, IL-6). Avec pipérine, sa biodisponibilité explose.",ko:"❌ Le curcuma n'a pas d'effet colorant cutané. Son action est moléculaire : inhibe NF-κB, le chef d'orchestre de l'inflammation.",enc:"La phytothérapie moléculaire est aussi sérieuse que la pharmacologie !"},
+{t:"La cohérence cardiaque peut aider les dermatoses car elle :",o:["Agit directement sur les bactéries C. acnes","Réduit le cortisol qui aggrave l'inflammation cutanée et la séborrhée","Remplace les crèmes hydratantes","Améliore l'absorption cutanée des actifs"],c:1,ok:"✅ La cohérence cardiaque (5 min, 6 resp/min, 3×/jour) réduit le cortisol. Or le cortisol aggrave acné, eczéma et psoriasis. Un outil simple, gratuit et puissant !",ko:"❌ La cohérence cardiaque agit sur l'axe stress-inflammation. En abaissant le cortisol, on réduit les poussées inflammatoires — sans médicament.",enc:"Votre respiration est l'un de vos meilleurs alliés santé !"},
+{t:"Calendula officinalis est indiqué en application locale car il possède :",o:["Des propriétés stimulantes pour la mélanine","Des propriétés cicatrisantes, anti-inflammatoires et antibactériennes légères (triterpènes et flavonoïdes)","Un antibiotique puissant","Des propriétés exfoliantes acides"],c:1,ok:"✅ Ses triterpènes et flavonoïdes : triple action cicatrisante, anti-inflammatoire, légèrement antimicrobienne. Bien toléré sur les peaux atopiques fragiles.",ko:"❌ Le calendula n'est pas un antibiotique. Son action est douce mais réelle : cicatrisante, apaisante, légèrement anti-inflammatoire.",enc:"Les remèdes de grand-mère ont parfois une science solide derrière eux !"},
+{t:"Le protocole d'éviction-réintroduction alimentaire dure généralement :",o:["3 jours maximum","4 à 6 semaines d'éviction, puis réintroduction un par un","Une seule journée de jeûne","Un an complet sans les aliments suspects"],c:1,ok:"✅ Il faut 4 à 6 semaines d'éviction stricte pour vider les anticorps, puis réintroduction progressive, un aliment à la fois, en observant 72h à chaque fois.",ko:"❌ 3 jours sont insuffisants. Il faut 4 à 6 semaines puis une réintroduction méthodique.",enc:"La patience est une vertu en naturopathie — les résultats durables prennent du temps !"}
+],
+retry:[
+{t:"PIÈGE : 'Je prends du curcuma en poudre dans mes plats — c'est suffisant.' Vrai ou faux ?",o:["Vrai, le curcuma en cuisine est pleinement bioactif","Faux — la curcumine a une très faible biodisponibilité seule. Elle nécessite pipérine ou formulation liposomale","Vrai, les graisses alimentaires suffisent","Faux — le curcuma cuit perd tous ses principes actifs"],c:1,ok:"✅ La curcumine pure a une biodisponibilité < 1%. La pipérine du poivre noir l'augmente de ~2000%. Des formulations liposomales sont encore plus efficaces.",ko:"❌ Le curcuma alimentaire apporte peu d'effets thérapeutiques. Pour une action réelle, la curcumine doit être associée à la pipérine ou sous forme liposomale.",enc:"Connaître la biodisponibilité des actifs naturels change tout !"},
+{t:"PIÈGE : Une personne avec eczéma atopique veut tenter l'éviction des laitages. La bonne approche ?",o:["Supprimer tous les laitages définitivement sans consultation","Test de 4 à 6 semaines en compensant le calcium (légumineuses, amandes, sardines) et surveiller avec un professionnel","Supprimer uniquement le lait mais garder les fromages","Inutile car les laitages n'influencent jamais l'eczéma"],c:1,ok:"✅ L'éviction de test est pertinente, mais elle doit être bien conduite : durée suffisante, compensation nutritionnelle et suivi professionnel.",ko:"❌ Une éviction partielle sans protocole peut fausser les résultats et créer des carences. Toujours : éviction totale 4-6 semaines + compensation + réintroduction méthodique.",enc:"La méthode rigoureuse fait toute la différence !"},
+{t:"PIÈGE : Laquelle N'aide PAS à réduire le cortisol aggravant les dermatoses ?",o:["La cohérence cardiaque 3×5 min/jour","Le yoga et la méditation","Regarder les actualités anxiogènes le soir avant de dormir","La marche en nature 30 min/jour"],c:2,ok:"✅ L'exposition aux actualités négatives le soir maintient un cortisol élevé. Les trois autres pratiques l'abaissent.",ko:"❌ C'est regarder les actualités anxiogènes le soir qui maintient le cortisol élevé. Cohérence cardiaque, yoga et marche en nature baissent tous le cortisol.",enc:"L'hygiène mentale fait partie de l'hygiène de peau !"}
+]},
+{id:4,name:"Expert·e",emoji:"🎓",ct:"#4527a0",bg:"#ede7f6",
+intro:"Biochimie de la peau, approche PNIE, protocoles intégratifs. Pour les passionné·e·s de santé intégrative.",
+debrief:["Les LPS bactériens d'une muqueuse hyperperméable activent les TLR4 immunitaires et entretiennent une inflammation de bas grade qui s'exprime via la peau.","Le stress active l'axe HPA → CRH → dégranulation des mastocytes cutanés → substance P. D'où les poussées après chocs émotionnels.","Les céramides constituent ~50% des lipides intercellulaires. Leur déficit dans la peau atopique augmente la perte d'eau et la pénétration des allergènes.","La naturopathie intégrative est complémentaire — jamais substitutive — au suivi médical."],
+supp:{title:"Protocole avancé — Expert",items:[{l:"L-Glutamine (5g/j)",d:"Restaure l'intégrité de la muqueuse intestinale."},{l:"Zinc-Carnosine",d:"Protection et régénération de la muqueuse intestinale."},{l:"Émollient aux céramides",d:"Restaure la barrière cutanée dans l'eczéma atopique."},{l:"Adaptogènes (Ashwagandha, Rhodiola)",d:"Régulation de l'axe HPA et du cortisol chronique."},{l:"Vitex agnus-castus (acné hormonale F.)",d:"Régulation FSH/LH dans l'acné hormonale féminine."}]},
+questions:[
+{t:"La perméabilité intestinale ('leaky gut') peut aggraver les dermatoses car :",o:["Elle provoque directement des plaques sur la peau","Des fragments bactériens (LPS) passent dans le sang, activent les TLR4 immunitaires et entretiennent une inflammation systémique","Elle n'a aucun lien prouvé avec la peau","Elle cause uniquement des troubles digestifs"],c:1,ok:"✅ Les LPS traversent la muqueuse hyperperméable et activent les récepteurs TLR4, déclenchant une cascade inflammatoire de bas grade. L'axe intestin-peau est central.",ko:"❌ Le mécanisme est indirect mais réel : LPS bactériens → circulation sanguine → TLR4 → inflammation systémique → expression via la peau.",enc:"La connexion intestin-peau est l'une des frontières les plus passionnantes de la médecine intégrative !"},
+{t:"L'approche PNIE appliquée aux dermatoses nous enseigne que :",o:["Les émotions n'ont aucun impact prouvé sur la peau","Le stress active l'axe HPA, libère du CRH et des neuropeptides (substance P) qui déclenchent la dégranulation des mastocytes cutanés","La peau est isolée du cerveau","Seule la génétique détermine les maladies de peau"],c:1,ok:"✅ L'axe stress → HPA → CRH → mastocytes → substance P → inflammation est documenté. C'est pourquoi les rechutes surviennent fréquemment après des chocs émotionnels.",ko:"❌ Le stress active l'axe HPA qui libère du CRH, déclenche la dégranulation des mastocytes via la substance P. D'où les poussées après chocs émotionnels.",enc:"La PNIE révolutionne notre vision de la santé !"},
+{t:"Les céramides jouent quel rôle essentiel dans la peau atopique ?",o:["Ils donnent la couleur naturelle à la peau","Ils constituent ~50% des lipides intercellulaires ; leur déficit augmente la perte d'eau (TEWL) et la pénétration des allergènes","Ils stimulent la croissance des poils","Ils activent la réponse immunitaire cutanée"],c:1,ok:"✅ Les céramides forment le 'ciment' lipidique entre les cellules. Dans la peau atopique, leur déficit crée une 'peau passoire' avec perte d'eau excessive.",ko:"❌ Les céramides sont le ciment lipidique intercellulaire. Leur déficit dans la peau atopique crée une perte d'eau excessive et une entrée des allergènes.",enc:"La biochimie cutanée révèle pourquoi les bons émollients font toute la différence !"},
+{t:"Dans un protocole naturopathique de l'acné hormonale féminine, l'association cohérente est :",o:["Antibiotiques longue durée + pilule uniquement","Vitex agnus-castus + zinc + DIM (diindolylméthane des brassicacées) + probiotiques ciblés","Suppression totale des graisses alimentaires","Cortisone locale + antihistaminiques"],c:1,ok:"✅ Vitex module l'axe hypothalamo-hypophysaire (FSH/LH). Le DIM (brocoli, chou) favorise un métabolisme œstrogénique sain. Le zinc inhibe la 5α-réductase.",ko:"❌ L'approche naturopathique est multi-cibles : Vitex (axe hypophysaire) + DIM (métabolisme œstrogènes) + zinc (DHT) + probiotiques (axe intestin-foie-hormones).",enc:"Les protocoles avancés demandent du temps à comprendre — vous en maîtrisez la logique !"}
+],
+retry:[
+{t:"PIÈGE EXPERT : Pour restaurer la perméabilité intestinale dans un contexte de dermatose chronique ?",o:["Antibiotiques à large spectre pour 'nettoyer' l'intestin","L-Glutamine + zinc-carnosine + probiotiques + éviction des aliments irritants si sensibilité avérée","Jeûne hydrique de 3 jours uniquement","Laxatifs naturels quotidiens"],c:1,ok:"✅ La L-glutamine nourrit les entérocytes et restaure les jonctions serrées. Le zinc-carnosine protège la muqueuse. Les probiotiques rétablissent la flore.",ko:"❌ Les antibiotiques détruisent le microbiome, le jeûne court est insuffisant, les laxatifs n'agissent pas sur la muqueuse. Protocole ciblé : L-glutamine + zinc-carnosine + probiotiques + alimentation adaptée.",enc:"Les protocoles de restauration intestinale sont complexes mais fondamentaux !"},
+{t:"PIÈGE EXPERT : Une patiente a des poussées de psoriasis à chaque période de stress intense. L'explication PNIE la plus juste ?",o:["C'est une coïncidence sans lien causal","Le stress active l'axe HPA → cortisol et CRH → dégranulation des mastocytes → substance P et histamine → poussée psoriasique","Le stress affaiblit seulement les anticorps","Le psoriasis crée le stress, pas l'inverse"],c:1,ok:"✅ L'axe stress-HPA-mastocytes-substance P est le mécanisme de liaison entre le choc émotionnel et la poussée cutanée.",ko:"❌ Le lien est causal et bidirectionnel : stress → cortisol + CRH → mastocytes → substance P → inflammation. Et les lésions visibles créent un stress psychologique.",enc:"Vous comprenez maintenant pourquoi la naturopathie traite la personne entière !"},
+{t:"PIÈGE EXPERT : Pourquoi la vaseline seule est moins efficace qu'une crème aux céramides dans l'eczéma atopique ?",o:["La vaseline est allergisante pour les peaux atopiques","La vaseline crée un film occlusif sans restaurer les céramides manquants ; elle hydrate par occlusion mais ne répare pas la barrière structurellement","La vaseline accélère la prolifération bactérienne","La vaseline aggrave toujours l'eczéma"],c:1,ok:"✅ La vaseline hydrate par occlusion (empêche l'évaporation) mais n'apporte pas les céramides manquants. Les émollients aux céramides réparent structurellement la barrière.",ko:"❌ La vaseline est bien tolérée mais insuffisante. Elle réduit la TEWL mais ne remplace pas les céramides manquants dans la peau atopique.",enc:"La compréhension fine des mécanismes fait la différence entre bonne et excellente prise en charge !"}
+]}
+];
+
+let S={sc:'intro',lv:0,qi:0,ans:false,sel:null,sc4:[0,0,0,0],retry:false,rs:0};
+
+function render(){
+  const c=document.getElementById('ct'),b=document.getElementById('bb');
+  c.innerHTML='';b.innerHTML='';c.scrollTop=0;
+  document.getElementById('lp').innerHTML=LV.map((l,i)=>
+    `<div class="lvl-pill ${i<S.lv?'done':i===S.lv?'active':''}">${l.emoji} Niv.${l.id} — ${l.name}</div>`).join('');
+  let pct=0;
+  if(S.sc==='question'){const qs=S.retry?LV[S.lv].retry:LV[S.lv].questions;pct=(S.qi/qs.length)*100;}
+  else if(S.sc==='final')pct=100;
+  document.getElementById('pb').style.width=pct+'%';
+  ({intro,lvlIntro,question,lvlDone,retryIntro,retryDone,final})[S.sc](c,b);
+}
+
+function add(p,h){const d=document.createElement('div');d.innerHTML=h;while(d.firstChild)p.appendChild(d.firstChild);}
+
+function intro(c,b){
+  add(c,`<img class="cover-img" src="https://catherinepiault.github.io/quiz-brainfest/cover%20quiz%20peau.png" alt="Quiz peau">
+    <div class="screen-title">Savez-vous lire le langage de votre peau ?</div>
+    <div class="screen-text">Acné, eczéma, psoriasis — trois mots si souvent confondus. Ce quiz en <strong>4 niveaux progressifs</strong> vous guide à travers chaque erreur pour mieux comprendre.</div>
+    <div class="rule-box">💡 <strong>Règle du jeu :</strong> 4 questions par niveau. Toutes les bonnes réponses sont nécessaires pour avancer. Une erreur ? Une question reformulée vous aide à consolider.</div>`);
+  add(b,`<button class="btn btn-primary" onclick="go('lvlIntro')">Commencer le voyage 🌿</button>`);
+}
+
+function lvlIntro(c,b){
+  const l=LV[S.lv];
+  add(c,`<div class="big-emoji">${l.emoji}</div>
+    <div class="screen-title">Niveau ${l.id} — ${l.name}</div>
+    <div class="screen-sub">— ${l.name} —</div>
+    <div class="screen-text">${l.intro}</div>`);
+  add(b,`<button class="btn btn-primary" onclick="startLv()">Je suis prêt·e !</button>`);
+}
+
+function question(c,b){
+  const l=LV[S.lv],qs=S.retry?l.retry:l.questions,q=qs[S.qi],lt=['A','B','C','D'];
+  if(S.retry)add(c,`<div class="retry-badge">⚡ Question de rattrapage</div>`);
+  add(c,`<div class="q-meta-row"><div class="q-num">Question ${S.qi+1}/${qs.length}</div><div class="q-tag" style="background:${l.bg};color:${l.ct};">${l.emoji} ${l.name}</div></div><div class="q-text">${q.t}</div>`);
+  const od=document.createElement('div');od.className='options';
+  q.o.forEach((o,i)=>{
+    let cls='';
+    if(S.ans){if(i===q.c)cls='correct';else if(i===S.sel)cls='wrong';}
+    const btn=document.createElement('button');
+    btn.className=`opt ${cls}`;btn.disabled=S.ans;
+    btn.innerHTML=`<span class="opt-letter">${lt[i]}</span><span>${o}</span>`;
+    btn.onclick=()=>pick(i);od.appendChild(btn);
+  });
+  c.appendChild(od);
+  if(S.ans){
+    const ok=S.sel===q.c;
+    add(c,`<div class="feedback ${ok?'ok':'ko'}">${ok?q.ok:q.ko}</div>`);
+    if(!ok)add(c,`<div class="encourage">💪 ${q.enc}</div>`);
+    add(b,`<button class="btn btn-sage" onclick="nextQ()">Continuer →</button>`);
+  }
+}
+
+function lvlDone(c,b){
+  const l=LV[S.lv],score=S.sc4[S.lv],total=l.questions.length,perfect=score===total;
+  add(c,`<div class="score-big">${score}/${total}</div><div class="score-of">réponses justes</div>
+    <div class="screen-title">${perfect?'🌟 Bravo !':'💡 Presque !'}</div>
+    <div class="result-msg ${perfect?'good':'retry-msg'}">${perfect?'🎉 Score parfait ! Vous maîtrisez ce niveau.':'📚 Quelques notions à consolider ! Des questions reformulées vont vous aider.'}</div>
+    <div class="debrief-section"><div class="section-title">📖 Ce qu'il faut retenir</div><div class="debrief-items">${l.debrief.map(d=>`<div class="debrief-item">${d}</div>`).join('')}</div></div>
+    <div class="supp-section"><div class="section-title">🌿 ${l.supp.title}</div><div class="supp-items">${l.supp.items.map(s=>`<div class="supp-item"><strong>${s.l}</strong> — ${s.d}</div>`).join('')}</div></div>`);
+  if(perfect){
+    if(S.lv<LV.length-1)add(b,`<button class="btn btn-primary" onclick="nextLv()">Niveau ${S.lv+2} ${LV[S.lv+1].emoji} →</button>`);
+    else add(b,`<button class="btn btn-primary" onclick="go('final')">Mon bilan final 🏆</button>`);
+  }else add(b,`<button class="btn btn-outline" onclick="go('retryIntro')">Questions de rattrapage →</button>`);
+}
+
+function retryIntro(c,b){
+  add(c,`<div class="big-emoji">🎯</div>
+    <div class="screen-title">Questions de rattrapage</div>
+    <div class="screen-text">Ces questions abordent les <strong>mêmes notions</strong> que le niveau ${LV[S.lv].id}, formulées différemment — avec des pièges subtils.</div>
+    <div class="rule-box">🎯 Objectif : comprendre, pas juste répondre. Chaque erreur vous rapproche de la maîtrise.</div>`);
+  add(b,`<button class="btn btn-primary" onclick="launchRetry()">Je suis prêt·e !</button>`);
+}
+
+function retryDone(c,b){
+  const isLast=S.lv===LV.length-1;
+  add(c,`<div class="big-emoji">🎉</div>
+    <div class="screen-title">Rattrapage accompli !</div>
+    <div class="screen-text">Félicitations ! Vous avez consolidé les notions clés du <strong>Niveau ${LV[S.lv].id} — ${LV[S.lv].name}</strong>.</div>
+    <div class="result-msg good">🌱 Ces connaissances sont maintenant bien ancrées. Vous pouvez avancer avec confiance.</div>`);
+  if(isLast)add(b,`<button class="btn btn-primary" onclick="go('final')">Mon bilan final 🏆</button>`);
+  else add(b,`<button class="btn btn-primary" onclick="nextLv()">Niveau ${S.lv+2} ${LV[S.lv+1].emoji} →</button>`);
+}
+
+function final(c,b){
+  const total=LV.reduce((s,l)=>s+l.questions.length,0),scored=S.sc4.reduce((a,b)=>a+b,0),pct=Math.round((scored/total)*100);
+  const medal=pct>=90?'🏆':pct>=70?'🌟':'🌱';
+  const title=pct>=90?'Vous êtes une véritable expert·e de la peau !':pct>=70?'Bravo, vous avez fait un beau chemin !':'Vous avez planté des graines précieuses !';
+  add(c,`<div class="big-emoji">${medal}</div>
+    <div class="final-score-big">${scored}/${total}</div>
+    <div class="final-pct">Score global : ${pct}%</div>
+    <div class="screen-title">${title}</div>
+    <div class="screen-text">Vous avez parcouru les 4 niveaux sur l'acné, l'eczéma et le psoriasis. La peau est un organe de communication entre votre monde intérieur et extérieur.</div>
+    <div class="cta-box"><h3>🌿 Passez à l'étape suivante</h3><p>Ce quiz vous a donné les clés — mais votre peau mérite une approche sur mesure. Un·e naturopathe qualifié·e peut établir un bilan de terrain complet.</p><button class="btn btn-white" onclick="alert('Merci ! Contactez votre naturopathe pour prendre rendez-vous. 📅')">📅 Prendre rendez-vous</button></div>`);
+  add(b,`<button class="btn btn-outline" onclick="resetQ()">🔄 Recommencer depuis le début</button>`);
+}
+
+function go(sc){S.sc=sc;render();}
+function startLv(){S.qi=0;S.ans=false;S.sel=null;S.retry=false;S.sc4[S.lv]=0;S.sc='question';render();}
+function pick(i){
+  if(S.ans)return;S.ans=true;S.sel=i;
+  const qs=S.retry?LV[S.lv].retry:LV[S.lv].questions;
+  if(i===qs[S.qi].c){if(S.retry)S.rs++;else S.sc4[S.lv]++;}
+  render();
+}
+function nextQ(){
+  const qs=S.retry?LV[S.lv].retry:LV[S.lv].questions;
+  S.ans=false;S.sel=null;
+  if(S.qi<qs.length-1){S.qi++;S.sc='question';}
+  else{S.sc=S.retry?'retryDone':'lvlDone';}
+  render();
+}
+function launchRetry(){S.retry=true;S.qi=0;S.rs=0;S.ans=false;S.sel=null;S.sc='question';render();}
+function nextLv(){S.lv++;S.sc='lvlIntro';render();}
+function resetQ(){S={sc:'intro',lv:0,qi:0,ans:false,sel:null,sc4:[0,0,0,0],retry:false,rs:0};render();}
+render();
+</script>
+</body>
+</html>
