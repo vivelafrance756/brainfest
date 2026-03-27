@@ -100,6 +100,8 @@ Fichiers concernés : `sante-naturelle.html`, `memoire.html`, et tout autre fich
 - [ ] **8.** Mettre à jour les URLs canoniques dans tous les fichiers HTML concernés
 - [ ] **9.** Pousser la mise à jour des canonicals sur GitHub
 
----
+
 
 *Dernière mise à jour : 2026-03-26 — Étapes 1–4 complétées : bugs corrigés, CNAME créé, tout poussé sur GitHub.*
+Read PLAN.md and continue. We are now on step 8: update all canonical URLs in all HTML files from the old URLs to https://brainfest.eu. Then push to GitHub on account vivelafrance756/brainfest.
+Read PLAN.md and continue. We are now on step 8: update all canonical URLs in all HTML files from the old URLs to https://brainfest.eu. Then push to GitHub on account vivelafrance756/brainfest.
