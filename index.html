@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BrainFest — Santé naturelle &amp; Mémoire</title>
+<meta name="description" content="Jeux de mémoire et quiz en santé naturelle. Entraînez votre cerveau en jouant. Bilingue FR/EN.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/">
+<meta property="og:title" content="BrainFest — Santé naturelle &amp; Mémoire">
+<meta property="og:description" content="Jeux de mémoire et quiz en santé naturelle. Entraînez votre cerveau en jouant.">
+<meta property="og:url" content="https://brainfest.eu/">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue-light: #ADD8E6;
+  --blue-mid: #7ab8cc;
+  --blue-dark: #1a3a5c;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-width: 375px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--indigo-dark);
+  overflow-x: hidden;
+  min-width: 375px;
+}
+
+/* ── HEADER ── */
+#header {
+  width: 100%;
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1;
+}
+
+#header-logo .brain {
+  color: var(--cream);
+  font-weight: 400;
+}
+
+#header-logo .fest {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+#header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+#lang-toggle {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 6px 18px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 64px;
+  letter-spacing: 0.5px;
+}
+
+#new-this-week {
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 24px;
+  padding: 10px 28px;
+  cursor: pointer;
+  min-height: 44px;
+  animation: pulse 2.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,146,58,0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(212,146,58,0); }
+}
+
+/* ── HERO ── */
+#hero {
+  background: var(--indigo-dark);
+  padding: 32px 20px 28px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+#hero-text {
+  flex: 1;
+}
+
+#hero-text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+#hero-tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--amber);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-top: 18px;
+}
+
+#hero-brain {
+  width: 140px;
+  height: 140px;
+  min-width: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── THEME SENTENCE ── */
+#theme-sentence {
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+#theme-sentence p {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--blue-light);
+  font-style: italic;
+  text-align: center;
+  line-height: 1.6;
+}
+
+#theme-sentence strong {
+  color: var(--cream);
+  font-style: normal;
+}
+
+/* ── TWO COLUMNS ── */
+#two-columns {
+  background: #f0f4f8;
+  padding: 24px 16px;
+}
+
+.columns-row {
+  display: flex;
+  flex-direction: row;
+  gap: 4%;
+  align-items: stretch;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column {
+  width: 48%;
+  flex-shrink: 0;
+  flex: 1;
+}
+
+.column-header {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.25;
+  margin-bottom: 14px;
+  white-space: pre-line;
+}
+
+.card-row-wrapper {
+  position: relative;
+}
+
+.card-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 180px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+  gap: 0;
+}
+
+.card-row::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 12px;
+  min-width: 160px;
+  max-width: 180px;
+  height: 160px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  margin-right: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.card-emoji {
+  font-size: 20px;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--sage);
+  line-height: 1.4;
+}
+
+.card-nav {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+  flex-shrink: 0;
+}
+
+.card-row-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-nav button {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 44px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── SONOCERVEAU ── */
+#sonocerveau {
+  width: 100%;
+  background: var(--blue-light);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+#sono-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding-top: 6px;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+#sono-label span.note-icon {
+  font-size: 22px;
+  color: var(--blue-dark);
+}
+
+#sono-label span.sono-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--blue-dark);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+#sono-cards {
+  flex: 1;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+
+#sono-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.sono-card {
+  background: var(--blue-mid);
+  border-radius: 16px;
+  padding: 16px 12px;
+  min-width: 160px;
+  max-width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.sono-card-img {
+  background: #5a9ab5;
+  border-radius: 8px;
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.sono-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  line-height: 1.3;
+}
+
+.sono-card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--blue-dark);
+  line-height: 1.4;
+}
+
+/* ── FOOTER ── */
+#footer {
+  background: var(--indigo-mid);
+  padding: 32px 20px;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#footer-text-top {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#newsletter-btn {
+  width: 100%;
+  background: var(--amber);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#footer-text-bottom {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+#footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--amber);
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+#footer-links a:hover {
+  text-decoration: underline;
+}
+
+#footer-copyright {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(212,146,58,0.2); }
+  50% { box-shadow: 0 0 30px rgba(212,146,58,0.5); }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 500px) {
+  #hero {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  #hero-brain {
+    align-self: flex-end;
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+  }
+
+  #hero-text h1 {
+    font-size: 28px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="header">
+  <div id="header-logo"><span class="brain">Brain</span><span class="fest">Fest</span></div>
+  <div id="header-right">
+    <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+    <button id="new-this-week" onclick="scrollToMelodie()">
+      <span data-fr="NOUVEAU CETTE SEMAINE" data-en="NEW THIS WEEK">NOUVEAU CETTE SEMAINE</span>
+    </button>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div id="hero-text">
+    <h1 data-fr="Faites vibrer votre cerveau avec des connaissances en santé naturelle." data-en="Feed your brain with natural health knowledge.">
+      Faites vibrer votre cerveau avec des connaissances en santé naturelle.
+    </h1>
+    <h1 style="margin-top:10px;" data-fr="Entraînez votre mémoire en jouant." data-en="Train your memory by playing.">
+      Entraînez votre mémoire en jouant.
+    </h1>
+    <p id="hero-tagline">MÉMOIRE · VITALITÉ · PRÉVENTION</p>
+  </div>
+  <img src="images/brain-hero.jpg" alt="BrainFest" id="hero-brain" style="width:140px;height:140px;object-fit:cover;border-radius:50%;border:1px solid rgba(212,146,58,0.3);flex-shrink:0;animation:float 4s ease-in-out infinite,pulse-glow 4s ease-in-out infinite;">
+</section>
+
+<!-- ── THEME SENTENCE ── -->
+<section id="theme-sentence">
+  <p data-fr='Les jeux de mémoire sont conçus pour ancrer ce que vous apprenez dans les questionnaires santé. Le thème du moment : <strong>la peau</strong>.'
+     data-en='The memory games are designed to reinforce what you learn in the health quizzes. Current theme : <strong>skin</strong>.'>
+    Les jeux de mémoire sont conçus pour ancrer ce que vous apprenez dans les questionnaires santé. Le thème du moment : <strong>la peau</strong>.
+  </p>
+</section>
+
+<!-- ── TWO COLUMNS ── -->
+<section id="two-columns">
+  <div class="columns-row">
+
+    <!-- CULTIVEZ VOS SAVOIRS -->
+    <div class="column">
+      <div class="column-header" data-fr="CULTIVEZ&#10;VOS&#10;SAVOIRS" data-en="CULTIVATE&#10;YOUR&#10;KNOWLEDGE">CULTIVEZ&#10;VOS&#10;SAVOIRS</div>
+      <div class="card-row-wrapper">
+        <div class="card-row" id="row-savoirs">
+          <div class="card">
+            <div class="card-emoji">🍊</div>
+            <div class="card-title">Nutriments et Peau</div>
+            <div class="card-desc" data-fr="Votre peau mange ce que vous mangez" data-en="Your skin eats what you eat">Votre peau mange ce que vous mangez</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🔬</div>
+            <div class="card-title" data-fr="Votre peau a une histoire" data-en="Your skin has a story">Votre peau a une histoire</div>
+            <div class="card-desc" data-fr="Acné, eczéma, psoriasis : comprenez votre peau" data-en="Acne, eczema, psoriasis: understand your skin">Acné, eczéma, psoriasis : comprenez votre peau</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🦠</div>
+            <div class="card-title">Peau et Microbiote</div>
+            <div class="card-desc" data-fr="Votre intestin parle à votre peau" data-en="Your gut talks to your skin">Votre intestin parle à votre peau</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🫁</div>
+            <div class="card-title">Peau et Foie</div>
+            <div class="card-desc" data-fr="Quand le foie déborde, la peau réagit" data-en="When the liver overflows, the skin reacts">Quand le foie déborde, la peau réagit</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">💊</div>
+            <div class="card-title" data-fr="Magnésium oui, mais lequel ?" data-en="Magnesium yes, but which one?">Magnésium oui, mais lequel ?</div>
+            <div class="card-desc" data-fr="Démêlez le vrai du marketing" data-en="Sort fact from marketing">Démêlez le vrai du marketing</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🥗</div>
+            <div class="card-title" data-fr="Stratège Anti-Inflammatoire" data-en="Anti-Inflammatory Strategy">Stratège Anti-Inflammatoire</div>
+            <div class="card-desc" data-fr="L'alimentation qui protège" data-en="The diet that protects">L'alimentation qui protège</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🌿</div>
+            <div class="card-title" data-fr="Plantes : Remèdes ou Légendes ?" data-en="Plants: Remedies or Legends?">Plantes : Remèdes ou Légendes ?</div>
+            <div class="card-desc" data-fr="La science face aux traditions" data-en="Science meets tradition">La science face aux traditions</div>
+          </div>
+        </div>
+        <div class="card-nav">
+          <button onclick="scrollRow('row-savoirs', -1)" aria-label="Précédent">&#8592;</button>
+          <button onclick="scrollRow('row-savoirs', 1)" aria-label="Suivant">&#8594;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENTRAÎNEZ VOTRE MÉMOIRE -->
+    <div class="column">
+      <div class="column-header" data-fr="ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE" data-en="TRAIN&#10;YOUR&#10;MEMORY">ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE</div>
+      <div class="card-row-wrapper">
+        <div class="card-row" id="row-memoire">
+          <div class="card">
+            <div class="card-emoji">🧩</div>
+            <div class="card-title" data-fr="Le Carré Magique" data-en="The Magic Square">Le Carré Magique</div>
+            <div class="card-desc" data-fr="Votre cerveau adore qu'on le mette au défi" data-en="Your brain loves a challenge">Votre cerveau adore qu'on le mette au défi</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">✏️</div>
+            <div class="card-title" data-fr="Mots Croisés Jolie Peau" data-en="Lovely Skin Crosswords">Mots Croisés Jolie Peau</div>
+            <div class="card-desc" data-fr="Le vocabulaire de la peau en jeu" data-en="Skin vocabulary at play">Le vocabulaire de la peau en jeu</div>
+          </div>
+          <div class="card">
+            <div class="card-emoji">🃏</div>
+            <div class="card-title" data-fr="Paires Santé" data-en="Health Pairs">Paires Santé</div>
+            <div class="card-desc" data-fr="Associez plantes et effets" data-en="Match plants and effects">Associez plantes et effets</div>
+          </div>
+        </div>
+        <div class="card-nav">
+          <button onclick="scrollRow('row-memoire', -1)" aria-label="Précédent">&#8592;</button>
+          <button onclick="scrollRow('row-memoire', 1)" aria-label="Suivant">&#8594;</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SONOCERVEAU ── -->
+<section id="sonocerveau">
+  <div id="sono-label">
+    <span class="note-icon">♪</span>
+    <span class="sono-title">SonoCerveau</span>
+  </div>
+  <div id="sono-cards">
+    <div class="sono-card" id="melodie-miroir-card">
+      <img src="images/melody_miroir.png" alt="Mélodie Miroir" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <div class="sono-card-title">Mélodie Miroir</div>
+      <div class="sono-card-desc" data-fr="Comparez deux mélodies et trouvez la différence" data-en="Compare two melodies and find the difference">Comparez deux mélodies et trouvez la différence</div>
+    </div>
+    <div class="sono-card">
+      <img src="images/beat-memory.jpg" alt="Beat Memory" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <div class="sono-card-title">Beat Memory</div>
+      <div class="sono-card-desc" data-fr="Reproduisez des rythmes de jazz" data-en="Reproduce jazz rhythms">Reproduisez des rythmes de jazz</div>
+    </div>
+    <div class="sono-card">
+      <img src="images/melodie-jazz.jpg" alt="Mélodie Jazz" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
+      <div class="sono-card-title" data-fr="Mélodie Jazz" data-en="Jazz Melody">Mélodie Jazz</div>
+      <div class="sono-card-desc" data-fr="Apprenez les mélodies note par note" data-en="Learn melodies note by note">Apprenez les mélodies note par note</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="footer">
+  <p id="footer-text-top"
+     data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+     data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+    Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+  </p>
+
+  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+    S'inscrire à la newsletter
+  </a>
+
+  <p id="footer-text-bottom"
+     data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
+     data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
+    Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+  </p>
+
+  <div id="footer-links">
+    <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+    <a href="/confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="/conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="/lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+  </div>
+
+  <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+</footer>
+
+<script>
+var currentLang = 'fr';
+
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  applyLang();
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+}
+
+function applyLang() {
+  var lang = currentLang;
+  var els = document.querySelectorAll('[data-fr][data-en]');
+  els.forEach(function(el) {
+    var val = el.getAttribute('data-' + lang);
+    if (val !== null) {
+      el.innerHTML = val;
+    }
+  });
+  // Theme sentence needs innerHTML for the <strong> tag
+  var ts = document.querySelector('#theme-sentence p');
+  if (ts) {
+    var val = ts.getAttribute('data-' + lang);
+    if (val) ts.innerHTML = val;
+  }
+}
+
+function scrollRow(rowId, dir) {
+  var row = document.getElementById(rowId);
+  var cardWidth = 172; // min-width 160 + margin 12
+  row.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+}
+
+function scrollToMelodie() {
+  var el = document.getElementById('melodie-miroir-card');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.outline = '2px solid ' + getComputedStyle(document.documentElement).getPropertyValue('--amber');
+    setTimeout(function() { el.style.outline = ''; }, 1800);
+  }
+}
+</script>
+</body>
+</html>
