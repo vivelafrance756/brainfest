@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Peau et Microbiote — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/peau-microbiote-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='peau-microbiote.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11124289/" target="_blank" rel="noopener">Gut skin axis LPS inflammation 2025</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/35317980/" target="_blank" rel="noopener">Faecalibacterium prausnitzii skin diseases</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Comment les LPS (lipopolysaccharides) relient-ils l'intestin à la peau ?",
+    question_en: "How do LPS (lipopolysaccharides) link the gut to the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Ils produisent du collagène", text_en: "They produce collagen" },
+      { letter: 'B', text_fr: "Ils traversent une barrière intestinale fragilisée, activent TLR4 sur les cellules immunitaires et déclenchent une inflammation systémique qui atteint la peau", text_en: "They cross a weakened intestinal barrier, activate TLR4 on immune cells and trigger systemic inflammation that reaches the skin" },
+      { letter: 'C', text_fr: "Ils hydratent la peau directement", text_en: "They directly hydrate the skin" },
+      { letter: 'D', text_fr: "Ils régulent la mélanine", text_en: "They regulate melanin" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Les LPS sont des fragments de parois bactériennes Gram-négatives. Quand la barrière intestinale est fragilisée, ils passent dans la circulation sanguine et activent TLR4 sur les kératinocytes et les cellules immunitaires. Ils déclenchent NF-kB et une cascade pro-inflammatoire qui aggrave acné, eczéma et psoriasis.",
+    feedback_ok_en: "LPS are fragments of Gram-negative bacterial walls. When the intestinal barrier is weakened, they enter the bloodstream and activate TLR4 on keratinocytes and immune cells. They trigger NF-kB and a pro-inflammatory cascade that worsens acne, eczema and psoriasis.",
+    feedback_ko_fr: "L'endotoxémie métabolique, c'est-à-dire le passage de LPS dans la circulation, est l'un des mécanismes centraux par lequel la dysbiose intestinale aggrave les maladies cutanées inflammatoires.",
+    feedback_ko_en: "Metabolic endotoxaemia, meaning the passage of LPS into the circulation, is one of the central mechanisms by which intestinal dysbiosis worsens inflammatory skin diseases.",
+    reformulation_fr: "Une barrière intestinale fragilisée peut-elle aggraver l'inflammation cutanée ?",
+    reformulation_en: "Can a weakened intestinal barrier worsen skin inflammation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La perméabilité intestinale augmentée permet aux LPS de passer dans le sang. Ces molécules pro-inflammatoires atteignent la peau et aggravent l'acné, l'eczéma et le psoriasis via TLR4 et NF-kB.",
+    reformulation_explanation_en: "Increased intestinal permeability allows LPS to enter the blood. These pro-inflammatory molecules reach the skin and worsen acne, eczema and psoriasis via TLR4 and NF-kB."
+  },
+  {
+    question_fr: "Les AGCC (acides gras à chaîne courte) produits par le microbiote intestinal influencent-ils la peau ?",
+    question_en: "Do SCFAs (short-chain fatty acids) produced by the gut microbiome influence the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Non, ils restent dans l'intestin", text_en: "No, they stay in the intestine" },
+      { letter: 'B', text_fr: "Oui, ils régulent les lymphocytes T régulateurs et réduisent l'inflammation systémique qui affecte la peau", text_en: "Yes, they regulate regulatory T lymphocytes and reduce systemic inflammation that affects the skin" },
+      { letter: 'C', text_fr: "Ils aggravent l'inflammation", text_en: "They worsen inflammation" },
+      { letter: 'D', text_fr: "Uniquement chez les personnes ayant un eczéma", text_en: "Only in people with eczema" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le butyrate, le propionate et l'acétate sont les trois principaux AGCC produits par la fermentation des fibres. Ils régulent les lymphocytes Treg qui maintiennent la tolérance immunitaire. Une alimentation riche en fibres diversifiées augmente leur production et réduit l'inflammation cutanée.",
+    feedback_ok_en: "Butyrate, propionate and acetate are the three main SCFAs produced by fibre fermentation. They regulate Treg lymphocytes that maintain immune tolerance. A diet rich in diverse fibres increases their production and reduces skin inflammation.",
+    feedback_ko_fr: "Les AGCC sont les médiateurs clés par lesquels le microbiote intestinal influence l'immunité systémique. Un microbiote pauvre en producteurs d'AGCC est associé à davantage d'inflammation cutanée.",
+    feedback_ko_en: "SCFAs are the key mediators through which the gut microbiome influences systemic immunity. A microbiome poor in SCFA producers is associated with more skin inflammation.",
+    reformulation_fr: "Manger des fibres variées peut-il réduire l'inflammation cutanée via le microbiote ?",
+    reformulation_en: "Can eating varied fibres reduce skin inflammation via the microbiome ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les fibres alimentaires diversifiées stimulent la production d'AGCC par le microbiote. Ces molécules anti-inflammatoires réduisent l'inflammation systémique et améliorent l'état de la peau dans l'eczéma et le psoriasis.",
+    reformulation_explanation_en: "Diverse dietary fibres stimulate SCFA production by the microbiome. These anti-inflammatory molecules reduce systemic inflammation and improve skin condition in eczema and psoriasis."
+  },
+  {
+    question_fr: "Faecalibacterium prausnitzii est une bactérie importante pour la peau parce que :",
+    question_en: "Faecalibacterium prausnitzii is an important bacterium for the skin because :",
+    options: [
+      { letter: 'A', text_fr: "Elle produit de la mélanine", text_en: "It produces melanin" },
+      { letter: 'B', text_fr: "C'est une bactérie anti-inflammatoire majeure dont la réduction est associée au psoriasis, à l'eczéma et à la maladie de Crohn", text_en: "It is a major anti-inflammatory bacterium whose reduction is associated with psoriasis, eczema and Crohn's disease" },
+      { letter: 'C', text_fr: "Elle hydrate la barrière cutanée", text_en: "It hydrates the skin barrier" },
+      { letter: 'D', text_fr: "Elle n'a aucun lien avec la peau", text_en: "It has no link to the skin" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Faecalibacterium prausnitzii est l'une des bactéries les plus abondantes dans un intestin sain et l'une des plus anti-inflammatoires connues. Elle produit du butyrate et d'autres AGCC. Sa réduction est un marqueur de dysbiose associé aux maladies inflammatoires cutanées et intestinales.",
+    feedback_ok_en: "Faecalibacterium prausnitzii is one of the most abundant bacteria in a healthy gut and one of the most anti-inflammatory known. It produces butyrate and other SCFAs. Its reduction is a marker of dysbiosis associated with inflammatory skin and intestinal diseases.",
+    feedback_ko_fr: "F. prausnitzii est souvent appelée la bactérie gardienne de l'équilibre intestinal. Sa présence en quantité suffisante est un marqueur de bonne santé intestinale et cutanée.",
+    feedback_ko_en: "F. prausnitzii is often called the guardian bacterium of intestinal balance. Its presence in sufficient quantity is a marker of good intestinal and skin health.",
+    reformulation_fr: "Une réduction de Faecalibacterium prausnitzii est-elle associée aux maladies cutanées inflammatoires ?",
+    reformulation_en: "Is a reduction of Faecalibacterium prausnitzii associated with inflammatory skin diseases ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs études montrent des niveaux réduits de F. prausnitzii chez les patients atteints de psoriasis, d'eczéma atopique et de maladie de Crohn avec manifestations cutanées.",
+    reformulation_explanation_en: "Several studies show reduced levels of F. prausnitzii in patients with psoriasis, atopic eczema and Crohn's disease with skin manifestations."
+  },
+  {
+    question_fr: "Le récepteur AhR (Aryl hydrocarbon receptor) est un lien moléculaire entre microbiote et peau parce que :",
+    question_en: "The AhR (Aryl hydrocarbon receptor) is a molecular link between microbiome and skin because :",
+    options: [
+      { letter: 'A', text_fr: "Il produit du collagène dans les kératinocytes", text_en: "It produces collagen in keratinocytes" },
+      { letter: 'B', text_fr: "Il est activé par des métabolites microbiens du tryptophane et régule l'immunité de barrière cutanée", text_en: "It is activated by microbial tryptophan metabolites and regulates skin barrier immunity" },
+      { letter: 'C', text_fr: "Il régule la mélanine", text_en: "It regulates melanin" },
+      { letter: 'D', text_fr: "Il n'a aucun lien avec le microbiote", text_en: "It has no link to the microbiome" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "AhR est exprimé dans les kératinocytes et les cellules de Langerhans. Il est activé par des indoles produits par les bactéries intestinales à partir du tryptophane. Son dysfonctionnement est impliqué dans la dermatite atopique et le psoriasis. Les polyphénols alimentaires l'activent aussi positivement.",
+    feedback_ok_en: "AhR is expressed in keratinocytes and Langerhans cells. It is activated by indoles produced by gut bacteria from tryptophan. Its dysfunction is implicated in atopic dermatitis and psoriasis. Dietary polyphenols also activate it positively.",
+    feedback_ko_fr: "AhR est l'un des exemples les plus fascinants de la communication moléculaire entre microbiote intestinal et peau. Les bactéries intestinales transforment le tryptophane alimentaire en indoles qui activent AhR dans les cellules cutanées.",
+    feedback_ko_en: "AhR is one of the most fascinating examples of molecular communication between the gut microbiome and skin. Gut bacteria transform dietary tryptophan into indoles that activate AhR in skin cells.",
+    reformulation_fr: "Les bactéries intestinales peuvent-elles influencer l'immunité de la peau via des métabolites ?",
+    reformulation_en: "Can gut bacteria influence skin immunity via metabolites ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les métabolites du tryptophane produits par les bactéries intestinales activent AhR dans les kératinocytes, régulant directement l'immunité de barrière cutanée. C'est un mécanisme moléculaire direct entre microbiote et peau.",
+    reformulation_explanation_en: "Tryptophan metabolites produced by gut bacteria activate AhR in keratinocytes, directly regulating skin barrier immunity. This is a direct molecular mechanism between microbiome and skin."
+  },
+  {
+    question_fr: "Staphylococcus aureus joue-t-il un rôle dans la dermatite atopique ?",
+    question_en: "Does Staphylococcus aureus play a role in atopic dermatitis ?",
+    options: [
+      { letter: 'A', text_fr: "Non, c'est une bactérie sans lien avec l'eczéma", text_en: "No, it is a bacterium unrelated to eczema" },
+      { letter: 'B', text_fr: "Oui, il colonise massivement les lésions et produit des toxines qui aggravent l'inflammation et fragilisent la barrière cutanée", text_en: "Yes, it massively colonises lesions and produces toxins that worsen inflammation and weaken the skin barrier" },
+      { letter: 'C', text_fr: "Il protège la peau dans l'eczéma", text_en: "It protects the skin in eczema" },
+      { letter: 'D', text_fr: "Uniquement dans les formes sévères", text_en: "Only in severe forms" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Staphylococcus aureus colonise jusqu'à 90% des lésions de dermatite atopique. Il produit des superantigènes qui activent directement les lymphocytes T et aggravent l'inflammation. Il produit aussi des protéases qui dégradent la filaggrine et fragilisent la barrière cutanée.",
+    feedback_ok_en: "Staphylococcus aureus colonises up to 90% of atopic dermatitis lesions. It produces superantigens that directly activate T lymphocytes and worsen inflammation. It also produces proteases that degrade filaggrin and weaken the skin barrier.",
+    feedback_ko_fr: "La dominance de S. aureus dans le microbiote cutané des patients atteints de dermatite atopique est l'un des mécanismes les mieux documentés de cette maladie. Restaurer la diversité microbienne cutanée est une piste thérapeutique prometteuse.",
+    feedback_ko_en: "The dominance of S. aureus in the skin microbiome of atopic dermatitis patients is one of the best-documented mechanisms of this disease. Restoring cutaneous microbial diversity is a promising therapeutic avenue.",
+    reformulation_fr: "Réduire Staphylococcus aureus sur la peau peut-il améliorer l'eczéma atopique ?",
+    reformulation_en: "Can reducing Staphylococcus aureus on the skin improve atopic eczema ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les stratégies visant à restaurer la diversité du microbiote cutané, notamment par des bains émollients et des probiotiques cutanés, réduisent la dominance de S. aureus et améliorent les symptômes de dermatite atopique.",
+    reformulation_explanation_en: "Strategies aimed at restoring cutaneous microbiome diversity, including emollient baths and cutaneous probiotics, reduce S. aureus dominance and improve atopic dermatitis symptoms."
+  },
+  {
+    question_fr: "Le VDR (Vitamin D Receptor) est-il un lien entre microbiote intestinal et peau ?",
+    question_en: "Is the VDR (Vitamin D Receptor) a link between the gut microbiome and skin ?",
+    options: [
+      { letter: 'A', text_fr: "Non, le VDR n'agit que dans les os", text_en: "No, the VDR only acts in bones" },
+      { letter: 'B', text_fr: "Oui, son activation par la vitamine D module le microbiote intestinal et régule l'immunité de barrière cutanée", text_en: "Yes, its activation by vitamin D modulates the gut microbiome and regulates skin barrier immunity" },
+      { letter: 'C', text_fr: "Il régule uniquement la mélanine", text_en: "It only regulates melanin" },
+      { letter: 'D', text_fr: "Son rôle dans la peau n'est pas documenté", text_en: "Its role in the skin is not documented" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le VDR est exprimé dans les cellules intestinales épithéliales et les kératinocytes. Son activation par la vitamine D produite sous l'effet des UVB module la composition du microbiote intestinal et régule l'immunité cutanée. C'est un lien direct entre soleil, microbiote et peau.",
+    feedback_ok_en: "The VDR is expressed in intestinal epithelial cells and keratinocytes. Its activation by vitamin D produced under the effect of UVB rays modulates gut microbiome composition and regulates skin immunity. This is a direct link between sun, microbiome and skin.",
+    feedback_ko_fr: "La vitamine D est bien plus qu'un simple régulateur du calcium. Son récepteur VDR dans l'intestin et la peau en fait un modulateur central du microbiote et de l'immunité cutanée.",
+    feedback_ko_en: "Vitamin D is much more than a simple calcium regulator. Its VDR receptor in the gut and skin makes it a central modulator of the microbiome and skin immunity.",
+    reformulation_fr: "L'exposition solaire peut-elle influencer positivement le microbiote intestinal ?",
+    reformulation_en: "Can sun exposure positively influence the gut microbiome ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "L'exposition cutanée aux UVB produit de la vitamine D qui active le VDR dans les cellules intestinales, modulant la composition du microbiote. C'est l'un des mécanismes par lesquels l'exposition solaire modérée bénéficie à la santé globale.",
+    reformulation_explanation_en: "UVB skin exposure produces vitamin D that activates the VDR in intestinal cells, modulating microbiome composition. This is one of the mechanisms by which moderate sun exposure benefits overall health."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pm2', score); window.location.href = 'peau-microbiote-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

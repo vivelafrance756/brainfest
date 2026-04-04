@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Peau et Microbiote — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/peau-microbiote-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='peau-microbiote.html'" aria-label="Retour">←</button>
+  <div id="score-display">🦠 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11723311/" target="_blank" rel="noopener">Gut-skin axis review 2025</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31688941/" target="_blank" rel="noopener">Probiotics atopic dermatitis meta-analysis</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Votre peau et votre intestin sont-ils connectés ?",
+    question_en: "Are your skin and gut connected ?",
+    options: [
+      { letter: 'A', text_fr: "Non, ce sont deux organes totalement indépendants", text_en: "No, they are completely independent organs" },
+      { letter: 'B', text_fr: "Oui, via l'axe intestin-peau, un réseau de communication immunitaire, métabolique et neurologique", text_en: "Yes, via the gut-skin axis, a network of immune, metabolic and neurological communication" },
+      { letter: 'C', text_fr: "Uniquement via la circulation sanguine", text_en: "Only via the bloodstream" },
+      { letter: 'D', text_fr: "Seulement chez les personnes ayant des maladies cutanées", text_en: "Only in people with skin diseases" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. L'axe intestin-peau est un réseau de communication bidirectionnel. Le microbiote intestinal influence la peau via des médiateurs immunitaires, des métabolites (AGCC) et des voies neurologiques. À l'inverse, l'exposition cutanée aux UV peut moduler le microbiote intestinal via la vitamine D.",
+    feedback_ok_en: "Exactly. The gut-skin axis is a bidirectional communication network. The gut microbiome influences the skin via immune mediators, metabolites (SCFAs) and neurological pathways. Conversely, UV skin exposure can modulate the gut microbiome via vitamin D.",
+    feedback_ko_fr: "La connexion intestin-peau est l'une des découvertes les plus importantes de la dermatologie moderne. Un microbiote intestinal en dysbiose peut déclencher une inflammation systémique qui se manifeste sur la peau.",
+    feedback_ko_en: "The gut-skin connection is one of the most important discoveries in modern dermatology. A dysbiotic gut microbiome can trigger systemic inflammation that manifests on the skin.",
+    reformulation_fr: "Un problème intestinal peut-il se manifester sur la peau ?",
+    reformulation_en: "Can an intestinal problem manifest on the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "C'est l'un des principes fondamentaux de la naturopathie et de la médecine fonctionnelle : la peau est souvent le miroir de l'intestin. Acné, eczéma, psoriasis peuvent tous être influencés par l'état du microbiote intestinal.",
+    reformulation_explanation_en: "This is one of the fundamental principles of naturopathy and functional medicine: the skin is often the mirror of the gut. Acne, eczema, psoriasis can all be influenced by the state of the gut microbiome."
+  },
+  {
+    question_fr: "Qu'est-ce que la dysbiose intestinale ?",
+    question_en: "What is intestinal dysbiosis ?",
+    options: [
+      { letter: 'A', text_fr: "Une infection bactérienne de l'intestin", text_en: "A bacterial infection of the intestine" },
+      { letter: 'B', text_fr: "Un déséquilibre du microbiote intestinal avec réduction de la diversité microbienne et augmentation des bactéries pro-inflammatoires", text_en: "An imbalance of the gut microbiome with reduced microbial diversity and increased pro-inflammatory bacteria" },
+      { letter: 'C', text_fr: "Une allergie alimentaire", text_en: "A food allergy" },
+      { letter: 'D', text_fr: "Un manque de fibres alimentaires", text_en: "A lack of dietary fibre" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. La dysbiose se caractérise par une réduction de la diversité microbienne, une diminution des bactéries bénéfiques comme Faecalibacterium prausnitzii, et une augmentation des bactéries pro-inflammatoires. Elle est associée à l'acné, l'eczéma et le psoriasis.",
+    feedback_ok_en: "Exactly. Dysbiosis is characterised by reduced microbial diversity, decreased beneficial bacteria like Faecalibacterium prausnitzii, and increased pro-inflammatory bacteria. It is associated with acne, eczema and psoriasis.",
+    feedback_ko_fr: "La dysbiose n'est pas une infection mais un déséquilibre. Le microbiote sain contient des milliers d'espèces bactériennes en équilibre. Quand cet équilibre est rompu, l'inflammation peut se propager à la peau.",
+    feedback_ko_en: "Dysbiosis is not an infection but an imbalance. A healthy microbiome contains thousands of bacterial species in balance. When this balance is disrupted, inflammation can spread to the skin.",
+    reformulation_fr: "La dysbiose intestinale peut-elle aggraver les maladies cutanées inflammatoires ?",
+    reformulation_en: "Can intestinal dysbiosis worsen inflammatory skin diseases ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs études montrent une association entre dysbiose intestinale et maladies cutanées comme l'acné, l'eczéma et le psoriasis. Restaurer la diversité microbienne intestinale améliore souvent l'état de la peau.",
+    reformulation_explanation_en: "Several studies show an association between intestinal dysbiosis and skin diseases such as acne, eczema and psoriasis. Restoring intestinal microbial diversity often improves skin condition."
+  },
+  {
+    question_fr: "Quels aliments nourrissent les bonnes bactéries intestinales bénéfiques pour la peau ?",
+    question_en: "Which foods nourish beneficial gut bacteria good for the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Les aliments ultra-transformés", text_en: "Ultra-processed foods" },
+      { letter: 'B', text_fr: "Les fibres prébiotiques : légumineuses, artichaut, ail, oignon, chicorée", text_en: "Prebiotic fibres: legumes, artichoke, garlic, onion, chicory" },
+      { letter: 'C', text_fr: "Les sucres raffinés", text_en: "Refined sugars" },
+      { letter: 'D', text_fr: "Les protéines animales uniquement", text_en: "Animal proteins only" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Les fibres prébiotiques nourrissent sélectivement les bactéries bénéfiques comme Bifidobacterium et Lactobacillus. Leur fermentation produit des acides gras à chaîne courte (AGCC) comme le butyrate, qui réduisent l'inflammation systémique et soutiennent la barrière intestinale.",
+    feedback_ok_en: "Prebiotic fibres selectively nourish beneficial bacteria like Bifidobacterium and Lactobacillus. Their fermentation produces short-chain fatty acids (SCFAs) like butyrate, which reduce systemic inflammation and support the intestinal barrier.",
+    feedback_ko_fr: "Les aliments ultra-transformés et les sucres raffinés appauvrissent le microbiote. Les fibres prébiotiques (légumineuses, ail, oignon, artichaut, chicorée, poireaux) nourrissent les bonnes bactéries qui protègent la peau.",
+    feedback_ko_en: "Ultra-processed foods and refined sugars deplete the microbiome. Prebiotic fibres (legumes, garlic, onion, artichoke, chicory, leeks) nourish the good bacteria that protect the skin.",
+    reformulation_fr: "Les légumineuses et les légumes riches en fibres sont-ils bénéfiques pour le microbiote et donc pour la peau ?",
+    reformulation_en: "Are legumes and fibre-rich vegetables beneficial for the microbiome and therefore for the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les fibres de légumineuses, d'artichaut et d'ail sont parmi les prébiotiques les plus puissants. Elles stimulent Faecalibacterium prausnitzii et Bifidobacterium, deux bactéries anti-inflammatoires directement liées à la santé cutanée.",
+    reformulation_explanation_en: "Fibres from legumes, artichoke and garlic are among the most powerful prebiotics. They stimulate Faecalibacterium prausnitzii and Bifidobacterium, two anti-inflammatory bacteria directly linked to skin health."
+  },
+  {
+    question_fr: "Les probiotiques peuvent-ils améliorer certaines maladies cutanées ?",
+    question_en: "Can probiotics improve certain skin diseases ?",
+    options: [
+      { letter: 'A', text_fr: "Non, ils n'agissent que sur la digestion", text_en: "No, they only act on digestion" },
+      { letter: 'B', text_fr: "Oui, plusieurs essais cliniques montrent leur bénéfice dans l'eczéma, l'acné et le psoriasis", text_en: "Yes, several clinical trials show their benefit in eczema, acne and psoriasis" },
+      { letter: 'C', text_fr: "Uniquement appliqués sur la peau", text_en: "Only when applied to the skin" },
+      { letter: 'D', text_fr: "Uniquement chez les enfants", text_en: "Only in children" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Des essais randomisés contrôlés montrent que des probiotiques oraux (notamment Lactobacillus rhamnosus GG) réduisent le score SCORAD dans la dermatite atopique. Des souches comme Lactobacillus acidophilus et Bifidobacterium longum montrent aussi des bénéfices dans l'acné.",
+    feedback_ok_en: "Randomised controlled trials show that oral probiotics (notably Lactobacillus rhamnosus GG) reduce the SCORAD score in atopic dermatitis. Strains like Lactobacillus acidophilus and Bifidobacterium longum also show benefits in acne.",
+    feedback_ko_fr: "Les probiotiques oraux agissent sur l'axe intestin-peau en modulant l'immunité systémique. Ils ne remplacent pas les traitements dermatologiques mais peuvent les compléter utilement.",
+    feedback_ko_en: "Oral probiotics act on the gut-skin axis by modulating systemic immunity. They do not replace dermatological treatments but can usefully complement them.",
+    reformulation_fr: "Les probiotiques oraux peuvent-ils réduire l'inflammation dans l'eczéma ?",
+    reformulation_en: "Can oral probiotics reduce inflammation in eczema ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Lactobacillus rhamnosus GG est la souche la plus étudiée pour la dermatite atopique. Plusieurs méta-analyses confirment une réduction du score SCORAD avec une supplémentation probiotique.",
+    reformulation_explanation_en: "Lactobacillus rhamnosus GG is the most studied strain for atopic dermatitis. Several meta-analyses confirm a reduction in SCORAD score with probiotic supplementation."
+  },
+  {
+    question_fr: "La peau possède-t-elle son propre microbiote ?",
+    question_en: "Does the skin have its own microbiome ?",
+    options: [
+      { letter: 'A', text_fr: "Non, la peau est stérile", text_en: "No, the skin is sterile" },
+      { letter: 'B', text_fr: "Oui, le microbiote cutané protège contre les agents pathogènes et régule l'immunité de la peau", text_en: "Yes, the skin microbiome protects against pathogens and regulates skin immunity" },
+      { letter: 'C', text_fr: "Seulement sur certaines zones du corps", text_en: "Only on certain body areas" },
+      { letter: 'D', text_fr: "Uniquement chez les personnes âgées", text_en: "Only in elderly people" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le microbiote cutané est composé de bactéries, champignons et virus qui colonisent la surface de la peau. Il joue un rôle protecteur contre les agents pathogènes et participe à la régulation immunitaire. Dans la dermatite atopique, il est caractérisé par une dominance de Staphylococcus aureus.",
+    feedback_ok_en: "The skin microbiome is composed of bacteria, fungi and viruses that colonise the skin surface. It plays a protective role against pathogens and participates in immune regulation. In atopic dermatitis, it is characterised by a dominance of Staphylococcus aureus.",
+    feedback_ko_fr: "La peau héberge environ 1000 espèces bactériennes différentes. Ce microbiote cutané est aussi important que le microbiote intestinal pour la santé de la peau.",
+    feedback_ko_en: "The skin hosts approximately 1000 different bacterial species. This skin microbiome is as important as the gut microbiome for skin health.",
+    reformulation_fr: "Le microbiote cutané joue-t-il un rôle protecteur pour la peau ?",
+    reformulation_en: "Does the skin microbiome play a protective role for the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le microbiote cutané produit des peptides antimicrobiens, régule le pH de la peau et forme une barrière contre les agents pathogènes. Sa perturbation est associée à l'acné, l'eczéma et la rosacée.",
+    reformulation_explanation_en: "The skin microbiome produces antimicrobial peptides, regulates skin pH and forms a barrier against pathogens. Its disruption is associated with acne, eczema and rosacea."
+  },
+  {
+    question_fr: "Les antibiotiques peuvent-ils aggraver certaines maladies cutanées à long terme ?",
+    question_en: "Can antibiotics worsen certain skin diseases in the long term ?",
+    options: [
+      { letter: 'A', text_fr: "Non, ils ne font que tuer les bactéries pathogènes", text_en: "No, they only kill pathogenic bacteria" },
+      { letter: 'B', text_fr: "Oui, en appauvrissant le microbiote intestinal et cutané, ils peuvent fragiliser les défenses naturelles de la peau", text_en: "Yes, by depleting the intestinal and skin microbiome, they can weaken the skin natural defences" },
+      { letter: 'C', text_fr: "Non, les antibiotiques n'affectent pas le microbiote", text_en: "No, antibiotics do not affect the microbiome" },
+      { letter: 'D', text_fr: "Oui, mais uniquement les antibiotiques topiques", text_en: "Yes, but only topical antibiotics" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Les antibiotiques à large spectre réduisent la diversité du microbiote intestinal et cutané. Cette dysbiose induite peut fragiliser la barrière cutanée et augmenter le risque de rechutes dans l'acné, l'eczéma et d'autres maladies inflammatoires. C'est pourquoi ils doivent être accompagnés de probiotiques.",
+    feedback_ok_en: "Broad-spectrum antibiotics reduce the diversity of the intestinal and skin microbiome. This induced dysbiosis can weaken the skin barrier and increase the risk of relapses in acne, eczema and other inflammatory diseases. This is why they should be accompanied by probiotics.",
+    feedback_ko_fr: "Les antibiotiques sont parfois nécessaires mais leur impact sur le microbiote doit être pris en compte. Associer des probiotiques pendant et après un traitement antibiotique aide à restaurer la diversité microbienne.",
+    feedback_ko_en: "Antibiotics are sometimes necessary but their impact on the microbiome must be taken into account. Combining probiotics during and after antibiotic treatment helps restore microbial diversity.",
+    reformulation_fr: "Prendre des probiotiques pendant un traitement antibiotique est-il utile pour la peau ?",
+    reformulation_en: "Is taking probiotics during antibiotic treatment useful for the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les probiotiques pris pendant et après un traitement antibiotique aident à restaurer la diversité du microbiote, réduisant le risque de dysbiose induite et ses conséquences cutanées.",
+    reformulation_explanation_en: "Probiotics taken during and after antibiotic treatment help restore microbiome diversity, reducing the risk of induced dysbiosis and its skin consequences."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pm1', score); window.location.href = 'peau-microbiote-niveau1-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
