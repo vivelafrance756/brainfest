@@ -247,20 +247,65 @@ body {
 
 /* ── REFORMULATION ── */
 #reformulation-block {
-  background: #ffffff;
+  background: #fff8e8;
   border-radius: 12px;
-  padding: 16px 16px 8px;
+  padding: 16px;
   margin-top: 12px;
+  border: 1px solid rgba(212,146,58,0.3);
   display: none;
+}
+
+#reformulation-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--amber);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 #reformulation-text {
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   color: var(--indigo-dark);
-  font-weight: 500;
   line-height: 1.5;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+#reformulation-options {
+  display: flex;
+  gap: 4%;
+}
+
+.refo-btn {
+  width: 48%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  gap: 6px;
+}
+
+.refo-btn.refo-correct {
+  background: #e8f4f0;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.refo-btn.refo-wrong {
+  background: #fdecea;
+  border-color: #e74c3c;
+  color: #e74c3c;
 }
 
 #reformulation-explanation {
@@ -268,7 +313,7 @@ body {
   font-size: 13px;
   color: #555;
   line-height: 1.6;
-  margin-top: 10px;
+  margin-top: 12px;
   display: none;
 }
 
@@ -427,6 +472,7 @@ body {
     <div id="feedback-text"></div>
     <!-- Reformulation (wrong only) -->
     <div id="reformulation-block">
+      <div id="reformulation-title"></div>
       <div id="reformulation-text"></div>
       <div id="reformulation-options"></div>
       <div id="reformulation-explanation"></div>
@@ -633,6 +679,8 @@ function renderQuestion() {
   document.getElementById('feedback-block').style.display = 'none';
   document.getElementById('feedback-block').className = 'feedback-block';
   document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
   document.getElementById('ask-row').style.display = 'none';
   document.getElementById('ask-input-row').style.display = 'none';
   document.getElementById('ask-reply').style.display = 'none';
@@ -701,41 +749,53 @@ function showReformulation() {
   var q = questions[currentIndex];
   var block = document.getElementById('reformulation-block');
   block.style.display = 'block';
+
+  document.getElementById('reformulation-title').innerHTML =
+    '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
   document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
 
   var opts = document.getElementById('reformulation-options');
   opts.innerHTML = '';
 
   var choices = [
-    { letter: 'A', text_fr: 'Oui', text_en: 'Yes', correct: true },
-    { letter: 'B', text_fr: 'Non', text_en: 'No', correct: false }
+    { text_fr: 'Oui', text_en: 'Yes', correct: true },
+    { text_fr: 'Non', text_en: 'No', correct: false }
   ];
 
   choices.forEach(function(c) {
     var btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.style.background = '#f5ede8';
-    btn.style.marginTop = '8px';
-    btn.innerHTML =
-      '<span class="option-letter">' + c.letter + '</span>' +
-      '<span class="option-text">' + c['text_' + lang] + '</span>' +
-      '<span class="option-check">✓</span>';
-    btn.onclick = function() { answerReformulation(c.correct, btn, choices); };
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
     opts.appendChild(btn);
   });
 }
 
-function answerReformulation(isCorrect, clickedBtn, choices) {
-  if (reformulationAnswered) return;
-  reformulationAnswered = true;
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) {
+    if (!isCorrect) {
+      // Flash red and reset so user can try again
+      clickedBtn.classList.add('refo-wrong');
+      setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600);
+    }
+    return;
+  }
 
-  var allBtns = document.getElementById('reformulation-options').querySelectorAll('.option-btn');
-  allBtns.forEach(function(btn, i) {
+  if (!isCorrect) {
+    // Flash red, allow retry — no lock
+    clickedBtn.classList.add('refo-wrong');
+    setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600);
+    return;
+  }
+
+  // Correct answer
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
     btn.onclick = null;
-    if (choices[i].correct) {
-      btn.classList.add('correct');
-    } else if (!isCorrect && btn === clickedBtn) {
-      btn.classList.add('wrong');
+    if (btn.textContent === (lang === 'fr' ? 'Oui' : 'Yes')) {
+      btn.classList.add('refo-correct');
+      btn.innerHTML += ' ✓';
     }
   });
 
@@ -743,7 +803,7 @@ function answerReformulation(isCorrect, clickedBtn, choices) {
   document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
   document.getElementById('reformulation-explanation').style.display = 'block';
 
-  showPostFeedback();
+  setTimeout(function() { showPostFeedback(); }, 1000);
 }
 
 function showPostFeedback() {

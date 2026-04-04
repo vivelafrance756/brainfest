@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 4 Questions — Nutriments et Peau — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/nutriments-peau-niveau4-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='nutriments-et-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🧠 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8971946/" target="_blank" rel="noopener">Diet and acne — JAAD 2022</a>
+    <a href="https://www.sciencedaily.com/releases/2025/01/250117120531.htm" target="_blank" rel="noopener">Vitamin C skin layers — Otago 2025</a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12739960/" target="_blank" rel="noopener">Collagen synthesis review — PMC 2025</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "La voie mTORC1 est au cœur de l'acné d'origine alimentaire. Quel nutriment l'active le plus directement ?",
+    question_en: "The mTORC1 pathway is at the heart of diet-driven acne. Which nutrient activates it most directly ?",
+    options: [
+      { letter: 'A', text_fr: "Les acides gras oméga-3", text_en: "Omega-3 fatty acids" },
+      { letter: 'B', text_fr: "Les leucine et acides aminés branchés issus des protéines de lait", text_en: "Leucine and branched-chain amino acids from milk proteins" },
+      { letter: 'C', text_fr: "La vitamine D", text_en: "Vitamin D" },
+      { letter: 'D', text_fr: "Le magnésium", text_en: "Magnesium" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "La leucine est le principal activateur de mTORC1. Les protéines de lactosérum (whey) et les caséines du lait sont particulièrement riches en leucine et acides aminés branchés. mTORC1 stimule ensuite la prolifération des kératinocytes, la synthèse de sébum et l'expression des récepteurs androgéniques — les trois piliers de l'acné.",
+    feedback_ok_en: "Leucine is the primary activator of mTORC1. Whey proteins and milk caseins are particularly rich in leucine and branched-chain amino acids. mTORC1 then stimulates keratinocyte proliferation, sebum synthesis and androgen receptor expression — the three pillars of acne.",
+    feedback_ko_fr: "La leucine des protéines laitières est le déclencheur direct de mTORC1, qui orchestre l'ensemble de la cascade acnéogène.",
+    feedback_ko_en: "Leucine from dairy proteins is the direct trigger of mTORC1, which orchestrates the entire acnegenic cascade.",
+    reformulation_fr: "Les protéines de lait peuvent-elles activer la voie mTORC1 et aggraver l'acné ?",
+    reformulation_en: "Can milk proteins activate the mTORC1 pathway and worsen acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La leucine des protéines laitières active mTORC1 qui stimule la sébogenèse, la prolifération des kératinocytes folliculaires et l'expression des récepteurs androgéniques.",
+    reformulation_explanation_en: "Leucine from dairy proteins activates mTORC1 which stimulates sebogenesis, follicular keratinocyte proliferation and androgen receptor expression."
+  },
+  {
+    question_fr: "La glycation (formation d'AGE — Advanced Glycation End-products) affecte la peau en :",
+    question_en: "Glycation (formation of AGEs — Advanced Glycation End-products) affects the skin by :",
+    options: [
+      { letter: 'A', text_fr: "Augmentant la production de mélanine", text_en: "Increasing melanin production" },
+      { letter: 'B', text_fr: "Réticulant les fibres de collagène et d'élastine, les rendant rigides et cassantes", text_en: "Cross-linking collagen and elastin fibres, making them rigid and brittle" },
+      { letter: 'C', text_fr: "Stimulant la synthèse de céramides", text_en: "Stimulating ceramide synthesis" },
+      { letter: 'D', text_fr: "Réduisant la production de sébum", text_en: "Reducing sebum production" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Les AGE forment des ponts covalents entre les molécules de collagène et d'élastine. Ces protéines réticulées perdent leur élasticité, deviennent rigides et résistantes à la dégradation normale. Résultat visible : teint terne, rides profondes, perte de fermeté. Le glucose en excès et la cuisson à haute température (Maillard) sont les principales sources d'AGE.",
+    feedback_ok_en: "AGEs form covalent cross-links between collagen and elastin molecules. These cross-linked proteins lose their elasticity, become rigid and resistant to normal degradation. Visible result: dull complexion, deep wrinkles, loss of firmness. Excess glucose and high-temperature cooking (Maillard) are the main sources of AGEs.",
+    feedback_ko_fr: "Les AGE créent des ponts entre les fibres de collagène qui rigidifient la peau et accélèrent le vieillissement cutané visible.",
+    feedback_ko_en: "AGEs create bridges between collagen fibres that stiffen the skin and accelerate visible skin ageing.",
+    reformulation_fr: "Un excès de sucres rapides accélère-t-il le vieillissement cutané via la glycation du collagène ?",
+    reformulation_en: "Does an excess of fast sugars accelerate skin ageing through collagen glycation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les AGE issus de la glycation du collagène sont directement liés à la perte d'élasticité, aux rides et au teint terne caractéristiques du vieillissement cutané accéléré.",
+    reformulation_explanation_en: "AGEs from collagen glycation are directly linked to the loss of elasticity, wrinkles and dull complexion characteristic of accelerated skin ageing."
+  },
+  {
+    question_fr: "La voie Nrf2 est un mécanisme clé de protection cutanée. Quels aliments l'activent le plus efficacement ?",
+    question_en: "The Nrf2 pathway is a key skin protection mechanism. Which foods activate it most effectively ?",
+    options: [
+      { letter: 'A', text_fr: "Les produits laitiers entiers", text_en: "Full-fat dairy products" },
+      { letter: 'B', text_fr: "Les légumes crucifères (brocoli, chou) via le sulforaphane, et le curcuma via la curcumine", text_en: "Cruciferous vegetables (broccoli, cabbage) via sulforaphane, and turmeric via curcumin" },
+      { letter: 'C', text_fr: "La viande rouge", text_en: "Red meat" },
+      { letter: 'D', text_fr: "Les céréales raffinées", text_en: "Refined cereals" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Nrf2 est un facteur de transcription qui active les gènes de défense antioxydante et anti-inflammatoire. Le sulforaphane du brocoli et la curcumine du curcuma sont parmi les activateurs alimentaires les plus puissants de Nrf2. Ils induisent notamment la synthèse de glutathion, de HO-1 et de NQO1, des enzymes protectrices pour la peau.",
+    feedback_ok_en: "Nrf2 is a transcription factor that activates antioxidant and anti-inflammatory defence genes. Sulforaphane from broccoli and curcumin from turmeric are among the most potent dietary activators of Nrf2. They notably induce the synthesis of glutathione, HO-1 and NQO1, protective enzymes for the skin.",
+    feedback_ko_fr: "Les activateurs alimentaires de Nrf2 les plus puissants sont le sulforaphane (crucifères) et la curcumine (curcuma), qui déclenchent la production d'enzymes antioxydantes endogènes.",
+    feedback_ko_en: "The most potent dietary activators of Nrf2 are sulforaphane (cruciferous) and curcumin (turmeric), which trigger the production of endogenous antioxidant enzymes.",
+    reformulation_fr: "Les légumes crucifères et le curcuma peuvent-ils activer la voie Nrf2 et protéger la peau ?",
+    reformulation_en: "Can cruciferous vegetables and turmeric activate the Nrf2 pathway and protect the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le sulforaphane et la curcumine sont des activateurs directs de Nrf2 documentés dans de nombreux essais cliniques et études mécanistiques.",
+    reformulation_explanation_en: "Sulforaphane and curcumin are direct activators of Nrf2 documented in numerous clinical trials and mechanistic studies."
+  },
+  {
+    question_fr: "PIÈGE : Prendre des antioxydants en forte dose est toujours bénéfique pour la peau.",
+    question_en: "TRAP : Taking antioxidants in high doses is always beneficial for the skin.",
+    options: [
+      { letter: 'A', text_fr: "Vrai, plus d'antioxydants = meilleure protection", text_en: "True, more antioxidants = better protection" },
+      { letter: 'B', text_fr: "Faux : en excès, certains antioxydants deviennent pro-oxydants et peuvent être délétères", text_en: "False: in excess, some antioxidants become pro-oxidants and can be harmful" },
+      { letter: 'C', text_fr: "Vrai, si d'origine naturelle", text_en: "True, if of natural origin" },
+      { letter: 'D', text_fr: "Faux uniquement pour la vitamine E", text_en: "False only for vitamin E" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le paradoxe antioxydant : à haute dose, la vitamine C peut réduire des ions fer(III) en fer(II) pro-oxydant (réaction de Fenton), la vitamine E recyclée insuffisamment devient radicale tocophéroxyle, et le bêta-carotène en forte dose a montré une augmentation de la mortalité par cancer chez les fumeurs (essais CARET, ATBC). Les antioxydants alimentaires dans leur matrice naturelle restent toujours préférables aux suppléments isolés à forte dose.",
+    feedback_ok_en: "The antioxidant paradox: at high doses, vitamin C can reduce iron(III) to pro-oxidant iron(II) (Fenton reaction), insufficiently recycled vitamin E becomes a tocopheroxyl radical, and high-dose beta-carotene showed increased cancer mortality in smokers (CARET, ATBC trials). Dietary antioxidants in their natural matrix always remain preferable to high-dose isolated supplements.",
+    feedback_ko_fr: "À forte dose isolée, certains antioxydants (bêta-carotène, vitamine C, vitamine E) peuvent devenir pro-oxydants ou augmenter des risques de cancer dans certaines populations.",
+    feedback_ko_en: "At high isolated doses, some antioxidants (beta-carotene, vitamin C, vitamin E) can become pro-oxidants or increase cancer risks in certain populations.",
+    reformulation_fr: "Les antioxydants en forte dose sont-ils toujours sans risque pour la santé ?",
+    reformulation_en: "Are high-dose antioxidants always risk-free for health ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Les essais CARET et ATBC ont montré une surmortalité par cancer du poumon chez des fumeurs supplémentés en bêta-carotène. La règle d'or reste les antioxydants alimentaires dans leur matrice naturelle.",
+    reformulation_explanation_en: "The CARET and ATBC trials showed excess lung cancer mortality in smokers supplemented with beta-carotene. The golden rule remains dietary antioxidants in their natural food matrix."
+  },
+  {
+    question_fr: "Le resvératrol active la voie SIRT1 pour protéger la peau. Sa meilleure source alimentaire est :",
+    question_en: "Resveratrol activates the SIRT1 pathway to protect the skin. Its best dietary source is :",
+    options: [
+      { letter: 'A', text_fr: "Les agrumes", text_en: "Citrus fruits" },
+      { letter: 'B', text_fr: "La peau du raisin rouge, les mûres et les cacahuètes", text_en: "Red grape skin, mulberries and peanuts" },
+      { letter: 'C', text_fr: "L'huile d'olive", text_en: "Olive oil" },
+      { letter: 'D', text_fr: "Les épinards", text_en: "Spinach" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le resvératrol est un stilbène polyphénolique concentré dans la peau du raisin rouge (et donc dans le vin rouge avec modération), les mûres et les cacahuètes. Il active SIRT1 (sirtuine 1), une déacétylase qui régule la réponse au stress oxydatif, l'inflammation et la réparation de l'ADN dans les cellules cutanées. Son absorption est améliorée par les lipides alimentaires.",
+    feedback_ok_en: "Resveratrol is a polyphenolic stilbene concentrated in red grape skin (and therefore in red wine in moderation), mulberries and peanuts. It activates SIRT1 (sirtuin 1), a deacetylase that regulates oxidative stress response, inflammation and DNA repair in skin cells. Its absorption is improved by dietary lipids.",
+    feedback_ko_fr: "Les meilleures sources alimentaires de resvératrol sont la peau du raisin rouge, les mûres et les cacahuètes. L'activation de SIRT1 contribue à la protection anti-âge et anti-inflammatoire de la peau.",
+    feedback_ko_en: "The best dietary sources of resveratrol are red grape skin, mulberries and peanuts. SIRT1 activation contributes to the anti-ageing and anti-inflammatory protection of the skin.",
+    reformulation_fr: "Le raisin rouge est-il une source alimentaire de resvératrol activateur de SIRT1 ?",
+    reformulation_en: "Is red grape a dietary source of resveratrol that activates SIRT1 ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le resvératrol est particulièrement concentré dans la peau du raisin rouge. Il est connu pour activer SIRT1 et ses effets protecteurs sur le vieillissement cellulaire.",
+    reformulation_explanation_en: "Resveratrol is particularly concentrated in red grape skin. It is known to activate SIRT1 and its protective effects on cellular ageing."
+  },
+  {
+    question_fr: "Le cuivre est essentiel à la solidité du tissu conjonctif cutané car il est cofacteur de :",
+    question_en: "Copper is essential to the solidity of skin connective tissue because it is a cofactor of :",
+    options: [
+      { letter: 'A', text_fr: "La superoxyde dismutase uniquement", text_en: "Superoxide dismutase only" },
+      { letter: 'B', text_fr: "La lysyl oxydase, enzyme qui réticule le collagène et l'élastine pour leur donner leur résistance mécanique", text_en: "Lysyl oxidase, the enzyme that cross-links collagen and elastin to give them their mechanical strength" },
+      { letter: 'C', text_fr: "La tyrosinase uniquement", text_en: "Tyrosinase only" },
+      { letter: 'D', text_fr: "La collagénase", text_en: "Collagenase" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "La lysyl oxydase (LOX) est une enzyme cuivre-dépendante qui catalyse la réticulation oxydative des lysines du collagène et de l'élastine, créant des liaisons covalentes qui donnent à la peau sa résistance mécanique et son élasticité. Une carence en cuivre produit un tissu conjonctif lâche, des anévrysmes vasculaires et une peau fragile. Sources : foie, fruits de mer, noix de cajou, chocolat noir, graines de sésame.",
+    feedback_ok_en: "Lysyl oxidase (LOX) is a copper-dependent enzyme that catalyses the oxidative cross-linking of lysine residues in collagen and elastin, creating covalent bonds that give the skin its mechanical strength and elasticity. Copper deficiency produces loose connective tissue, vascular aneurysms and fragile skin. Sources: liver, seafood, cashews, dark chocolate, sesame seeds.",
+    feedback_ko_fr: "Le cuivre est le cofacteur indispensable de la lysyl oxydase, qui crée les ponts moléculaires dans le collagène et l'élastine et donne sa solidité à la peau.",
+    feedback_ko_en: "Copper is the indispensable cofactor of lysyl oxidase, which creates the molecular bridges in collagen and elastin and gives the skin its strength.",
+    reformulation_fr: "La lysyl oxydase a-t-elle besoin de cuivre pour réticuler le collagène et l'élastine ?",
+    reformulation_en: "Does lysyl oxidase need copper to cross-link collagen and elastin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La lysyl oxydase est strictement cuivre-dépendante. Sans cuivre suffisant, les fibres de collagène et d'élastine ne peuvent pas former les liaisons covalentes qui leur donnent leur résistance.",
+    reformulation_explanation_en: "Lysyl oxidase is strictly copper-dependent. Without sufficient copper, collagen and elastin fibres cannot form the covalent bonds that give them their strength."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_n4', score); window.location.href = 'nutriments-peau-niveau4-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

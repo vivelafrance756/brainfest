@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Nutriments et Peau — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/nutriments-peau-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue: #2a7fa8;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='nutriments-et-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10820017/" target="_blank" rel="noopener">Nutritional supplements for skin health PMC 2024</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/29382109/" target="_blank" rel="noopener">Zinc and skin disorders Nutrients 2018</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Le ratio oméga-6/oméga-3 dans l'alimentation occidentale est problématique pour la peau parce que :",
+    question_en: "The omega-6/omega-3 ratio in the Western diet is problematic for the skin because :",
+    options: [
+      { letter: 'A', text_fr: "Les oméga-6 sont inutiles pour la peau", text_en: "Omega-6 are useless for the skin" },
+      { letter: 'B', text_fr: "Un excès d'oméga-6 favorise l'inflammation cutanée chronique", text_en: "An excess of omega-6 promotes chronic skin inflammation" },
+      { letter: 'C', text_fr: "Les oméga-3 bloquent les oméga-6", text_en: "Omega-3 block omega-6" },
+      { letter: 'D', text_fr: "Ce ratio n'a aucun impact documenté", text_en: "This ratio has no documented impact" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le ratio idéal est entre 4:1 et 1:1. L'alimentation occidentale atteint souvent 15:1 voire 20:1. Cet excès d'acide arachidonique produit des eicosanoïdes pro-inflammatoires qui aggravent acné, eczéma et psoriasis.",
+    feedback_ok_en: "The ideal ratio is between 4:1 and 1:1. The Western diet often reaches 15:1 or even 20:1. This excess of arachidonic acid produces pro-inflammatory eicosanoids that worsen acne, eczema and psoriasis.",
+    feedback_ko_fr: "Les oméga-6 et oméga-3 entrent en compétition pour les mêmes enzymes. Un excès d'oméga-6 (huile de tournesol, aliments transformés) détourne ces enzymes vers des voies pro-inflammatoires.",
+    feedback_ko_en: "Omega-6 and omega-3 compete for the same enzymes. An excess of omega-6 (sunflower oil, processed foods) diverts these enzymes towards pro-inflammatory pathways.",
+    reformulation_fr: "Réduire les huiles riches en oméga-6 peut-il réduire l'inflammation cutanée ?",
+    reformulation_en: "Can reducing omega-6-rich oils reduce skin inflammation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Rééquilibrer le ratio oméga-6/oméga-3 en réduisant les huiles de tournesol et en augmentant les poissons gras est l'une des interventions les plus documentées pour l'inflammation cutanée.",
+    reformulation_explanation_en: "Rebalancing the omega-6/omega-3 ratio by reducing sunflower oil and increasing oily fish is one of the best-documented interventions for skin inflammation."
+  },
+  {
+    question_fr: "La silice est bénéfique pour la peau parce qu'elle :",
+    question_en: "Silica is beneficial for the skin because it :",
+    options: [
+      { letter: 'A', text_fr: "Produit du sébum", text_en: "Produces sebum" },
+      { letter: 'B', text_fr: "Renforce le collagène et l'élastine en stabilisant leurs liaisons croisées", text_en: "Strengthens collagen and elastin by stabilising their cross-links" },
+      { letter: 'C', text_fr: "Bloque la mélanine", text_en: "Blocks melanin" },
+      { letter: 'D', text_fr: "Aucun rôle documenté", text_en: "No documented role" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "La silice stabilise les liaisons croisées entre les fibres de collagène et d'élastine. Elle améliore l'élasticité et la fermeté cutanée. On la trouve dans la prêle, les poivrons, les céréales complètes et le persil.",
+    feedback_ok_en: "Silica stabilises the cross-links between collagen and elastin fibres. It improves skin elasticity and firmness. It is found in horsetail, peppers, whole grains and parsley.",
+    feedback_ko_fr: "La silice joue un rôle structural en stabilisant les ponts entre les fibres de collagène. La prêle est la source végétale la plus concentrée.",
+    feedback_ko_en: "Silica plays a structural role by stabilising bridges between collagen fibres. Horsetail is the most concentrated plant source.",
+    reformulation_fr: "La prêle est-elle une bonne source de silice pour la fermeté de la peau ?",
+    reformulation_en: "Is horsetail a good source of silica for skin firmness ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La prêle des champs (Equisetum arvense) est la plante la plus riche en silice bioassimilable. Elle est utilisée pour soutenir la fermeté cutanée, la solidité des ongles et la qualité des cheveux.",
+    reformulation_explanation_en: "Common horsetail (Equisetum arvense) is the plant richest in bioavailable silica. It is used to support skin firmness, nail strength and hair quality."
+  },
+  {
+    question_fr: "Le sélénium protège la peau parce qu'il :",
+    question_en: "Selenium protects the skin because it :",
+    options: [
+      { letter: 'A', text_fr: "Produit du collagène", text_en: "Produces collagen" },
+      { letter: 'B', text_fr: "Est cofacteur de la glutathion peroxydase qui neutralise les radicaux libres cutanés", text_en: "Is a cofactor of glutathione peroxidase which neutralises skin free radicals" },
+      { letter: 'C', text_fr: "Régule la mélanine", text_en: "Regulates melanin" },
+      { letter: 'D', text_fr: "Stimule les glandes sébacées", text_en: "Stimulates sebaceous glands" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le sélénium est le cofacteur de la glutathion peroxydase (GPx), qui neutralise les peroxydes lipidiques dans les membranes cellulaires cutanées. Sa carence augmente la sensibilité aux UV. Deux noix du Brésil par jour suffisent. Pas plus de trois, ça devient toxique.",
+    feedback_ok_en: "Selenium is the cofactor of glutathione peroxidase (GPx), which neutralises lipid peroxides in skin cell membranes. Its deficiency increases UV sensitivity. Two Brazil nuts a day are enough. No more than three, it becomes toxic.",
+    feedback_ko_fr: "Deux noix du Brésil par jour couvrent les besoins en sélénium. Attention, pas d'excès, ça devient toxique. Sa déficience est associée à une plus grande sensibilité aux dommages UV.",
+    feedback_ko_en: "Two Brazil nuts a day cover selenium needs. Be careful, excess becomes toxic. Its deficiency is associated with greater sensitivity to UV damage.",
+    reformulation_fr: "Les noix du Brésil sont-elles une bonne source de sélénium protecteur pour la peau ?",
+    reformulation_en: "Are Brazil nuts a good source of selenium protective for the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Deux noix du Brésil apportent environ 100 à 200 microgrammes de sélénium, bien au-delà des 55 microgrammes recommandés. C'est la source alimentaire la plus concentrée connue.",
+    reformulation_explanation_en: "Two Brazil nuts provide approximately 100 to 200 micrograms of selenium, well above the recommended 55 micrograms. It is the most concentrated food source known."
+  },
+  {
+    question_fr: "PIÈGE : La biotine améliore systématiquement la qualité de la peau.",
+    question_en: "TRAP : Biotin systematically improves skin quality.",
+    options: [
+      { letter: 'A', text_fr: "Vrai, c'est le nutriment clé", text_en: "True, it is the key nutrient" },
+      { letter: 'B', text_fr: "Faux, uniquement chez les personnes carencées, ce qui est rare", text_en: "False, only in deficient people which is rare" },
+      { letter: 'C', text_fr: "Vrai, tout le monde manque de biotine", text_en: "True, everyone lacks biotin" },
+      { letter: 'D', text_fr: "Faux, la biotine est nocive", text_en: "False, biotin is harmful" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "La biotine n'est bénéfique que chez les rares personnes présentant une carence avérée. Chez la majorité des adultes, la supplémentation n'a pas d'effet documenté sur la qualité cutanée. Le marketing de la biotine est l'un des exemples les plus frappants de décalage entre publicité et science.",
+    feedback_ok_en: "Biotin is only beneficial in the rare people with a proven deficiency. In the majority of adults, supplementation has no documented effect on skin quality. Biotin marketing is one of the most striking examples of the gap between advertising and science.",
+    feedback_ko_fr: "Les carences en biotine sont extrêmement rares chez l'adulte sain. La supplémentation ne sert à rien sans carence préalable.",
+    feedback_ko_en: "Biotin deficiencies are extremely rare in healthy adults. Supplementation is useless without a prior deficiency.",
+    reformulation_fr: "La biotine est-elle utile uniquement en cas de carence avérée ?",
+    reformulation_en: "Is biotin only useful in cases of proven deficiency ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La revue publiée dans Nutrients 2024 confirme que la biotine n'améliore la peau que chez les personnes carencées. Sa carence est rare chez l'adulte sain mangeant varié.",
+    reformulation_explanation_en: "The review published in Nutrients 2024 confirms that biotin only improves skin in deficient people. Its deficiency is rare in healthy adults eating a varied diet."
+  },
+  {
+    question_fr: "Quel est l'effet d'une alimentation riche en polyphénols sur la peau ?",
+    question_en: "What is the effect of a polyphenol-rich diet on the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Elle augmente le sébum", text_en: "It increases sebum" },
+      { letter: 'B', text_fr: "Elle réduit l'oxydation des lipides membranaires et l'inflammation", text_en: "It reduces membrane lipid oxidation and inflammation" },
+      { letter: 'C', text_fr: "Elle bloque le collagène", text_en: "It blocks collagen" },
+      { letter: 'D', text_fr: "Aucun effet documenté", text_en: "No documented effect" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Les polyphénols (flavonoïdes, resvératrol, curcumine, EGCG du thé vert) inhibent NF-kB et réduisent les cytokines pro-inflammatoires. Ils protègent aussi les lipides des membranes cellulaires cutanées contre la peroxydation.",
+    feedback_ok_en: "Polyphenols (flavonoids, resveratrol, curcumin, EGCG from green tea) inhibit NF-kB and reduce pro-inflammatory cytokines. They also protect skin cell membrane lipids against peroxidation.",
+    feedback_ko_fr: "Fruits rouges, thé vert, chocolat noir 85%, huile d'olive extra vierge, curcuma : tous contiennent des polyphénols qui protègent les cellules cutanées.",
+    feedback_ko_en: "Red fruits, green tea, 85% dark chocolate, extra virgin olive oil, turmeric: all contain polyphenols that protect skin cells.",
+    reformulation_fr: "Le thé vert contient-il des composés bénéfiques pour la peau ?",
+    reformulation_en: "Does green tea contain compounds beneficial for the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les catéchines du thé vert, en particulier l'EGCG, inhibent les métalloprotéinases qui dégradent le collagène et réduisent l'inflammation cutanée via NF-kB.",
+    reformulation_explanation_en: "Green tea catechins, particularly EGCG, inhibit matrix metalloproteinases that degrade collagen and reduce skin inflammation via NF-kB."
+  },
+  {
+    question_fr: "L'astaxanthine est intéressante pour la peau parce que :",
+    question_en: "Astaxanthin is interesting for the skin because :",
+    options: [
+      { letter: 'A', text_fr: "Elle produit du collagène", text_en: "It produces collagen" },
+      { letter: 'B', text_fr: "C'est un antioxydant 6000 fois plus puissant que la vitamine C", text_en: "It is an antioxidant 6000 times more powerful than vitamin C" },
+      { letter: 'C', text_fr: "Elle régule uniquement la mélanine", text_en: "It only regulates melanin" },
+      { letter: 'D', text_fr: "Effet uniquement topique", text_en: "Only topical effect" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "L'astaxanthine est produite par des microalgues (Haematococcus pluvialis). Sa puissance antioxydante est 6000 fois supérieure à la vitamine C et 800 fois à la CoQ10. Elle protège les cellules cutanées du stress oxydatif et de la photooxydation.",
+    feedback_ok_en: "Astaxanthin is produced by microalgae (Haematococcus pluvialis). Its antioxidant power is 6000 times greater than vitamin C and 800 times greater than CoQ10. It protects skin cells from oxidative stress and photooxidation.",
+    feedback_ko_fr: "L'astaxanthine est le pigment rouge du saumon sauvage. Sa structure unique lui permet de s'ancrer dans la membrane cellulaire et de la protéger de l'intérieur comme de l'extérieur.",
+    feedback_ko_en: "Astaxanthin is the red pigment of wild salmon. Its unique structure allows it to anchor into the cell membrane and protect it from both inside and outside.",
+    reformulation_fr: "L'astaxanthine est-elle plus puissante que la vitamine C comme antioxydant ?",
+    reformulation_en: "Is astaxanthin more powerful than vitamin C as an antioxidant ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Sa capacité antioxydante est 6000 fois supérieure à celle de la vitamine C selon les mesures ORAC. Sa structure moléculaire unique lui permet d'agir des deux côtés de la membrane cellulaire simultanément.",
+    reformulation_explanation_en: "Its antioxidant capacity is 6000 times greater than that of vitamin C according to ORAC measurements. Its unique molecular structure allows it to act on both sides of the cell membrane simultaneously."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_n2', score); window.location.href = 'nutriments-peau-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

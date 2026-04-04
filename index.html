@@ -465,6 +465,49 @@ body {
   color: rgba(255,255,255,0.5);
 }
 
+/* ── CARD CLICKABLE ── */
+.card { cursor: pointer; position: relative; transition: transform 0.2s; }
+.card:hover { transform: scale(1.02); }
+.card:active { opacity: 0.85; }
+.sono-card { cursor: pointer; position: relative; transition: transform 0.2s; }
+.sono-card:hover { transform: scale(1.02); }
+.sono-card:active { opacity: 0.85; }
+a.card-link { text-decoration: none; display: block; }
+
+.card-soon-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--amber);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 2px 6px;
+  pointer-events: none;
+}
+
+#soon-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--indigo-dark);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+#soon-toast.show { opacity: 1; }
+
 /* ── ANIMATIONS ── */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
@@ -615,37 +658,45 @@ body {
       <div class="column-header" data-fr="CULTIVEZ&#10;VOS&#10;SAVOIRS" data-en="CULTIVATE&#10;YOUR&#10;KNOWLEDGE">CULTIVEZ&#10;VOS&#10;SAVOIRS</div>
       <div class="card-row-wrapper">
         <div class="card-row" id="row-savoirs">
+          <a href="nutriments-et-peau.html" class="card-link">
           <div class="card">
             <div class="card-emoji">🍊</div>
             <div class="card-title">Nutriments et Peau</div>
             <div class="card-desc" data-fr="Votre peau mange ce que vous mangez" data-en="Your skin eats what you eat">Votre peau mange ce que vous mangez</div>
           </div>
-          <div class="card">
+          </a>
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🔬</div>
             <div class="card-title" data-fr="Votre peau a une histoire" data-en="Your skin has a story">Votre peau a une histoire</div>
             <div class="card-desc" data-fr="Acné, eczéma, psoriasis : comprenez votre peau" data-en="Acne, eczema, psoriasis: understand your skin">Acné, eczéma, psoriasis : comprenez votre peau</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🦠</div>
             <div class="card-title">Peau et Microbiote</div>
             <div class="card-desc" data-fr="Votre intestin parle à votre peau" data-en="Your gut talks to your skin">Votre intestin parle à votre peau</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🫁</div>
             <div class="card-title">Peau et Foie</div>
             <div class="card-desc" data-fr="Quand le foie déborde, la peau réagit" data-en="When the liver overflows, the skin reacts">Quand le foie déborde, la peau réagit</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">💊</div>
             <div class="card-title" data-fr="Magnésium oui, mais lequel ?" data-en="Magnesium yes, but which one?">Magnésium oui, mais lequel ?</div>
             <div class="card-desc" data-fr="Démêlez le vrai du marketing" data-en="Sort fact from marketing">Démêlez le vrai du marketing</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🥗</div>
             <div class="card-title" data-fr="Stratège Anti-Inflammatoire" data-en="Anti-Inflammatory Strategy">Stratège Anti-Inflammatoire</div>
             <div class="card-desc" data-fr="L'alimentation qui protège" data-en="The diet that protects">L'alimentation qui protège</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🌿</div>
             <div class="card-title" data-fr="Plantes : Remèdes ou Légendes ?" data-en="Plants: Remedies or Legends?">Plantes : Remèdes ou Légendes ?</div>
             <div class="card-desc" data-fr="La science face aux traditions" data-en="Science meets tradition">La science face aux traditions</div>
@@ -663,17 +714,20 @@ body {
       <div class="column-header" data-fr="ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE" data-en="TRAIN&#10;YOUR&#10;MEMORY">ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE</div>
       <div class="card-row-wrapper">
         <div class="card-row" id="row-memoire">
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🧩</div>
             <div class="card-title" data-fr="Le Carré Magique" data-en="The Magic Square">Le Carré Magique</div>
             <div class="card-desc" data-fr="Votre cerveau adore qu'on le mette au défi" data-en="Your brain loves a challenge">Votre cerveau adore qu'on le mette au défi</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">✏️</div>
             <div class="card-title" data-fr="Mots Croisés Jolie Peau" data-en="Lovely Skin Crosswords">Mots Croisés Jolie Peau</div>
             <div class="card-desc" data-fr="Le vocabulaire de la peau en jeu" data-en="Skin vocabulary at play">Le vocabulaire de la peau en jeu</div>
           </div>
-          <div class="card">
+          <div class="card" onclick="soon()">
+            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
             <div class="card-emoji">🃏</div>
             <div class="card-title" data-fr="Paires Santé" data-en="Health Pairs">Paires Santé</div>
             <div class="card-desc" data-fr="Associez plantes et effets" data-en="Match plants and effects">Associez plantes et effets</div>
@@ -696,17 +750,20 @@ body {
     <span class="sono-title">SonoCerveau</span>
   </div>
   <div id="sono-cards">
-    <div class="sono-card" id="melodie-miroir-card">
+    <div class="sono-card" id="melodie-miroir-card" onclick="soon()">
+      <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
       <img src="images/melody_miroir.png" alt="Mélodie Miroir" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
       <div class="sono-card-title">Mélodie Miroir</div>
       <div class="sono-card-desc" data-fr="Comparez deux mélodies et trouvez la différence" data-en="Compare two melodies and find the difference">Comparez deux mélodies et trouvez la différence</div>
     </div>
-    <div class="sono-card">
+    <div class="sono-card" onclick="soon()">
+      <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
       <img src="images/beat-memory.jpg" alt="Beat Memory" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
       <div class="sono-card-title">Beat Memory</div>
       <div class="sono-card-desc" data-fr="Reproduisez des rythmes de jazz" data-en="Reproduce jazz rhythms">Reproduisez des rythmes de jazz</div>
     </div>
-    <div class="sono-card">
+    <div class="sono-card" onclick="soon()">
+      <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
       <img src="images/melodie-jazz.jpg" alt="Mélodie Jazz" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
       <div class="sono-card-title" data-fr="Mélodie Jazz" data-en="Jazz Melody">Mélodie Jazz</div>
       <div class="sono-card-desc" data-fr="Apprenez les mélodies note par note" data-en="Learn melodies note by note">Apprenez les mélodies note par note</div>
@@ -742,6 +799,8 @@ body {
 
   <p id="footer-copyright">© La Troisième Note / BrainFest</p>
 </footer>
+
+<div id="soon-toast"></div>
 
 <script>
 // ── PASSWORD PROTECTION ──
@@ -794,6 +853,14 @@ function scrollRow(rowId, dir) {
   var row = document.getElementById(rowId);
   var cardWidth = 172; // min-width 160 + margin 12
   row.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+}
+
+function goTo(url) {
+  window.location.href = url;
+}
+
+function soon() {
+  alert(currentLang === 'fr' ? 'Ce contenu arrive bientôt' : 'This content is coming soon');
 }
 
 function scrollToMelodie() {

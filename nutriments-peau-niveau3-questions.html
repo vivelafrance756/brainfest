@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 3 Questions — Nutriments et Peau — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/nutriments-peau-niveau3-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='nutriments-et-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🎯 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12587681/" target="_blank" rel="noopener">Mediterranean diet and acne 2025</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/39624570/" target="_blank" rel="noopener">Low glycemic diet acne Cureus 2024</a>
+    <a href="https://www.amjmed.com/article/S0002-9343(25)00283-9/fulltext" target="_blank" rel="noopener">Collagen supplements meta-analysis 2025</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Pourquoi la vitamine C alimentaire est-elle plus efficace que la vitamine C topique pour la synthèse de collagène ?",
+    question_en: "Why is dietary vitamin C more effective than topical vitamin C for collagen synthesis ?",
+    options: [
+      { letter: 'A', text_fr: "La topique est instable", text_en: "Topical is unstable" },
+      { letter: 'B', text_fr: "L'alimentaire se distribue dans toutes les couches via la circulation, y compris le derme profond", text_en: "Dietary distributes to all layers via bloodstream including the deep dermis" },
+      { letter: 'C', text_fr: "Même effet", text_en: "Same effect" },
+      { letter: 'D', text_fr: "La topique est plus concentrée", text_en: "Topical is more concentrated" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Une étude de l'Université d'Otago (2025) a montré une corrélation étroite entre le taux plasmatique de vitamine C et sa concentration dans toutes les couches de la peau. La vitamine C alimentaire atteint le derme profond où les fibroblastes produisent le collagène, là où les crèmes ne pénètrent pas.",
+    feedback_ok_en: "A 2025 study from the University of Otago showed a tight correlation between plasma vitamin C levels and its concentration in all skin layers. Dietary vitamin C reaches the deep dermis where fibroblasts produce collagen, where creams cannot penetrate.",
+    feedback_ko_fr: "La vitamine C alimentaire est distribuée par le sang à toutes les couches de la peau, y compris le derme profond. Les crèmes atteignent principalement l'épiderme.",
+    feedback_ko_en: "Dietary vitamin C is distributed by blood to all skin layers, including the deep dermis. Creams mainly reach the epidermis.",
+    reformulation_fr: "Manger des aliments riches en vitamine C est-il plus efficace que les crèmes pour le collagène profond ?",
+    reformulation_en: "Is eating vitamin C-rich foods more effective than creams for deep collagen ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les crèmes à la vitamine C ont une action intéressante sur l'épiderme, mais elles ne peuvent pas atteindre le derme profond où se produisent la majorité des fibres de collagène.",
+    reformulation_explanation_en: "Vitamin C creams have an interesting action on the epidermis, but they cannot reach the deep dermis where the majority of collagen fibres are produced."
+  },
+  {
+    question_fr: "Les suppléments de collagène oral ont-ils une efficacité prouvée pour la peau ?",
+    question_en: "Do oral collagen supplements have proven effectiveness for the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Oui, toutes les études", text_en: "Yes, all studies" },
+      { letter: 'B', text_fr: "Résultats mitigés : études indépendantes montrent peu d'effet, études financées montrent des effets positifs", text_en: "Mixed results: independent studies show little effect, funded studies show positive effects" },
+      { letter: 'C', text_fr: "Non, aucune étude", text_en: "No studies" },
+      { letter: 'D', text_fr: "Oui, uniquement après 60 ans", text_en: "Yes, only after 60" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Une méta-analyse de 23 essais contrôlés publiée en 2025 dans The American Journal of Medicine montre que dans les études non financées par l'industrie, les suppléments de collagène ne montrent pas d'effet significatif sur l'hydratation, l'élasticité ou les rides. Ce biais de financement est crucial à connaître.",
+    feedback_ok_en: "A meta-analysis of 23 controlled trials published in 2025 in The American Journal of Medicine shows that in studies not funded by industry, collagen supplements show no significant effect on hydration, elasticity or wrinkles. This funding bias is crucial to know about.",
+    feedback_ko_fr: "Quand on sépare les études selon leur source de financement, l'effet du collagène oral disparaît dans les études indépendantes. Le mieux est de soutenir la synthèse naturelle via la vitamine C alimentaire.",
+    feedback_ko_en: "When studies are separated by funding source, the effect of oral collagen disappears in independent studies. The best approach is to support natural synthesis through dietary vitamin C.",
+    reformulation_fr: "Les études indépendantes confirment-elles l'efficacité du collagène oral pour la peau ?",
+    reformulation_en: "Do independent studies confirm the effectiveness of oral collagen for the skin ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Le collagène ingéré est digéré en acides aminés avant d'être absorbé. Aucun mécanisme biologique ne garantit que ces acides aminés seront utilisés pour synthétiser du collagène cutané.",
+    reformulation_explanation_en: "Ingested collagen is digested into amino acids before being absorbed. No biological mechanism guarantees these amino acids will be used to synthesise skin collagen."
+  },
+  {
+    question_fr: "Le régime méditerranéen réduit la sévérité de l'acné parce qu'il :",
+    question_en: "The Mediterranean diet reduces acne severity because it :",
+    options: [
+      { letter: 'A', text_fr: "Exclut les graisses", text_en: "Excludes fats" },
+      { letter: 'B', text_fr: "Est riche en oméga-3, antioxydants, fibres prébiotiques et a un faible index glycémique global", text_en: "Is rich in omega-3, antioxidants, prebiotic fibre and has a low overall GI" },
+      { letter: 'C', text_fr: "Est riche en laitages", text_en: "Is rich in dairy" },
+      { letter: 'D', text_fr: "Réduit la mélanine", text_en: "Reduces melanin" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Une méta-analyse dans Nutrition and Metabolism 2025 confirme l'association entre régime méditerranéen et acné moins sévère. Ce régime cumule faible index glycémique, oméga-3 anti-inflammatoires, polyphénols antioxydants et fibres prébiotiques.",
+    feedback_ok_en: "A meta-analysis in Nutrition and Metabolism 2025 confirms the association between Mediterranean diet and less severe acne. This diet combines low GI, anti-inflammatory omega-3, antioxidant polyphenols and prebiotic fibres.",
+    feedback_ko_fr: "Le régime méditerranéen agit sur plusieurs mécanismes : faible charge glycémique, oméga-3, polyphénols, fibres. C'est une approche globale plus efficace que les suppléments isolés.",
+    feedback_ko_en: "The Mediterranean diet acts on multiple mechanisms: low glycaemic load, omega-3, polyphenols, fibre. It is a more effective global approach than isolated supplements.",
+    reformulation_fr: "Le régime méditerranéen peut-il réduire la sévérité de l'acné ?",
+    reformulation_en: "Can the Mediterranean diet reduce acne severity ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La méta-analyse de Taha et al. dans Nutrition and Metabolism (2025) confirme une association entre haute adhérence au régime méditerranéen et acné moins sévère.",
+    reformulation_explanation_en: "The meta-analysis by Taha et al. in Nutrition and Metabolism (2025) confirms an association between high adherence to the Mediterranean diet and less severe acne."
+  },
+  {
+    question_fr: "PIÈGE : Le chocolat cause l'acné.",
+    question_en: "TRAP : Chocolate causes acne.",
+    options: [
+      { letter: 'A', text_fr: "Vrai, le cacao est acnéogène", text_en: "True, cocoa is acnegenic" },
+      { letter: 'B', text_fr: "Faux, c'est le sucre et le lait dans le chocolat industriel, pas le cacao pur", text_en: "False, it is sugar and milk in industrial chocolate, not pure cocoa" },
+      { letter: 'C', text_fr: "Vrai, toutes formes", text_en: "True, all forms" },
+      { letter: 'D', text_fr: "Faux, le chocolat améliore la peau", text_en: "False, chocolate improves skin" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le cacao pur (chocolat 85%+) est riche en flavonoïdes antioxydants et n'est pas acnéogène. C'est le sucre (charge glycémique élevée) et les protéines de lait (IGF-1) des chocolats industriels qui aggravent l'acné. Un carré de chocolat noir 85% peut même être bénéfique pour la peau.",
+    feedback_ok_en: "Pure cocoa (85%+ chocolate) is rich in antioxidant flavonoids and is not acnegenic. It is the sugar (high glycaemic load) and milk proteins (IGF-1) in industrial chocolates that worsen acne. A square of 85% dark chocolate can even be beneficial for the skin.",
+    feedback_ko_fr: "C'est l'un des mythes alimentaires les plus tenaces. Le cacao pur contient des flavonoïdes protecteurs. Ce sont le sucre et le lait ajoutés dans les chocolats industriels qui posent problème.",
+    feedback_ko_en: "This is one of the most persistent dietary myths. Pure cocoa contains protective flavonoids. It is the added sugar and milk in industrial chocolates that are problematic.",
+    reformulation_fr: "Le chocolat noir à 85% est-il aussi acnéogène que le chocolat au lait ?",
+    reformulation_en: "Is 85% dark chocolate as acnegenic as milk chocolate ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Le chocolat noir 85%+ a une faible charge glycémique et ne contient pas de protéines laitières. Ses flavonoïdes sont au contraire anti-inflammatoires.",
+    reformulation_explanation_en: "85%+ dark chocolate has a low glycaemic load and contains no milk proteins. Its flavonoids are in fact anti-inflammatory."
+  },
+  {
+    question_fr: "Le niacinamide (vitamine B3) est bénéfique pour la peau parce qu'il :",
+    question_en: "Niacinamide (vitamin B3) is beneficial for the skin because it :",
+    options: [
+      { letter: 'A', text_fr: "Produit du collagène", text_en: "Produces collagen" },
+      { letter: 'B', text_fr: "Réduit le sébum, renforce la barrière cutanée et protège contre les UV", text_en: "Reduces sebum, strengthens the skin barrier and protects against UV rays" },
+      { letter: 'C', text_fr: "Hydrate uniquement la couche cornée", text_en: "Only hydrates the stratum corneum" },
+      { letter: 'D', text_fr: "Effet uniquement topique", text_en: "Only topical effect" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Le niacinamide protège contre les dommages UV et réduit le risque de kératose actinique. Il régule aussi la production de sébum et renforce la barrière cutanée via la synthèse de céramides. Les aliments riches en B3 : viande, poisson, légumineuses, champignons.",
+    feedback_ok_en: "Niacinamide protects against UV damage and reduces the risk of actinic keratosis. It also regulates sebum production and strengthens the skin barrier through ceramide synthesis. Foods rich in B3 include meat, fish, legumes and mushrooms.",
+    feedback_ko_fr: "Le niacinamide agit à la fois par voie orale et topique sur la peau. Aliments riches en B3 : viande, poisson, légumineuses, champignons.",
+    feedback_ko_en: "Niacinamide acts both orally and topically on the skin. Foods rich in B3 include meat, fish, legumes and mushrooms.",
+    reformulation_fr: "La vitamine B3 peut-elle protéger la peau contre les dommages solaires ?",
+    reformulation_en: "Can vitamin B3 protect the skin against sun damage ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs essais cliniques montrent que la niacine orale réduit le risque de kératose actinique et de carcinome squameux chez les personnes à risque.",
+    reformulation_explanation_en: "Several clinical trials show oral niacin reduces the risk of actinic keratosis and squamous cell carcinoma in at-risk individuals."
+  },
+  {
+    question_fr: "Pourquoi l'index glycémique d'un aliment est-il important pour la peau ?",
+    question_en: "Why is the glycaemic index of a food important for the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Il régule la mélanine", text_en: "It regulates melanin" },
+      { letter: 'B', text_fr: "Un IG élevé provoque un pic d'insuline augmentant l'IGF-1 qui stimule les glandes sébacées et C. acnes", text_en: "A high GI triggers an insulin spike increasing IGF-1 which stimulates sebaceous glands and C. acnes" },
+      { letter: 'C', text_fr: "Il détermine le collagène", text_en: "It determines collagen" },
+      { letter: 'D', text_fr: "Le glucose nourrit les cellules cutanées", text_en: "Glucose feeds skin cells" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "L'hyperinsulinémie postprandiale augmente l'IGF-1 libre. L'IGF-1 active les récepteurs androgéniques dans les glandes sébacées, augmente la production de sébum et stimule la prolifération de C. acnes.",
+    feedback_ok_en: "Postprandial hyperinsulinaemia increases free IGF-1. IGF-1 activates androgenic receptors in sebaceous glands, increases sebum production and stimulates the proliferation of C. acnes.",
+    feedback_ko_fr: "La chaîne causale : sucres rapides, pic d'insuline, augmentation d'IGF-1, activation des glandes sébacées, excès de sébum, prolifération bactérienne, acné.",
+    feedback_ko_en: "The causal chain: fast sugars, insulin spike, increased IGF-1, activation of sebaceous glands, excess sebum, bacterial proliferation, acne.",
+    reformulation_fr: "Remplacer les sucres rapides par des glucides à faible IG peut-il améliorer l'acné ?",
+    reformulation_en: "Can replacing fast sugars with low GI carbohydrates improve acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs essais ont montré une réduction de 30 à 70% des lésions inflammatoires avec un régime à faible charge glycémique.",
+    reformulation_explanation_en: "Several trials showed a 30 to 70% reduction in inflammatory lesions with a low glycaemic load diet."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_n3', score); window.location.href = 'nutriments-peau-niveau3-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
