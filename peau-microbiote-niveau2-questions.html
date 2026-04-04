@@ -89,7 +89,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--ind
     </div>
   </div>
   <div id="ask-row">
-    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 restantes)</span></button>
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
     <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
       <input id="ask-input" type="text" placeholder="Votre question...">
       <button id="ask-send" onclick="sendAsk()">→</button>
@@ -259,7 +259,7 @@ function renderQuestion() {
   document.getElementById('reformulation-options').innerHTML = '';
   document.getElementById('ask-row').style.display = 'none';
   document.getElementById('ask-input-row').style.display = 'none';
-  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
   document.getElementById('continuer-btn').style.display = 'none';
   document.getElementById('pubmed-block').style.display = 'none';
   updateHeader();
@@ -342,7 +342,9 @@ function answerReformulation(isCorrect, clickedBtn, allBtns) {
 }
 
 function showPostFeedback() {
-  if (questionsLeft > 0) { document.getElementById('ask-row').style.display = 'block'; updateAskBtn(); }
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
   if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
   document.getElementById('continuer-btn').style.display = 'block';
   document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
@@ -361,8 +363,8 @@ function updateHeader() {
 
 function updateAskBtn() {
   document.getElementById('ask-btn-text').textContent = lang === 'fr'
-    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
-    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
 }
 
 function toggleAsk() {
@@ -380,7 +382,7 @@ async function sendAsk() {
   input.value = '';
   document.getElementById('ask-input-row').style.display = 'none';
   if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
-  else updateAskBtn();
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
   reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
   reply.style.display = 'block';
   try {
