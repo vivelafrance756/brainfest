@@ -856,19 +856,33 @@ function toggleAsk() {
   row.style.display = row.style.display === 'none' ? 'flex' : 'none';
 }
 
-function sendAsk() {
+async function sendAsk() {
   if (questionsLeft <= 0) return;
-  questionsLeft--;
-  document.getElementById('ask-input').value = '';
-  document.getElementById('ask-input-row').style.display = 'none';
+  var input = document.getElementById('ask-input');
   var reply = document.getElementById('ask-reply');
-  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else updateAskBtn();
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
   reply.style.display = 'block';
-  if (questionsLeft === 0) {
-    document.getElementById('ask-btn').disabled = true;
-    document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available';
-  } else {
-    updateAskBtn();
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'la nutrition et la santé de la peau' : 'nutrition and skin health',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
   }
 }
 
