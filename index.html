@@ -476,6 +476,71 @@ body {
   50% { box-shadow: 0 0 30px rgba(212,146,58,0.5); }
 }
 
+/* ── PASSWORD OVERLAY ── */
+#pw-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--indigo-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#pw-overlay .pw-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  line-height: 1;
+}
+
+#pw-overlay .pw-logo .brain { color: var(--cream); font-weight: 400; }
+#pw-overlay .pw-logo .fest  { color: var(--amber); font-weight: 600; }
+
+#pw-overlay .pw-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--blue-light);
+  margin-top: 8px;
+}
+
+#pw-input {
+  margin-top: 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: var(--cream);
+  width: 200px;
+  text-align: center;
+  outline: none;
+}
+
+#pw-input::placeholder { color: rgba(247,243,236,0.5); }
+
+#pw-submit {
+  margin-top: 12px;
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+#pw-error {
+  margin-top: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #e74c3c;
+  display: none;
+}
+
 /* ── MOBILE ── */
 @media (max-width: 500px) {
   #hero {
@@ -497,6 +562,16 @@ body {
 </style>
 </head>
 <body>
+
+<!-- ── PASSWORD OVERLAY ── -->
+<div id="pw-overlay">
+  <div class="pw-logo"><span class="brain">Brain</span><span class="fest">Fest</span></div>
+  <p class="pw-subtitle">Site en construction / Site under construction</p>
+  <input id="pw-input" type="password" placeholder="Mot de passe" autocomplete="off"
+         onkeydown="if(event.key==='Enter') checkPassword()">
+  <button id="pw-submit" onclick="checkPassword()">Accéder</button>
+  <p id="pw-error">Mot de passe incorrect</p>
+</div>
 
 <!-- ── HEADER ── -->
 <header id="header">
@@ -669,6 +744,27 @@ body {
 </footer>
 
 <script>
+// ── PASSWORD PROTECTION ──
+(function() {
+  if (sessionStorage.getItem('bf_access') === 'granted') {
+    document.getElementById('pw-overlay').style.display = 'none';
+  }
+})();
+
+function checkPassword() {
+  var val = document.getElementById('pw-input').value;
+  if (val === 'brainfest2025') {
+    sessionStorage.setItem('bf_access', 'granted');
+    document.getElementById('pw-overlay').style.display = 'none';
+  } else if (val === 'devbrainfest') {
+    sessionStorage.setItem('bf_access', 'dev');
+    document.getElementById('pw-overlay').style.display = 'none';
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
 var currentLang = 'fr';
 
 function toggleLang() {
