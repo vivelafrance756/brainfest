@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Nutriments et Peau — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/nutriments-peau-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue: #2a7fa8;
+}
+
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { min-width: 375px; overflow-x: hidden; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f5ede8;
+  color: var(--indigo-dark);
+  min-width: 375px;
+  min-height: 100vh;
+}
+
+/* ── HEADER BAR ── */
+#quiz-header {
+  background: #f5ede8;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+#back-arrow {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-size: 20px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+#score-display {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--indigo-dark);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#q-counter {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--blue);
+  font-weight: 500;
+}
+
+/* ── PROGRESS BAR ── */
+#progress-track {
+  width: 100%;
+  height: 4px;
+  background: #e0e0e0;
+}
+
+#progress-fill {
+  height: 4px;
+  background: var(--blue);
+  transition: width 0.4s ease;
+}
+
+/* ── MAIN ── */
+#quiz-main {
+  padding: 16px 20px 32px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── QUESTION CARD ── */
+#question-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  margin-bottom: 12px;
+}
+
+#question-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: var(--indigo-dark);
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.option-btn {
+  width: 100%;
+  background: #f5ede8;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  min-height: 44px;
+}
+
+.option-btn:last-child { margin-bottom: 0; }
+
+.option-letter {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--indigo-dark);
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.option-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--indigo-dark);
+  flex: 1;
+}
+
+.option-check {
+  font-size: 16px;
+  color: var(--blue);
+  display: none;
+}
+
+/* Selected (pre-validation) */
+.option-btn.selected {
+  border-color: var(--blue);
+  background: #eaf4f8;
+}
+.option-btn.selected .option-letter {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* Correct */
+.option-btn.correct {
+  border-color: var(--blue);
+  background: #e8f4f0;
+}
+.option-btn.correct .option-letter {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.option-btn.correct .option-check { display: block; }
+
+/* Wrong */
+.option-btn.wrong {
+  border-color: #e74c3c;
+  background: #fdecea;
+}
+.option-btn.wrong .option-letter {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
+/* ── VALIDATE BUTTON ── */
+#validate-btn {
+  width: 100%;
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  margin-bottom: 12px;
+  transition: background 0.2s;
+}
+
+#validate-btn:disabled {
+  background: #b0c8d8;
+  cursor: not-allowed;
+}
+
+/* ── FEEDBACK BLOCK ── */
+#feedback-block {
+  background: #e8f4f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+#feedback-block.wrong-feedback {
+  background: #fdecea;
+}
+
+#feedback-top {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#feedback-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--indigo-dark);
+  line-height: 1.6;
+}
+
+/* ── REFORMULATION ── */
+#reformulation-block {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 16px 8px;
+  margin-top: 12px;
+  display: none;
+}
+
+#reformulation-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--indigo-dark);
+  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+#reformulation-explanation {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.6;
+  margin-top: 10px;
+  display: none;
+}
+
+/* ── ASK A QUESTION ── */
+#ask-row {
+  display: none;
+  margin-bottom: 12px;
+}
+
+#ask-btn {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  text-align: left;
+  min-height: 44px;
+}
+
+#ask-input-row {
+  display: none;
+  margin-top: 8px;
+  flex-direction: row;
+  gap: 8px;
+}
+
+#ask-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  min-height: 44px;
+}
+
+#ask-send {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+#ask-reply {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  margin-top: 6px;
+  display: none;
+  font-style: italic;
+}
+
+/* ── PUBMED ── */
+#pubmed-block {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+#pubmed-block .pubmed-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+#pubmed-block a {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--blue);
+  text-decoration: none;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+#pubmed-block a:hover { text-decoration: underline; }
+
+/* ── CONTINUER BUTTON ── */
+#continuer-btn {
+  width: 100%;
+  background: var(--blue);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  display: none;
+  margin-bottom: 12px;
+}
+
+/* ── LANG TOGGLE in header ── */
+#lang-toggle {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  border-radius: 50px;
+  padding: 4px 12px;
+  cursor: pointer;
+  min-height: 36px;
+}
+</style>
+</head>
+<body>
+
+<!-- ── QUIZ HEADER ── -->
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='nutriments-et-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🌱 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<!-- ── PROGRESS BAR ── -->
+<div id="progress-track">
+  <div id="progress-fill" style="width:16.6%"></div>
+</div>
+
+<!-- ── MAIN ── -->
+<div id="quiz-main">
+
+  <!-- Question card -->
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+
+  <!-- Validate -->
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+
+  <!-- Feedback -->
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <!-- Reformulation (wrong only) -->
+    <div id="reformulation-block">
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+
+  <!-- Ask a question -->
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()">
+      <span id="ask-btn-text">💬 Poser une question (3 restantes)</span>
+    </button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+
+  <!-- PubMed (last question only) -->
+  <div id="pubmed-block">
+    <div class="pubmed-title" data-fr="Sources scientifiques" data-en="Scientific sources">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11723311/" target="_blank" rel="noopener">Nutritional dermatology 2025</a>
+    <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/der2.239" target="_blank" rel="noopener">Oral supplements and dermatology 2024</a>
+  </div>
+
+  <!-- Continuer -->
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+
+</div>
+
+<script>
+// ── GUARD ──
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+// ── LANGUAGE ──
+var lang = 'fr';
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion();
+  updateHeader();
+  // static data-fr/data-en elements
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+}
+
+// ── QUESTIONS DATA ──
+var questions = [
+  {
+    question_fr: "Quel nutriment est indispensable à la production de collagène dans la peau ?",
+    question_en: "Which nutrient is essential for collagen production in the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Le calcium", text_en: "Calcium" },
+      { letter: 'B', text_fr: "La vitamine C", text_en: "Vitamin C" },
+      { letter: 'C', text_fr: "Le fer", text_en: "Iron" },
+      { letter: 'D', text_fr: "La vitamine B12", text_en: "Vitamin B12" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. La vitamine C est le cofacteur essentiel de la prolyl hydroxylase et de la lysyl hydroxylase (les termes qui finissent par -ase se réfèrent toujours à des enzymes). Ces enzymes stabilisent la triple hélice du collagène. Sans vitamine C, le collagène ne peut pas être synthétisé correctement.",
+    feedback_ok_en: "Exactly. Vitamin C is the essential cofactor of prolyl hydroxylase and lysyl hydroxylase (terms ending in -ase always refer to enzymes). These enzymes stabilise the collagen triple helix. Without vitamin C, collagen cannot be correctly synthesised.",
+    feedback_ko_fr: "C'est la vitamine C. Elle est indispensable à la synthèse du collagène, le réseau de protéines qui donne fermeté et épaisseur à la peau. Une étude de 2025 a montré que manger deux kiwis par jour augmente l'épaisseur de la peau en quelques semaines.",
+    feedback_ko_en: "It is vitamin C. It is essential for collagen synthesis, the protein network that gives skin its firmness and thickness. A 2025 study showed that eating two kiwis a day measurably increases skin thickness within a few weeks.",
+    reformulation_fr: "La vitamine C est-elle nécessaire pour que la peau produise du collagène ?",
+    reformulation_en: "Is vitamin C necessary for the skin to produce collagen ?",
+    reformulation_explanation_fr: "La vitamine C active les enzymes qui fabriquent le collagène. Sans elle, les fibres de collagène sont mal formées et la peau perd sa fermeté.",
+    reformulation_explanation_en: "Vitamin C activates the enzymes that build collagen. Without it, collagen fibres are poorly formed and skin loses its firmness."
+  },
+  {
+    question_fr: "Les oméga-3 ont un effet anti-inflammatoire documenté sur la peau.",
+    question_en: "Omega-3 fatty acids have a documented anti-inflammatory effect on the skin.",
+    options: [
+      { letter: 'A', text_fr: "Vrai", text_en: "True" },
+      { letter: 'B', text_fr: "Faux", text_en: "False" }
+    ],
+    correct: 'A',
+    feedback_ok_fr: "Vrai. Les oméga-3 (EPA et DHA) modulent la production de prostaglandines et de leucotriènes pro-inflammatoires. Ils réduisent l'inflammation cutanée dans l'acné, l'eczéma et le psoriasis selon plusieurs études cliniques.",
+    feedback_ok_en: "True. Omega-3 fatty acids (EPA and DHA) modulate the production of pro-inflammatory prostaglandins and leukotrienes. They reduce skin inflammation in acne, eczema and psoriasis according to several clinical studies.",
+    feedback_ko_fr: "C'est pourtant vrai. Les oméga-3 des poissons gras réduisent l'inflammation systémique qui se manifeste sur la peau.",
+    feedback_ko_en: "It is true though. Omega-3 from oily fish reduce systemic inflammation that shows on the skin.",
+    reformulation_fr: "Les sardines et maquereaux contiennent-ils des nutriments bénéfiques pour une peau inflammée ?",
+    reformulation_en: "Do sardines and mackerel contain nutrients beneficial for inflamed skin ?",
+    reformulation_explanation_fr: "Les sardines et maquereaux sont parmi les sources les plus riches en EPA et DHA, les deux oméga-3 qui modulent directement l'inflammation cutanée.",
+    reformulation_explanation_en: "Sardines and mackerel are among the richest sources of EPA and DHA, the two omega-3 that directly modulate skin inflammation."
+  },
+  {
+    question_fr: "Le zinc est important pour la peau parce qu'il :",
+    question_en: "Zinc is important for the skin because it :",
+    options: [
+      { letter: 'A', text_fr: "Stimule la production de mélanine", text_en: "Stimulates melanin production" },
+      { letter: 'B', text_fr: "Régule la production de sébum et soutient la cicatrisation", text_en: "Regulates sebum production and supports wound healing" },
+      { letter: 'C', text_fr: "Produit de la vitamine D dans la peau", text_en: "Produces vitamin D in the skin" },
+      { letter: 'D', text_fr: "Hydrate la barrière cutanée directement", text_en: "Directly hydrates the skin barrier" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. Le zinc régule l'activité des glandes sébacées via l'inhibition de la 5-alpha-réductase. Il accélère aussi la cicatrisation en soutenant la division cellulaire. La couche externe de la peau contient 5 fois plus de zinc que la couche inférieure.",
+    feedback_ok_en: "Exactly. Zinc regulates sebaceous gland activity by inhibiting 5-alpha-reductase. It also accelerates healing by supporting cell division. The outer layer of skin contains 5 times more zinc than the layer beneath it.",
+    feedback_ko_fr: "Le zinc joue un rôle fondamental dans la régulation du sébum et la cicatrisation. Sa carence est associée à l'acné et aux plaies qui cicatrisent mal.",
+    feedback_ko_en: "Zinc plays a fundamental role in sebum regulation and wound healing. Its deficiency is associated with acne and poorly healing wounds.",
+    reformulation_fr: "Une carence en zinc peut-elle aggraver l'acné ?",
+    reformulation_en: "Can a zinc deficiency worsen acne ?",
+    reformulation_explanation_fr: "Le zinc inhibe la 5-alpha-réductase qui convertit la testostérone en DHT, la forme active qui stimule les glandes sébacées.",
+    reformulation_explanation_en: "Zinc inhibits 5-alpha-reductase which converts testosterone into DHT, the active form that stimulates sebaceous glands."
+  },
+  {
+    question_fr: "Lequel de ces aliments est une excellente source de vitamine E bénéfique pour la peau ?",
+    question_en: "Which of these foods is an excellent source of vitamin E beneficial for the skin ?",
+    options: [
+      { letter: 'A', text_fr: "Pain blanc", text_en: "White bread" },
+      { letter: 'B', text_fr: "Huile de chanvre, amandes et graines de tournesol", text_en: "Hemp oil, almonds and sunflower seeds" },
+      { letter: 'C', text_fr: "Lait demi-écrémé", text_en: "Semi-skimmed milk" },
+      { letter: 'D', text_fr: "Riz blanc cuit", text_en: "Cooked white rice" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. La vitamine E est un antioxydant liposoluble qui protège les membranes cellulaires cutanées contre le stress oxydatif. Elle travaille en synergie avec la vitamine C pour renforcer les parois cellulaires.",
+    feedback_ok_en: "Exactly. Vitamin E is a fat-soluble antioxidant that protects skin cell membranes from oxidative stress. It works in synergy with vitamin C to strengthen cell walls.",
+    feedback_ko_fr: "La vitamine E se trouve dans les huiles végétales, les fruits à coque et les graines. Elle protège les lipides membranaires contre l'oxydation causée par les UV.",
+    feedback_ko_en: "Vitamin E is found in vegetable oils, nuts and seeds. It protects membrane lipids from UV-caused oxidation.",
+    reformulation_fr: "La vitamine E protège-t-elle la peau contre les dommages des UV ?",
+    reformulation_en: "Does vitamin E protect the skin against UV damage ?",
+    reformulation_explanation_fr: "La vitamine E absorbe l'énergie des UV et neutralise les radicaux libres générés par l'exposition solaire.",
+    reformulation_explanation_en: "Vitamin E absorbs UV energy and neutralises free radicals generated by sun exposure."
+  },
+  {
+    question_fr: "Un régime riche en sucres raffinés peut aggraver l'acné.",
+    question_en: "A diet high in refined sugars can worsen acne.",
+    options: [
+      { letter: 'A', text_fr: "Vrai", text_en: "True" },
+      { letter: 'B', text_fr: "Faux", text_en: "False" }
+    ],
+    correct: 'A',
+    feedback_ok_fr: "Vrai. Les aliments à index glycémique élevé provoquent un pic d'insuline qui augmente la production d'IGF-1. L'IGF-1 stimule les glandes sébacées et favorise la croissance de Cutibacterium acnes.",
+    feedback_ok_en: "True. High glycaemic index foods trigger an insulin spike that increases IGF-1. IGF-1 stimulates sebaceous glands and promotes the growth of Cutibacterium acnes.",
+    feedback_ko_fr: "C'est pourtant vrai. Pain blanc, pâtes industrielles, sodas... leur index glycémique élevé crée une cascade hormonale qui stimule les glandes sébacées.",
+    feedback_ko_en: "It is true though. White bread, industrial pasta, sodas... their high glycaemic index creates a hormonal cascade that stimulates sebaceous glands.",
+    reformulation_fr: "Un régime à faible index glycémique peut-il réduire l'acné ?",
+    reformulation_en: "Can a low glycaemic index diet reduce acne ?",
+    reformulation_explanation_fr: "Une étude de 2024 dans Cureus montre qu'un régime à faible charge glycémique réduit le grade de l'acné de 2,68 à 1,56 chez des patientes adultes.",
+    reformulation_explanation_en: "A 2024 study in Cureus shows that a low glycaemic load diet reduced acne grade from 2.68 to 1.56 in adult female patients."
+  },
+  {
+    question_fr: "La vitamine A (rétinol) est connue pour son effet sur la peau parce qu'elle :",
+    question_en: "Vitamin A (retinol) is known for its effect on the skin because it :",
+    options: [
+      { letter: 'A', text_fr: "Hydrate directement les cellules cutanées", text_en: "Directly hydrates skin cells" },
+      { letter: 'B', text_fr: "Stimule le renouvellement cellulaire et régule la production de sébum", text_en: "Stimulates cell renewal and regulates sebum production" },
+      { letter: 'C', text_fr: "Produit du collagène sans cofacteur", text_en: "Produces collagen without a cofactor" },
+      { letter: 'D', text_fr: "Protège uniquement contre les UV", text_en: "Only protects against UV rays" }
+    ],
+    correct: 'B',
+    feedback_ok_fr: "Exactement. La vitamine A et ses dérivés (rétinoïdes) stimulent le renouvellement des kératinocytes, régulent le sébum et ont des effets anti-acné documentés. L'isotrétinoïne, dérivé de la vitamine A, est le traitement de référence des acnés sévères.",
+    feedback_ok_en: "Exactly. Vitamin A and its derivatives (retinoids) stimulate keratinocyte renewal, regulate sebum and have documented anti-acne effects. Isotretinoin, a vitamin A derivative, is the reference treatment for severe acne.",
+    feedback_ko_fr: "La vitamine A est fondamentale pour le renouvellement cutané. Sa carence se manifeste par une peau sèche et squameuse.",
+    feedback_ko_en: "Vitamin A is fundamental for skin renewal. Its deficiency shows as dry, flaky skin.",
+    reformulation_fr: "Une carence en vitamine A peut-elle rendre la peau sèche et squameuse ?",
+    reformulation_en: "Can a vitamin A deficiency make skin dry and flaky ?",
+    reformulation_explanation_fr: "La vitamine A est indispensable à la différenciation des kératinocytes. Sans elle, la couche cornée s'épaissit anormalement, rendant la peau sèche, rugueuse et terne.",
+    reformulation_explanation_en: "Vitamin A is essential for keratinocyte differentiation. Without it, the stratum corneum thickens abnormally, making skin dry, rough and dull."
+  }
+];
+
+// ── STATE ──
+var currentIndex = 0;
+var score = 0;
+var selectedLetter = null;
+var validated = false;
+var reformulationAnswered = false;
+var questionsLeft = 3;
+
+// ── INIT ──
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null;
+  validated = false;
+  reformulationAnswered = false;
+
+  // Question text
+  document.getElementById('question-text').textContent = q['question_' + lang];
+
+  // Options
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML =
+      '<span class="option-letter">' + opt.letter + '</span>' +
+      '<span class="option-text">' + opt['text_' + lang] + '</span>' +
+      '<span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+
+  // Reset UI
+  var validateBtn = document.getElementById('validate-btn');
+  validateBtn.disabled = true;
+  validateBtn.style.display = 'block';
+  validateBtn.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('feedback-block').className = 'feedback-block';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) {
+      btn.classList.add('selected');
+    }
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+
+  // Style options
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) {
+      btn.classList.remove('selected');
+      btn.classList.add('correct');
+    } else if (letter === selectedLetter && !isCorrect) {
+      btn.classList.remove('selected');
+      btn.classList.add('wrong');
+    }
+  });
+
+  // Hide validate, show feedback
+  document.getElementById('validate-btn').style.display = 'none';
+
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+
+  if (isCorrect) {
+    score++;
+    fb.className = '';
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  var block = document.getElementById('reformulation-block');
+  block.style.display = 'block';
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+
+  var choices = [
+    { letter: 'A', text_fr: 'Oui', text_en: 'Yes', correct: true },
+    { letter: 'B', text_fr: 'Non', text_en: 'No', correct: false }
+  ];
+
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.style.background = '#f5ede8';
+    btn.style.marginTop = '8px';
+    btn.innerHTML =
+      '<span class="option-letter">' + c.letter + '</span>' +
+      '<span class="option-text">' + c['text_' + lang] + '</span>' +
+      '<span class="option-check">✓</span>';
+    btn.onclick = function() { answerReformulation(c.correct, btn, choices); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, choices) {
+  if (reformulationAnswered) return;
+  reformulationAnswered = true;
+
+  var allBtns = document.getElementById('reformulation-options').querySelectorAll('.option-btn');
+  allBtns.forEach(function(btn, i) {
+    btn.onclick = null;
+    if (choices[i].correct) {
+      btn.classList.add('correct');
+    } else if (!isCorrect && btn === clickedBtn) {
+      btn.classList.add('wrong');
+    }
+  });
+
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+
+  showPostFeedback();
+}
+
+function showPostFeedback() {
+  // Ask a question
+  var askRow = document.getElementById('ask-row');
+  if (questionsLeft > 0) {
+    askRow.style.display = 'block';
+    updateAskBtn();
+  }
+
+  // PubMed on last question
+  if (currentIndex === questions.length - 1) {
+    document.getElementById('pubmed-block').style.display = 'block';
+  }
+
+  // Continuer
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    // Navigate to completion screen
+    sessionStorage.setItem('bf_score_n1', score);
+    window.location.href = 'nutriments-peau-niveau1-fin.html';
+  }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  var pct = ((currentIndex) / questions.length * 100) + (100 / questions.length);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// ── ASK A QUESTION ──
+function updateAskBtn() {
+  var text = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' restante' + (questionsLeft > 1 ? 's' : '') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' remaining)';
+  document.getElementById('ask-btn-text').textContent = text;
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function sendAsk() {
+  if (questionsLeft <= 0) return;
+  questionsLeft--;
+  document.getElementById('ask-input').value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  var reply = document.getElementById('ask-reply');
+  reply.textContent = lang === 'fr' ? 'Fonctionnalité bientôt disponible.' : 'Feature coming soon.';
+  reply.style.display = 'block';
+  if (questionsLeft === 0) {
+    document.getElementById('ask-btn').disabled = true;
+    document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available';
+  } else {
+    updateAskBtn();
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion();
+  updateHeader();
+}
+</script>
+</body>
+</html>
