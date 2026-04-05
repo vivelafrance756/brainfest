@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Magnésium — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/magnesium-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='magnesium.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31816477/" target="_blank" rel="noopener">Magnesium forms bioavailability comparison</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/37988614/" target="_blank" rel="noopener">Magnesium L-threonate cognitive function</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Quelle est la biodisponibilité du magnésium oxyde ?",
+    question_en: "What is the bioavailability of magnesium oxide ?",
+    options: [
+      {"letter": "A", "text_fr": "80%", "text_en": "80%"},
+      {"letter": "B", "text_fr": "Environ 4% seulement", "text_en": "Only approximately 4%"},
+      {"letter": "C", "text_fr": "50%", "text_en": "50%"},
+      {"letter": "D", "text_fr": "30%", "text_en": "30%"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium oxyde a une biodisponibilité de seulement 4%, ce qui en fait la forme la moins efficace malgré sa concentration élevée en magnésium élémentaire. Il est aussi fortement laxatif. C'est pourtant la forme la plus vendue car la moins chère à produire.",
+    feedback_ok_en: "Exactly. Magnesium oxide has a bioavailability of only 4%, making it the least effective form despite its high elemental magnesium concentration. It is also strongly laxative. Yet it is the best-selling form because it is the cheapest to produce.",
+    feedback_ko_fr: "Quand on lit la dose de magnésium sur une étiquette, il faut distinguer le magnésium élémentaire de la forme totale. Une gélule de 500mg de magnésium oxyde ne délivre que 20mg de magnésium assimilable.",
+    feedback_ko_en: "When reading the magnesium dose on a label, it is important to distinguish elemental magnesium from the total form. A 500mg magnesium oxide capsule only delivers 20mg of assimilable magnesium.",
+    reformulation_fr: "Le magnésium oxyde est-il la forme la moins bien absorbée ?",
+    reformulation_en: "Is magnesium oxide the least well absorbed form ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Avec seulement 4% de biodisponibilité, le magnésium oxyde est la forme la moins efficace. La majorité est éliminée dans les selles, ce qui explique son effet laxatif.",
+    reformulation_explanation_en: "With only 4% bioavailability, magnesium oxide is the least effective form. The majority is eliminated in stools, which explains its laxative effect."
+  },
+  {
+    question_fr: "Le magnésium L-thréonate est unique parce que :",
+    question_en: "Magnesium L-threonate is unique because :",
+    options: [
+      {"letter": "A", "text_fr": "Il est moins cher que les autres formes", "text_en": "It is cheaper than other forms"},
+      {"letter": "B", "text_fr": "Il traverse la barrière hémato-encéphalique et augmente les concentrations de magnésium dans le cerveau", "text_en": "It crosses the blood-brain barrier and increases magnesium concentrations in the brain"},
+      {"letter": "C", "text_fr": "Il est le seul à ne pas être laxatif", "text_en": "It is the only non-laxative form"},
+      {"letter": "D", "text_fr": "Il produit du collagène", "text_en": "It produces collagen"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le L-thréonate est la seule forme de magnésium démontrée capable de traverser la barrière hémato-encéphalique et d'augmenter les concentrations cérébrales de magnésium. Des études sur des modèles animaux et humains montrent des bénéfices sur la mémoire, les fonctions cognitives et l'anxiété.",
+    feedback_ok_en: "Exactly. L-threonate is the only form of magnesium demonstrated to cross the blood-brain barrier and increase cerebral magnesium concentrations. Studies on animal and human models show benefits on memory, cognitive functions and anxiety.",
+    feedback_ko_fr: "Le magnésium L-thréonate a été développé par des chercheurs du MIT. C'est la forme recommandée pour les objectifs cognitifs : mémoire, concentration, anxiété. Son coût est plus élevé que les autres formes.",
+    feedback_ko_en: "Magnesium L-threonate was developed by MIT researchers. It is the recommended form for cognitive objectives: memory, concentration, anxiety. Its cost is higher than other forms.",
+    reformulation_fr: "Le magnésium L-thréonate peut-il améliorer la mémoire et les fonctions cognitives ?",
+    reformulation_en: "Can magnesium L-threonate improve memory and cognitive functions ?",
+    reformulation_answer: "Oui selon les données actuelles",
+    reformulation_explanation_fr: "Des études cliniques montrent une amélioration des fonctions cognitives et de la mémoire de travail avec le magnésium L-thréonate, notamment chez les adultes vieillissants.",
+    reformulation_explanation_en: "Clinical studies show improvement in cognitive functions and working memory with magnesium L-threonate, particularly in ageing adults."
+  },
+  {
+    question_fr: "Le magnésium citrate est recommandé dans quelle situation ?",
+    question_en: "In which situation is magnesium citrate recommended ?",
+    options: [
+      {"letter": "A", "text_fr": "Pour les troubles cognitifs", "text_en": "For cognitive disorders"},
+      {"letter": "B", "text_fr": "Pour une bonne biodisponibilité avec un budget modéré et une tolérance digestive correcte", "text_en": "For good bioavailability with a moderate budget and acceptable digestive tolerance"},
+      {"letter": "C", "text_fr": "Pour les personnes constipées uniquement", "text_en": "Only for constipated people"},
+      {"letter": "D", "text_fr": "Pour les sportifs uniquement", "text_en": "Only for athletes"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium citrate offre une biodisponibilité correcte de 25-30% pour un coût modéré. Il peut provoquer des selles molles à haute dose, ce qui en fait un choix intéressant pour les personnes constipées mais à éviter en cas de transit déjà rapide. C'est l'un des meilleurs rapports qualité-prix.",
+    feedback_ok_en: "Exactly. Magnesium citrate offers acceptable bioavailability of 25-30% for a moderate cost. It can cause loose stools at high doses, making it an interesting choice for constipated people but to avoid with already rapid transit. It is one of the best value for money options.",
+    feedback_ko_fr: "Le citrate de magnésium est acidifiant et peut ne pas convenir aux personnes ayant des reflux gastriques. Le glycinate est alors préférable. Le choix de la forme doit toujours tenir compte du contexte clinique global.",
+    feedback_ko_en: "Magnesium citrate is acidifying and may not be suitable for people with gastric reflux. Glycinate is then preferable. The choice of form must always take into account the overall clinical context.",
+    reformulation_fr: "Le magnésium citrate peut-il aider les personnes souffrant de constipation ?",
+    reformulation_en: "Can magnesium citrate help people suffering from constipation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Son effet légèrement laxatif à dose modérée peut améliorer le transit. En cas de constipation, c'est une option intéressante mais à doser progressivement.",
+    reformulation_explanation_en: "Its slightly laxative effect at moderate doses can improve transit. In case of constipation, it is an interesting option but should be dosed progressively."
+  },
+  {
+    question_fr: "Le stress chronique aggrave-t-il la carence en magnésium ?",
+    question_en: "Does chronic stress worsen magnesium deficiency ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, le stress n'affecte pas le magnésium", "text_en": "No, stress does not affect magnesium"},
+      {"letter": "B", "text_fr": "Oui, le stress augmente l'élimination urinaire du magnésium et en augmente les besoins", "text_en": "Yes, stress increases urinary elimination of magnesium and increases its requirements"},
+      {"letter": "C", "text_fr": "Non, le magnésium est stable en cas de stress", "text_en": "No, magnesium is stable under stress"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement le stress physique", "text_en": "Yes, but only physical stress"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le cortisol et les catécholamines libérés lors du stress augmentent l'élimination urinaire du magnésium. De plus, un organisme stressé en consomme davantage pour la production d'énergie et la régulation nerveuse. C'est un cercle vicieux : le stress épuise le magnésium, et la carence en magnésium amplifie la réponse au stress.",
+    feedback_ok_en: "Exactly. Cortisol and catecholamines released during stress increase urinary elimination of magnesium. Moreover, a stressed organism consumes more for energy production and nervous regulation. It is a vicious circle: stress depletes magnesium, and magnesium deficiency amplifies the stress response.",
+    feedback_ko_fr: "Le cercle vicieux stress-carence en magnésium est l'un des mécanismes les mieux documentés en nutrition du stress. Supplémenter en magnésium lors de périodes de stress intense est une intervention nutritionnelle validée.",
+    feedback_ko_en: "The vicious circle of stress-magnesium deficiency is one of the best-documented mechanisms in stress nutrition. Supplementing with magnesium during periods of intense stress is a validated nutritional intervention.",
+    reformulation_fr: "Supplémenter en magnésium pendant une période de stress intense est-il utile ?",
+    reformulation_en: "Is magnesium supplementation during a period of intense stress useful ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le stress épuise le magnésium. Supplémenter pendant les périodes de stress intense aide à maintenir des niveaux adéquats et à atténuer la réponse au stress.",
+    reformulation_explanation_en: "Stress depletes magnesium. Supplementing during periods of intense stress helps maintain adequate levels and attenuate the stress response."
+  },
+  {
+    question_fr: "Le magnésium taurate est particulièrement recommandé pour :",
+    question_en: "Magnesium taurate is particularly recommended for :",
+    options: [
+      {"letter": "A", "text_fr": "Les troubles digestifs", "text_en": "Digestive disorders"},
+      {"letter": "B", "text_fr": "La santé cardiovasculaire et la régulation de la tension artérielle", "text_en": "Cardiovascular health and blood pressure regulation"},
+      {"letter": "C", "text_fr": "La mémoire", "text_en": "Memory"},
+      {"letter": "D", "text_fr": "Les crampes musculaires", "text_en": "Muscle cramps"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium taurate associe le magnésium à la taurine, un acide aminé cardioprotecteur. Des études montrent des bénéfices sur la tension artérielle, le rythme cardiaque et la santé cardiovasculaire globale. C'est la forme de choix pour les personnes avec des facteurs de risque cardiovasculaire.",
+    feedback_ok_en: "Exactly. Magnesium taurate combines magnesium with taurine, a cardioprotective amino acid. Studies show benefits on blood pressure, heart rhythm and overall cardiovascular health. It is the form of choice for people with cardiovascular risk factors.",
+    feedback_ko_fr: "La taurine est un acide aminé soufré qui joue un rôle cardioprotecteur indépendant. Son association avec le magnésium dans le taurate crée une synergie particulière pour la santé cardiaque et la régulation tensionnelle.",
+    feedback_ko_en: "Taurine is a sulphur amino acid that plays an independent cardioprotective role. Its combination with magnesium in taurate creates a particular synergy for cardiac health and blood pressure regulation.",
+    reformulation_fr: "Le magnésium taurate est-il une bonne option pour les personnes ayant une tension artérielle élevée ?",
+    reformulation_en: "Is magnesium taurate a good option for people with high blood pressure ?",
+    reformulation_answer: "Oui selon les données disponibles",
+    reformulation_explanation_fr: "La combinaison magnésium plus taurine montre des effets hypotenseurs dans plusieurs études. Consulter un professionnel de santé avant toute supplémentation en cas d'hypertension traitée.",
+    reformulation_explanation_en: "The magnesium plus taurine combination shows hypotensive effects in several studies. Consult a health professional before any supplementation in case of treated hypertension."
+  },
+  {
+    question_fr: "Comment lire une étiquette de magnésium pour évaluer la vraie dose ?",
+    question_en: "How to read a magnesium label to evaluate the real dose ?",
+    options: [
+      {"letter": "A", "text_fr": "Se fier uniquement au poids total de la gélule", "text_en": "Rely only on the total weight of the capsule"},
+      {"letter": "B", "text_fr": "Chercher la mention magnésium élémentaire et non le poids total du sel de magnésium", "text_en": "Look for the mention of elemental magnesium and not the total weight of the magnesium salt"},
+      {"letter": "C", "text_fr": "La dose indiquée est toujours la dose assimilable", "text_en": "The indicated dose is always the assimilable dose"},
+      {"letter": "D", "text_fr": "Diviser la dose par deux", "text_en": "Divide the dose by two"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Une gélule indiquant 500mg de magnésium citrate ne contient pas 500mg de magnésium assimilable. Le citrate représente environ 16% de magnésium élémentaire, soit 80mg réels. Toujours chercher la mention magnésium élémentaire sur l'étiquette pour connaître la vraie dose.",
+    feedback_ok_en: "Exactly. A capsule indicating 500mg of magnesium citrate does not contain 500mg of assimilable magnesium. Citrate represents approximately 16% elemental magnesium, meaning 80mg actual. Always look for the mention of elemental magnesium on the label to know the real dose.",
+    feedback_ko_fr: "Savoir lire une étiquette de complément alimentaire est une compétence clé en nutrition. Pour le magnésium : cherchez toujours le magnésium élémentaire, pas le poids du sel. Les fabricants sérieux l'indiquent clairement.",
+    feedback_ko_en: "Knowing how to read a food supplement label is a key skill in nutrition. For magnesium: always look for elemental magnesium, not the salt weight. Serious manufacturers indicate this clearly.",
+    reformulation_fr: "La dose totale indiquée sur une étiquette de magnésium est-elle toujours la dose assimilable ?",
+    reformulation_en: "Is the total dose indicated on a magnesium label always the assimilable dose ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "La dose indiquée est celle du sel de magnésium total, pas du magnésium élémentaire absorbable. Il faut multiplier par le pourcentage de magnésium élémentaire de la forme choisie.",
+    reformulation_explanation_en: "The indicated dose is that of the total magnesium salt, not the absorbable elemental magnesium. It must be multiplied by the percentage of elemental magnesium of the chosen form."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_mg2', score); window.location.href = 'magnesium-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'le magnésium et ses formes en nutrition et santé' : 'magnesium and its forms in nutrition and health',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

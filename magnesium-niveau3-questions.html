@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 3 Questions — Magnésium — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/magnesium-niveau3-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='magnesium.html'" aria-label="Retour">←</button>
+  <div id="score-display">🎯 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6356822/" target="_blank" rel="noopener">Magnesium vitamin D interaction PMC 2018</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/23835596/" target="_blank" rel="noopener">Magnesium PPI interaction hypomagnesemia</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "PIÈGE : Le magnésium marin est-il la meilleure forme de magnésium ?",
+    question_en: "TRAP : Is marine magnesium the best form of magnesium ?",
+    options: [
+      {"letter": "A", "text_fr": "Oui, c'est naturel donc meilleur", "text_en": "Yes, it is natural therefore better"},
+      {"letter": "B", "text_fr": "Non, le magnésium marin est principalement de l'oxyde et de l'hydroxyde de magnésium, deux des formes les moins bien absorbées", "text_en": "No, marine magnesium is mainly magnesium oxide and hydroxide, two of the least well absorbed forms"},
+      {"letter": "C", "text_fr": "Oui, il est riche en minéraux marins complémentaires", "text_en": "Yes, it is rich in complementary marine minerals"},
+      {"letter": "D", "text_fr": "Oui, tous les naturopathes le recommandent", "text_en": "Yes, all naturopaths recommend it"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "C'est l'un des malentendus les plus répandus en nutrition. Le terme naturel est utilisé commercialement mais ne garantit pas une meilleure absorption. Le magnésium marin extrait d'eau de mer est principalement de l'oxyde et de l'hydroxyde de magnésium, avec une biodisponibilité de 4 à 10%. Le glycinate et le malate, synthétiques, sont bien meilleurs.",
+    feedback_ok_en: "This is one of the most widespread misunderstandings in nutrition. The term natural is used commercially but does not guarantee better absorption. Marine magnesium extracted from seawater is mainly magnesium oxide and hydroxide, with a bioavailability of 4 to 10%. Glycinate and malate, synthetic, are much better.",
+    feedback_ko_fr: "Le naturel ne signifie pas nécessairement meilleur en nutrition. La chélation du magnésium à des acides organiques comme la glycine ou l'acide malique est un processus artificiel qui améliore considérablement son absorption.",
+    feedback_ko_en: "Natural does not necessarily mean better in nutrition. Chelation of magnesium to organic acids like glycine or malic acid is an artificial process that considerably improves its absorption.",
+    reformulation_fr: "Le magnésium marin est-il mieux absorbé que le magnésium glycinate ?",
+    reformulation_en: "Is marine magnesium better absorbed than magnesium glycinate ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Le magnésium marin est principalement de l'oxyde et de l'hydroxyde, avec 4-10% de biodisponibilité. Le glycinate atteint 80% dans certaines études. La forme naturelle n'est pas la plus efficace ici.",
+    reformulation_explanation_en: "Marine magnesium is mainly oxide and hydroxide, with 4-10% bioavailability. Glycinate reaches 80% in some studies. The natural form is not the most effective here."
+  },
+  {
+    question_fr: "La vitamine D et le magnésium ont-ils une relation synergique ?",
+    question_en: "Do vitamin D and magnesium have a synergistic relationship ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, ils agissent indépendamment", "text_en": "No, they act independently"},
+      {"letter": "B", "text_fr": "Oui, le magnésium est nécessaire à l'activation de la vitamine D par les enzymes hépatiques et rénales", "text_en": "Yes, magnesium is necessary for vitamin D activation by hepatic and renal enzymes"},
+      {"letter": "C", "text_fr": "Non, la vitamine D inhibe le magnésium", "text_en": "No, vitamin D inhibits magnesium"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement pour les os", "text_en": "Yes, but only for bones"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium est le cofacteur des enzymes CYP27B1 et CYP2R1 qui activent la vitamine D en calcitriol dans le foie et les reins. Sans magnésium suffisant, la vitamine D reste inactive. C'est pourquoi supplémenter en vitamine D sans corriger une carence en magnésium peut être insuffisant.",
+    feedback_ok_en: "Exactly. Magnesium is the cofactor of enzymes CYP27B1 and CYP2R1 that activate vitamin D into calcitriol in the liver and kidneys. Without sufficient magnesium, vitamin D remains inactive. This is why supplementing with vitamin D without correcting a magnesium deficiency can be insufficient.",
+    feedback_ko_fr: "Cette interaction est l'une des plus importantes en nutrition. Beaucoup de personnes supplémentées en vitamine D ne répondent pas bien parce qu'elles sont carencées en magnésium. Corriger d'abord le magnésium améliore l'efficacité de la vitamine D.",
+    feedback_ko_en: "This interaction is one of the most important in nutrition. Many people supplemented with vitamin D do not respond well because they are deficient in magnesium. Correcting magnesium first improves vitamin D effectiveness.",
+    reformulation_fr: "Peut-on manquer de magnésium et avoir une vitamine D qui ne fonctionne pas bien ?",
+    reformulation_en: "Can one be deficient in magnesium and have vitamin D that does not work well ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Sans magnésium, les enzymes qui transforment la vitamine D en sa forme active ne fonctionnent pas correctement. Le magnésium est indispensable à l'efficacité de la supplémentation en vitamine D.",
+    reformulation_explanation_en: "Without magnesium, the enzymes that transform vitamin D into its active form do not function correctly. Magnesium is essential for the effectiveness of vitamin D supplementation."
+  },
+  {
+    question_fr: "Quelle est la dose journalière recommandée de magnésium élémentaire pour un adulte ?",
+    question_en: "What is the recommended daily dose of elemental magnesium for an adult ?",
+    options: [
+      {"letter": "A", "text_fr": "100 à 150mg", "text_en": "100 to 150mg"},
+      {"letter": "B", "text_fr": "300 à 420mg selon le sexe et l'âge", "text_en": "300 to 420mg depending on sex and age"},
+      {"letter": "C", "text_fr": "600 à 800mg", "text_en": "600 to 800mg"},
+      {"letter": "D", "text_fr": "50mg suffisent", "text_en": "50mg is enough"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Les apports journaliers recommandés sont de 300mg pour les femmes et 420mg pour les hommes. Les besoins augmentent en cas de stress intense, de pratique sportive intensive, de grossesse, d'allaitement ou de prise de certains médicaments comme les inhibiteurs de la pompe à protons.",
+    feedback_ok_en: "Recommended daily intakes are 300mg for women and 420mg for men. Requirements increase with intense stress, intensive sport practice, pregnancy, breastfeeding or taking certain medications such as proton pump inhibitors.",
+    feedback_ko_fr: "La plupart des adultes n'atteignent pas les apports recommandés via l'alimentation seule. Le raffinage des céréales et la cuisson des légumes réduisent significativement la teneur en magnésium des aliments.",
+    feedback_ko_en: "Most adults do not reach recommended intakes through diet alone. Refining of cereals and cooking of vegetables significantly reduce the magnesium content of foods.",
+    reformulation_fr: "La majorité des adultes atteint-elle les apports recommandés en magnésium via l'alimentation ?",
+    reformulation_en: "Do most adults reach recommended magnesium intakes through diet ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Les études nutritionnelles montrent que 70 à 80% des adultes dans les pays industrialisés n'atteignent pas les apports journaliers recommandés en magnésium.",
+    reformulation_explanation_en: "Nutritional studies show that 70 to 80% of adults in industrialised countries do not reach recommended daily magnesium intakes."
+  },
+  {
+    question_fr: "Certains médicaments peuvent-ils réduire les niveaux de magnésium ?",
+    question_en: "Can certain medications reduce magnesium levels ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, les médicaments n'affectent pas le magnésium", "text_en": "No, medications do not affect magnesium"},
+      {"letter": "B", "text_fr": "Oui, les inhibiteurs de la pompe à protons, les diurétiques et certains antibiotiques réduisent l'absorption ou augmentent l'élimination du magnésium", "text_en": "Yes, proton pump inhibitors, diuretics and certain antibiotics reduce absorption or increase magnesium elimination"},
+      {"letter": "C", "text_fr": "Uniquement les médicaments cardiaques", "text_en": "Only cardiac medications"},
+      {"letter": "D", "text_fr": "Non, seul l'alcool affecte le magnésium", "text_en": "No, only alcohol affects magnesium"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les IPP (oméprazole, pantoprazole) réduisent l'absorption intestinale du magnésium et peuvent causer une hypomagnésémie sévère. Les diurétiques thiazidiques et de l'anse augmentent l'élimination urinaire. Les aminoglycosides et l'amphotéricine B ont aussi des effets hypomagnésiants.",
+    feedback_ok_en: "Exactly. PPIs (omeprazole, pantoprazole) reduce intestinal absorption of magnesium and can cause severe hypomagnesaemia. Thiazide and loop diuretics increase urinary elimination. Aminoglycosides and amphotericin B also have hypomagnesaemic effects.",
+    feedback_ko_fr: "Les personnes prenant des IPP au long cours doivent surveiller régulièrement leurs niveaux de magnésium. Une supplémentation est souvent nécessaire pour prévenir les complications neurologiques et cardiaques de l'hypomagnésémie.",
+    feedback_ko_en: "People taking long-term PPIs should regularly monitor their magnesium levels. Supplementation is often necessary to prevent neurological and cardiac complications of hypomagnesaemia.",
+    reformulation_fr: "Les personnes prenant des médicaments contre l'acidité gastrique doivent-elles surveiller leur magnésium ?",
+    reformulation_en: "Should people taking medications for gastric acidity monitor their magnesium ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les IPP (oméprazole, pantoprazole) réduisent significativement l'absorption du magnésium. Un bilan et une supplémentation sont souvent nécessaires lors d'une prise prolongée.",
+    reformulation_explanation_en: "PPIs (omeprazole, pantoprazole) significantly reduce magnesium absorption. Assessment and supplementation are often necessary during prolonged use."
+  },
+  {
+    question_fr: "Le magnésium bisglycinate est-il la même chose que le magnésium glycinate ?",
+    question_en: "Is magnesium bisglycinate the same as magnesium glycinate ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, ce sont deux formes complètement différentes", "text_en": "No, they are two completely different forms"},
+      {"letter": "B", "text_fr": "Oui, le bisglycinate signifie que le magnésium est chélaté à deux molécules de glycine, ce qui est la même chose que le glycinate", "text_en": "Yes, bisglycinate means magnesium is chelated to two glycine molecules, which is the same as glycinate"},
+      {"letter": "C", "text_fr": "Non, le bisglycinate est moins bien absorbé", "text_en": "No, bisglycinate is less well absorbed"},
+      {"letter": "D", "text_fr": "Non, le bisglycinate contient moins de magnésium élémentaire", "text_en": "No, bisglycinate contains less elemental magnesium"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exact. Le terme bisglycinate précise simplement que chaque ion magnésium est lié à deux molécules de glycine (bis signifiant deux). C'est la même forme que le glycinate, parfois appelé diglycinate. Cette nomenclature peut prêter à confusion mais ne désigne pas une forme différente.",
+    feedback_ok_en: "Correct. The term bisglycinate simply specifies that each magnesium ion is bound to two glycine molecules (bis meaning two). It is the same form as glycinate, sometimes called diglycinate. This nomenclature can be confusing but does not designate a different form.",
+    feedback_ko_fr: "La terminologie des compléments de magnésium peut être source de confusion. Glycinate, bisglycinate, diglycinate désignent tous la même forme chélatée à la glycine. Le bisglycinate est parfois préféré car il signale explicitement la double chélation.",
+    feedback_ko_en: "The terminology of magnesium supplements can be a source of confusion. Glycinate, bisglycinate, diglycinate all designate the same form chelated to glycine. Bisglycinate is sometimes preferred because it explicitly signals the double chelation.",
+    reformulation_fr: "Glycinate et bisglycinate de magnésium sont-ils la même forme ?",
+    reformulation_en: "Are magnesium glycinate and bisglycinate the same form ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Ce sont deux noms pour la même forme chélatée à la glycine. Le préfixe bis indique simplement la double liaison à deux molécules de glycine.",
+    reformulation_explanation_en: "These are two names for the same form chelated to glycine. The prefix bis simply indicates the double bond to two glycine molecules."
+  },
+  {
+    question_fr: "PIÈGE : Plus on prend de magnésium, mieux c'est ?",
+    question_en: "TRAP : The more magnesium taken, the better ?",
+    options: [
+      {"letter": "A", "text_fr": "Oui, le magnésium est sans danger à toute dose", "text_en": "Yes, magnesium is safe at any dose"},
+      {"letter": "B", "text_fr": "Non, des doses excessives peuvent causer diarrhée, hypotension et dans les cas extrêmes des troubles cardiaques", "text_en": "No, excessive doses can cause diarrhoea, hypotension and in extreme cases cardiac disorders"},
+      {"letter": "C", "text_fr": "Oui, le corps élimine l'excès automatiquement", "text_en": "Yes, the body automatically eliminates excess"},
+      {"letter": "D", "text_fr": "Non, mais uniquement si le magnésium est synthétique", "text_en": "No, but only if magnesium is synthetic"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Bonne réponse. La limite supérieure tolérable pour les suppléments de magnésium est de 350mg de magnésium élémentaire par jour chez l'adulte sain. Au-delà, les effets indésirables progressent : diarrhée, crampes abdominales, hypotension. En cas d'insuffisance rénale, des doses plus faibles peuvent être dangereuses.",
+    feedback_ok_en: "Good answer. The tolerable upper limit for magnesium supplements is 350mg of elemental magnesium per day in healthy adults. Beyond this, adverse effects increase: diarrhoea, abdominal cramps, hypotension. In case of renal failure, lower doses can be dangerous.",
+    feedback_ko_fr: "Le magnésium est généralement sûr mais pas illimité. Les personnes avec une insuffisance rénale doivent être particulièrement prudentes car les reins sont la principale voie d'élimination du magnésium en excès.",
+    feedback_ko_en: "Magnesium is generally safe but not unlimited. People with renal failure must be particularly careful as the kidneys are the main pathway for eliminating excess magnesium.",
+    reformulation_fr: "Les personnes avec une insuffisance rénale doivent-elles être prudentes avec les suppléments de magnésium ?",
+    reformulation_en: "Should people with renal failure be careful with magnesium supplements ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les reins éliminent le magnésium en excès. En cas d'insuffisance rénale, cet excès s'accumule et peut causer une hypermagnésémie potentiellement grave.",
+    reformulation_explanation_en: "The kidneys eliminate excess magnesium. In case of renal failure, this excess accumulates and can cause potentially serious hypermagnesaemia."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_mg3', score); window.location.href = 'magnesium-niveau3-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'le magnésium et ses formes en nutrition et santé' : 'magnesium and its forms in nutrition and health',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

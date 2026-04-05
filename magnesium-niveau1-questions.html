@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Magnésium — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/magnesium-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='magnesium.html'" aria-label="Retour">←</button>
+  <div id="score-display">💊 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11573812/" target="_blank" rel="noopener">Magnesium health overview PMC 2024</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38400735/" target="_blank" rel="noopener">Magnesium sleep disorders meta-analysis</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Le magnésium est-il un minéral important pour la santé ?",
+    question_en: "Is magnesium an important mineral for health ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, il est secondaire", "text_en": "No, it is secondary"},
+      {"letter": "B", "text_fr": "Oui, il est cofacteur de plus de 300 réactions enzymatiques dans le corps", "text_en": "Yes, it is a cofactor in more than 300 enzymatic reactions in the body"},
+      {"letter": "C", "text_fr": "Uniquement pour les muscles", "text_en": "Only for muscles"},
+      {"letter": "D", "text_fr": "Seulement après 60 ans", "text_en": "Only after 60"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium intervient dans plus de 300 réactions enzymatiques : production d'énergie (ATP), synthèse des protéines, régulation du glucose, fonction musculaire et nerveuse, et santé osseuse. Sa carence est l'une des plus fréquentes dans les pays industrialisés.",
+    feedback_ok_en: "Exactly. Magnesium is involved in more than 300 enzymatic reactions: energy production (ATP), protein synthesis, glucose regulation, muscle and nerve function, and bone health. Its deficiency is one of the most common in industrialised countries.",
+    feedback_ko_fr: "Le magnésium est fondamental pour presque toutes les fonctions biologiques. Plus de 300 enzymes en dépendent, ce qui explique pourquoi sa carence peut se manifester par des symptômes très variés : fatigue, crampes, anxiété, troubles du sommeil.",
+    feedback_ko_en: "Magnesium is fundamental for almost all biological functions. More than 300 enzymes depend on it, which explains why its deficiency can manifest through very varied symptoms: fatigue, cramps, anxiety, sleep disorders.",
+    reformulation_fr: "Une carence en magnésium peut-elle causer de la fatigue et des crampes ?",
+    reformulation_en: "Can a magnesium deficiency cause fatigue and cramps ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le magnésium est indispensable à la production d'ATP (énergie cellulaire) et à la relaxation musculaire. Sa carence se manifeste classiquement par fatigue, crampes et irritabilité.",
+    reformulation_explanation_en: "Magnesium is essential for ATP production (cellular energy) and muscle relaxation. Its deficiency classically manifests as fatigue, cramps and irritability."
+  },
+  {
+    question_fr: "Toutes les formes de magnésium en supplémentation sont-elles équivalentes ?",
+    question_en: "Are all forms of magnesium supplementation equivalent ?",
+    options: [
+      {"letter": "A", "text_fr": "Oui, seule la dose compte", "text_en": "Yes, only the dose matters"},
+      {"letter": "B", "text_fr": "Non, la forme détermine la biodisponibilité, la tolérance digestive et les effets spécifiques", "text_en": "No, the form determines bioavailability, digestive tolerance and specific effects"},
+      {"letter": "C", "text_fr": "Oui, le corps les assimile toutes pareil", "text_en": "Yes, the body assimilates all of them the same way"},
+      {"letter": "D", "text_fr": "Non, seul le magnésium marin est efficace", "text_en": "No, only marine magnesium is effective"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium oxyde a une biodisponibilité de seulement 4%. Le citrate est mieux absorbé (25-30%) et laxatif à haute dose. Le glycinate est très bien toléré et non laxatif. Le malate soutient l'énergie. Le L-thréonate traverse la barrière hémato-encéphalique. Chaque forme a ses indications.",
+    feedback_ok_en: "Exactly. Magnesium oxide has a bioavailability of only 4%. Citrate is better absorbed (25-30%) and laxative at high doses. Glycinate is very well tolerated and non-laxative. Malate supports energy. L-threonate crosses the blood-brain barrier. Each form has its indications.",
+    feedback_ko_fr: "Le magnésium oxyde, le plus vendu, est aussi le moins bien absorbé. Le choix de la forme doit dépendre de l'objectif : sommeil, énergie, anxiété, crampes. La forme compte autant que la dose.",
+    feedback_ko_en: "Magnesium oxide, the best-selling form, is also the least well absorbed. The choice of form should depend on the objective: sleep, energy, anxiety, cramps. The form matters as much as the dose.",
+    reformulation_fr: "Le magnésium oxyde est-il la meilleure forme de magnésium à acheter ?",
+    reformulation_en: "Is magnesium oxide the best form of magnesium to buy ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Le magnésium oxyde est la forme la moins bien absorbée avec seulement 4% de biodisponibilité. Il est aussi la plus vendue car la moins chère à produire.",
+    reformulation_explanation_en: "Magnesium oxide is the least well absorbed form with only 4% bioavailability. It is also the best-selling because it is the cheapest to produce."
+  },
+  {
+    question_fr: "Quelle est la forme de magnésium la mieux tolérée par le système digestif ?",
+    question_en: "Which form of magnesium is best tolerated by the digestive system ?",
+    options: [
+      {"letter": "A", "text_fr": "Le magnésium oxyde", "text_en": "Magnesium oxide"},
+      {"letter": "B", "text_fr": "Le magnésium glycinate", "text_en": "Magnesium glycinate"},
+      {"letter": "C", "text_fr": "Le magnésium citrate", "text_en": "Magnesium citrate"},
+      {"letter": "D", "text_fr": "Le magnésium sulfate", "text_en": "Magnesium sulfate"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium glycinate est chélaté à la glycine, un acide aminé. Cette forme est très bien absorbée, non laxative et très bien tolérée. La glycine a de plus des effets relaxants propres. C'est la forme recommandée pour les personnes sensibles du transit et pour un usage à long terme.",
+    feedback_ok_en: "Exactly. Magnesium glycinate is chelated to glycine, an amino acid. This form is very well absorbed, non-laxative and very well tolerated. Glycine additionally has its own relaxing effects. It is the recommended form for people with sensitive digestion and for long-term use.",
+    feedback_ko_fr: "Le magnésium citrate, bien qu'efficace, peut provoquer des selles molles à haute dose. Le sulfate (sel d'Epsom) est surtout utilisé en bain ou en laxatif puissant. Le glycinate est la forme reine pour une supplémentation quotidienne confortable.",
+    feedback_ko_en: "Magnesium citrate, although effective, can cause loose stools at high doses. Sulphate (Epsom salt) is mainly used in baths or as a powerful laxative. Glycinate is the premier form for comfortable daily supplementation.",
+    reformulation_fr: "Le magnésium glycinate est-il adapté aux personnes qui ont des problèmes digestifs avec le magnésium ?",
+    reformulation_en: "Is magnesium glycinate suitable for people who have digestive problems with magnesium ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Sa chélation à la glycine le rend non laxatif et très bien toléré même par les intestins sensibles. C'est la forme recommandée en cas de transit perturbé.",
+    reformulation_explanation_en: "Its chelation to glycine makes it non-laxative and very well tolerated even by sensitive intestines. It is the recommended form in case of disturbed transit."
+  },
+  {
+    question_fr: "Quelle forme de magnésium est particulièrement utile pour les crampes musculaires et la fatigue ?",
+    question_en: "Which form of magnesium is particularly useful for muscle cramps and fatigue ?",
+    options: [
+      {"letter": "A", "text_fr": "Le magnésium L-thréonate", "text_en": "Magnesium L-threonate"},
+      {"letter": "B", "text_fr": "Le magnésium malate", "text_en": "Magnesium malate"},
+      {"letter": "C", "text_fr": "Le magnésium oxyde", "text_en": "Magnesium oxide"},
+      {"letter": "D", "text_fr": "Le magnésium sulfate", "text_en": "Magnesium sulfate"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium malate est chélaté à l'acide malique, un intermédiaire du cycle de Krebs (production d'énergie cellulaire). Il est particulièrement indiqué pour la fatigue chronique, les douleurs musculaires et la fibromyalgie. Sa biodisponibilité est bonne et sa tolérance digestive acceptable.",
+    feedback_ok_en: "Exactly. Magnesium malate is chelated to malic acid, an intermediate of the Krebs cycle (cellular energy production). It is particularly indicated for chronic fatigue, muscle pain and fibromyalgia. Its bioavailability is good and digestive tolerance acceptable.",
+    feedback_ko_fr: "L'acide malique du magnésium malate joue un rôle direct dans le cycle de Krebs, expliquant son action particulière sur l'énergie et les douleurs musculaires. C'est la forme de choix pour les syndromes de fatigue chronique.",
+    feedback_ko_en: "The malic acid in magnesium malate plays a direct role in the Krebs cycle, explaining its particular action on energy and muscle pain. It is the form of choice for chronic fatigue syndromes.",
+    reformulation_fr: "Le magnésium malate est-il recommandé dans la fibromyalgie ?",
+    reformulation_en: "Is magnesium malate recommended in fibromyalgia ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs études montrent un bénéfice du magnésium malate dans la fibromyalgie, notamment sur les douleurs et la fatigue, via l'action de l'acide malique sur le métabolisme énergétique.",
+    reformulation_explanation_en: "Several studies show a benefit of magnesium malate in fibromyalgia, particularly on pain and fatigue, via the action of malic acid on energy metabolism."
+  },
+  {
+    question_fr: "Le magnésium est-il important pour le sommeil ?",
+    question_en: "Is magnesium important for sleep ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, il n'a aucun effet sur le sommeil", "text_en": "No, it has no effect on sleep"},
+      {"letter": "B", "text_fr": "Oui, il régule le GABA, réduit le cortisol et active le système parasympathique, favorisant l'endormissement", "text_en": "Yes, it regulates GABA, reduces cortisol and activates the parasympathetic system, promoting sleep onset"},
+      {"letter": "C", "text_fr": "Uniquement chez les personnes âgées", "text_en": "Only in elderly people"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement en injection", "text_en": "Yes, but only by injection"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium active les récepteurs GABA (neurotransmetteur inhibiteur), réduit le cortisol nocturne et régule la mélatonine. Sa carence est associée à des difficultés d'endormissement et à des réveils nocturnes. Le glycinate et le L-thréonate sont les formes préférées pour le sommeil.",
+    feedback_ok_en: "Exactly. Magnesium activates GABA receptors (inhibitory neurotransmitter), reduces nocturnal cortisol and regulates melatonin. Its deficiency is associated with difficulty falling asleep and nocturnal waking. Glycinate and L-threonate are the preferred forms for sleep.",
+    feedback_ko_fr: "La carence en magnésium est l'une des causes nutritionnelles les plus fréquentes de troubles du sommeil. Prendre du magnésium glycinate le soir est l'une des interventions nutritionnelles les mieux documentées pour améliorer la qualité du sommeil.",
+    feedback_ko_en: "Magnesium deficiency is one of the most common nutritional causes of sleep disorders. Taking magnesium glycinate in the evening is one of the best-documented nutritional interventions for improving sleep quality.",
+    reformulation_fr: "Prendre du magnésium le soir peut-il améliorer la qualité du sommeil ?",
+    reformulation_en: "Can taking magnesium in the evening improve sleep quality ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs essais cliniques montrent qu'une supplémentation en magnésium améliore la qualité subjective du sommeil, réduit le temps d'endormissement et diminue les réveils nocturnes.",
+    reformulation_explanation_en: "Several clinical trials show that magnesium supplementation improves subjective sleep quality, reduces sleep onset time and decreases nocturnal waking."
+  },
+  {
+    question_fr: "Quels aliments sont naturellement riches en magnésium ?",
+    question_en: "Which foods are naturally rich in magnesium ?",
+    options: [
+      {"letter": "A", "text_fr": "Les produits laitiers et la viande", "text_en": "Dairy products and meat"},
+      {"letter": "B", "text_fr": "Les graines de courge, les amandes, le chocolat noir 85% et les légumineuses", "text_en": "Pumpkin seeds, almonds, 85% dark chocolate and legumes"},
+      {"letter": "C", "text_fr": "Le pain blanc et les pâtes", "text_en": "White bread and pasta"},
+      {"letter": "D", "text_fr": "Les fruits tropicaux", "text_en": "Tropical fruits"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les graines de courge sont la source alimentaire la plus concentrée en magnésium (550mg pour 100g). Les amandes, noix de cajou, chocolat noir 85%, légumineuses, épinards et céréales complètes sont aussi d'excellentes sources. La cuisson et le raffinage réduisent significativement leur teneur.",
+    feedback_ok_en: "Exactly. Pumpkin seeds are the most concentrated food source of magnesium (550mg per 100g). Almonds, cashew nuts, 85% dark chocolate, legumes, spinach and whole grains are also excellent sources. Cooking and refining significantly reduce their content.",
+    feedback_ko_fr: "L'alimentation occidentale moderne est pauvre en magnésium car elle repose sur des aliments raffinés qui ont perdu leur teneur. Les graines, noix, légumineuses et légumes verts feuillus sont les meilleures sources alimentaires.",
+    feedback_ko_en: "The modern Western diet is low in magnesium because it relies on refined foods that have lost their content. Seeds, nuts, legumes and leafy green vegetables are the best food sources.",
+    reformulation_fr: "Le chocolat noir à 85% est-il une bonne source de magnésium ?",
+    reformulation_en: "Is 85% dark chocolate a good source of magnesium ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le chocolat noir 85% contient environ 230mg de magnésium pour 100g, soit environ 55% des apports journaliers recommandés. C'est aussi une source de polyphénols et de fer.",
+    reformulation_explanation_en: "85% dark chocolate contains approximately 230mg of magnesium per 100g, representing about 55% of recommended daily intake. It is also a source of polyphenols and iron."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_mg1', score); window.location.href = 'magnesium-niveau1-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'le magnésium et ses formes en nutrition et santé' : 'magnesium and its forms in nutrition and health',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

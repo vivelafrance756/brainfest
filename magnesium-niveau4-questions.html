@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 4 Questions — Magnésium — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/magnesium-niveau4-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='magnesium.html'" aria-label="Retour">←</button>
+  <div id="score-display">🧠 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/33839610/" target="_blank" rel="noopener">Magnesium migraine meta-analysis Nutrients 2021</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31816477/" target="_blank" rel="noopener">TRPM7 magnesium homeostasis</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38400735/" target="_blank" rel="noopener">Magnesium NMDA chronic pain</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Le transporteur TRPM7 est important pour comprendre le magnésium cellulaire parce que :",
+    question_en: "The TRPM7 transporter is important for understanding cellular magnesium because :",
+    options: [
+      {"letter": "A", "text_fr": "Il produit du magnésium dans les cellules", "text_en": "It produces magnesium in cells"},
+      {"letter": "B", "text_fr": "C'est le principal canal ionique permettant l'entrée du magnésium dans les cellules et son homéostasie intracellulaire", "text_en": "It is the main ion channel allowing magnesium entry into cells and its intracellular homeostasis"},
+      {"letter": "C", "text_fr": "Il régule uniquement le magnésium osseux", "text_en": "It only regulates bone magnesium"},
+      {"letter": "D", "text_fr": "Il n'est actif que dans les reins", "text_en": "It is only active in the kidneys"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. TRPM7 (Transient Receptor Potential Melastatin 7) est un canal ionique ubiquitaire qui régule l'entrée du magnésium dans toutes les cellules. Son dysfonctionnement est impliqué dans l'hypertension, les maladies neurodégénératives et les troubles du rythme cardiaque. C'est la cible moléculaire expliquant pourquoi un faible magnésium sérique peut coexister avec une carence intracellulaire.",
+    feedback_ok_en: "Exactly. TRPM7 (Transient Receptor Potential Melastatin 7) is a ubiquitous ion channel that regulates magnesium entry into all cells. Its dysfunction is implicated in hypertension, neurodegenerative diseases and cardiac rhythm disorders. It is the molecular target explaining why low serum magnesium can coexist with intracellular deficiency.",
+    feedback_ko_fr: "TRPM7 explique aussi pourquoi le magnésium sérique est un mauvais indicateur du statut en magnésium. Le magnésium intracellulaire peut être déficient même avec une magnésémie normale.",
+    feedback_ko_en: "TRPM7 also explains why serum magnesium is a poor indicator of magnesium status. Intracellular magnesium can be deficient even with normal serum magnesium.",
+    reformulation_fr: "Un taux de magnésium normal dans le sang signifie-t-il que le corps est bien pourvu en magnésium ?",
+    reformulation_en: "Does a normal blood magnesium level mean the body is well supplied with magnesium ?",
+    reformulation_answer: "Pas nécessairement",
+    reformulation_explanation_fr: "Le magnésium sérique représente moins de 1% du magnésium total. Le corps maintient la magnésémie au détriment des réserves intracellulaires et osseuses. Un taux normal n'exclut pas une carence fonctionnelle.",
+    reformulation_explanation_en: "Serum magnesium represents less than 1% of total magnesium. The body maintains serum magnesium at the expense of intracellular and bone reserves. A normal level does not exclude functional deficiency."
+  },
+  {
+    question_fr: "Le magnésium module-t-il les récepteurs NMDA impliqués dans la douleur et l'anxiété ?",
+    question_en: "Does magnesium modulate NMDA receptors involved in pain and anxiety ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, le magnésium n'affecte pas les récepteurs NMDA", "text_en": "No, magnesium does not affect NMDA receptors"},
+      {"letter": "B", "text_fr": "Oui, le magnésium bloque physiologiquement les récepteurs NMDA glutamatergiques, réduisant l'hyperexcitabilité neuronale impliquée dans la douleur chronique et l'anxiété", "text_en": "Yes, magnesium physiologically blocks glutamatergic NMDA receptors, reducing neuronal hyperexcitability involved in chronic pain and anxiety"},
+      {"letter": "C", "text_fr": "Oui, mais uniquement le magnésium L-thréonate", "text_en": "Yes, but only magnesium L-threonate"},
+      {"letter": "D", "text_fr": "Non, seul le calcium module NMDA", "text_en": "No, only calcium modulates NMDA"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le magnésium est un bloqueur physiologique des récepteurs NMDA. Quand le magnésium est insuffisant, ces récepteurs deviennent hyperactifs, générant de l'anxiété, de l'hyperalgésie et des insomnies. C'est le mécanisme neurologique principal par lequel la carence en magnésium amplifie la douleur chronique et l'anxiété.",
+    feedback_ok_en: "Exactly. Magnesium is a physiological blocker of NMDA receptors. When magnesium is insufficient, these receptors become hyperactive, generating anxiety, hyperalgesia and insomnia. This is the main neurological mechanism by which magnesium deficiency amplifies chronic pain and anxiety.",
+    feedback_ko_fr: "Le blocage des récepteurs NMDA par le magnésium explique son action anxiolytique et analgésique. Des médicaments comme la kétamine (bloqueur NMDA) imitent partiellement cet effet mais avec des effets secondaires majeurs.",
+    feedback_ko_en: "The blocking of NMDA receptors by magnesium explains its anxiolytic and analgesic action. Medications like ketamine (NMDA blocker) partially mimic this effect but with major side effects.",
+    reformulation_fr: "La carence en magnésium peut-elle amplifier la douleur chronique ?",
+    reformulation_en: "Can magnesium deficiency amplify chronic pain ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Sans blocage suffisant des récepteurs NMDA par le magnésium, le seuil de douleur s'abaisse et la douleur chronique s'intensifie. Corriger la carence en magnésium est une approche complémentaire dans la prise en charge de la douleur chronique.",
+    reformulation_explanation_en: "Without sufficient NMDA receptor blocking by magnesium, the pain threshold lowers and chronic pain intensifies. Correcting magnesium deficiency is a complementary approach in chronic pain management."
+  },
+  {
+    question_fr: "La biodisponibilité du magnésium glycinate peut-elle atteindre 80% ?",
+    question_en: "Can the bioavailability of magnesium glycinate reach 80% ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, toutes les formes sont à moins de 30%", "text_en": "No, all forms are below 30%"},
+      {"letter": "B", "text_fr": "Oui, la chélation à la glycine permet une absorption par transport actif des acides aminés, indépendante des transporteurs ioniques classiques", "text_en": "Yes, chelation to glycine allows absorption via active amino acid transport, independent of classic ion transporters"},
+      {"letter": "C", "text_fr": "Non, 80% est impossible pour un minéral", "text_en": "No, 80% is impossible for a mineral"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement à jeun", "text_en": "Yes, but only on an empty stomach"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La chélation à la glycine permet au magnésium d'emprunter les transporteurs d'acides aminés intestinaux plutôt que les canaux ioniques classiques. Ces transporteurs d'acides aminés sont plus efficaces et moins sujets à compétition. C'est pourquoi le glycinate peut atteindre des biodisponibilités de 60 à 80% selon les études.",
+    feedback_ok_en: "Exactly. Chelation to glycine allows magnesium to use intestinal amino acid transporters rather than classic ion channels. These amino acid transporters are more efficient and less subject to competition. This is why glycinate can achieve bioavailabilities of 60 to 80% according to studies.",
+    feedback_ko_fr: "Le mécanisme d'absorption par les transporteurs d'acides aminés est la raison fondamentale pour laquelle les formes chélatées à des acides aminés (glycinate, malate, taurate) sont supérieures aux sels minéraux simples (oxyde, sulfate, chlorure).",
+    feedback_ko_en: "The absorption mechanism via amino acid transporters is the fundamental reason why forms chelated to amino acids (glycinate, malate, taurate) are superior to simple mineral salts (oxide, sulphate, chloride).",
+    reformulation_fr: "Le magnésium glycinate est-il absorbé par un mécanisme différent du magnésium oxyde ?",
+    reformulation_en: "Is magnesium glycinate absorbed by a different mechanism than magnesium oxide ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le glycinate utilise les transporteurs d'acides aminés, plus efficaces. L'oxyde utilise les canaux ioniques, moins efficaces et sujets à compétition avec le calcium et d'autres minéraux.",
+    reformulation_explanation_en: "Glycinate uses amino acid transporters, which are more efficient. Oxide uses ion channels, which are less efficient and subject to competition with calcium and other minerals."
+  },
+  {
+    question_fr: "PIÈGE : Le test sanguin standard de magnésium sérique est-il le meilleur indicateur du statut en magnésium ?",
+    question_en: "TRAP : Is the standard serum magnesium blood test the best indicator of magnesium status ?",
+    options: [
+      {"letter": "A", "text_fr": "Oui, c'est le test de référence", "text_en": "Yes, it is the reference test"},
+      {"letter": "B", "text_fr": "Non, le magnésium sérique représente moins de 1% du magnésium total et peut être normal même en cas de carence tissulaire sévère", "text_en": "No, serum magnesium represents less than 1% of total magnesium and can be normal even with severe tissue deficiency"},
+      {"letter": "C", "text_fr": "Oui, un taux normal signifie toujours un bon statut", "text_en": "Yes, a normal level always means good status"},
+      {"letter": "D", "text_fr": "Non, mais il n'existe aucune alternative", "text_en": "No, but there is no alternative"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. C'est l'un des points les plus importants en pratique clinique. Le corps maintient la magnésémie au détriment des réserves intracellulaires et osseuses. Un taux sérique normal peut coexister avec une carence fonctionnelle sévère. Les tests plus précis incluent le magnésium érythrocytaire et la rétention de magnésium après charge.",
+    feedback_ok_en: "Exactly. This is one of the most important points in clinical practice. The body maintains serum magnesium at the expense of intracellular and bone reserves. A normal serum level can coexist with severe functional deficiency. More precise tests include erythrocyte magnesium and magnesium retention after loading.",
+    feedback_ko_fr: "Ce point est fondamental pour les praticiens. Beaucoup de patients avec des symptômes évocateurs de carence (fatigue, crampes, anxiété, insomnie) ont un magnésium sérique normal. Le dosage du magnésium érythrocytaire est plus représentatif.",
+    feedback_ko_en: "This point is fundamental for practitioners. Many patients with symptoms suggestive of deficiency (fatigue, cramps, anxiety, insomnia) have normal serum magnesium. Erythrocyte magnesium measurement is more representative.",
+    reformulation_fr: "Un taux de magnésium normal au bilan sanguin exclut-il une carence en magnésium ?",
+    reformulation_en: "Does a normal magnesium level in blood tests exclude magnesium deficiency ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Le magnésium sérique est maintenu aux dépens des réserves intracellulaires et osseuses. Une carence fonctionnelle peut exister avec une magnésémie normale.",
+    reformulation_explanation_en: "Serum magnesium is maintained at the expense of intracellular and bone reserves. Functional deficiency can exist with normal serum magnesium."
+  },
+  {
+    question_fr: "Le magnésium joue-t-il un rôle dans la prévention des migraines ?",
+    question_en: "Does magnesium play a role in migraine prevention ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, aucune étude ne le confirme", "text_en": "No, no study confirms this"},
+      {"letter": "B", "text_fr": "Oui, plusieurs essais cliniques montrent une réduction de la fréquence et de l'intensité des migraines avec une supplémentation en magnésium", "text_en": "Yes, several clinical trials show a reduction in migraine frequency and intensity with magnesium supplementation"},
+      {"letter": "C", "text_fr": "Oui, mais uniquement le magnésium injecté", "text_en": "Yes, but only injected magnesium"},
+      {"letter": "D", "text_fr": "Non, la migraine est uniquement neurologique", "text_en": "No, migraine is purely neurological"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Des méta-analyses confirment que la supplémentation en magnésium réduit la fréquence des migraines de 41% en moyenne. Le mécanisme implique le blocage des récepteurs NMDA, la réduction de la libération de substance P et l'inhibition de la dépression corticale envahissante, trois mécanismes centraux dans la physiopathologie de la migraine.",
+    feedback_ok_en: "Exactly. Meta-analyses confirm that magnesium supplementation reduces migraine frequency by 41% on average. The mechanism involves NMDA receptor blocking, reduction of substance P release and inhibition of cortical spreading depression, three central mechanisms in migraine pathophysiology.",
+    feedback_ko_fr: "La Société Américaine des Céphalées et les sociétés européennes reconnaissent le magnésium comme traitement prophylactique de la migraine. Il est particulièrement efficace dans la migraine menstruelle et la migraine avec aura.",
+    feedback_ko_en: "The American Headache Society and European societies recognise magnesium as a prophylactic treatment for migraine. It is particularly effective in menstrual migraine and migraine with aura.",
+    reformulation_fr: "Le magnésium est-il reconnu comme traitement préventif des migraines ?",
+    reformulation_en: "Is magnesium recognised as a preventive treatment for migraines ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Des sociétés savantes de neurologie et de céphalologie reconnaissent le magnésium comme option de prophylaxie migraineuse, particulièrement dans les migraines menstruelles et avec aura.",
+    reformulation_explanation_en: "Learned societies in neurology and cephalalogy recognise magnesium as a migraine prophylaxis option, particularly in menstrual and aura migraines."
+  },
+  {
+    question_fr: "Comment optimiser l'absorption du magnésium en supplémentation ?",
+    question_en: "How to optimise magnesium absorption in supplementation ?",
+    options: [
+      {"letter": "A", "text_fr": "Prendre toute la dose le matin à jeun", "text_en": "Take the entire dose in the morning on an empty stomach"},
+      {"letter": "B", "text_fr": "Fractionner la dose en 2 à 3 prises avec les repas, choisir une forme chélatée et éviter la co-ingestion de calcium en grande quantité", "text_en": "Split the dose into 2 to 3 intakes with meals, choose a chelated form and avoid co-ingestion of large amounts of calcium"},
+      {"letter": "C", "text_fr": "Prendre avec du café pour une meilleure absorption", "text_en": "Take with coffee for better absorption"},
+      {"letter": "D", "text_fr": "Prendre le soir uniquement", "text_en": "Take in the evening only"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le fractionnement de la dose (2 à 3 fois par jour) optimise l'absorption car les transporteurs intestinaux ont une capacité limitée. Les repas stimulent la sécrétion biliaire et pancréatique qui facilite l'absorption. Le calcium en grande quantité entre en compétition avec le magnésium pour les mêmes transporteurs.",
+    feedback_ok_en: "Exactly. Dose splitting (2 to 3 times per day) optimises absorption as intestinal transporters have limited capacity. Meals stimulate biliary and pancreatic secretion which facilitates absorption. Large amounts of calcium compete with magnesium for the same transporters.",
+    feedback_ko_fr: "La caféine du café augmente l'élimination urinaire du magnésium. Prendre son magnésium avec du café est contre-productif. L'idéal : fractionner en 2 à 3 prises avec les repas, loin du café et des gros apports calciques.",
+    feedback_ko_en: "Caffeine in coffee increases urinary elimination of magnesium. Taking magnesium with coffee is counterproductive. The ideal: split into 2 to 3 intakes with meals, away from coffee and large calcium intakes.",
+    reformulation_fr: "Faut-il éviter de prendre du magnésium en même temps que des produits laitiers en grande quantité ?",
+    reformulation_en: "Should magnesium be avoided at the same time as large amounts of dairy products ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le calcium des produits laitiers entre en compétition avec le magnésium pour les transporteurs intestinaux. Un intervalle d'au moins 2 heures est recommandé pour optimiser l'absorption du magnésium.",
+    reformulation_explanation_en: "Calcium from dairy products competes with magnesium for intestinal transporters. An interval of at least 2 hours is recommended to optimise magnesium absorption."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_mg4', score); window.location.href = 'magnesium-niveau4-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'le magnésium et ses formes en nutrition et santé' : 'magnesium and its forms in nutrition and health',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
