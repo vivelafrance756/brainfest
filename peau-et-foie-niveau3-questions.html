@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 3 Questions — Peau et Foie — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/peau-et-foie-niveau3-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='peau-et-foie.html'" aria-label="Retour">←</button>
+  <div id="score-display">🎯 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/25734562/" target="_blank" rel="noopener">Hodges Minich liver skin detoxification J Nutr Metab 2015</a>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12142353/" target="_blank" rel="noopener">TCM acne meta-analysis 2024</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Pourquoi le polymorphisme génétique GSTM1 est-il important pour la peau ?",
+    question_en: "Why is the GSTM1 genetic polymorphism important for the skin ?",
+    options: [{"letter": "A", "text_fr": "Il détermine la couleur de la peau", "text_en": "It determines skin colour"}, {"letter": "B", "text_fr": "Sa délétion réduit la capacité à détoxifier certains carcinogènes, augmentant la sensibilité cutanée aux UV et aux irritants", "text_en": "Its deletion reduces the ability to detoxify certain carcinogens, increasing skin sensitivity to UV and irritants"}, {"letter": "C", "text_fr": "Il produit du collagène", "text_en": "It produces collagen"}, {"letter": "D", "text_fr": "Il régule les glandes sébacées", "text_en": "It regulates sebaceous glands"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. GSTM1 est une enzyme de Phase II qui conjugue les toxines avec le glutathion. Sa délétion génétique (présente chez environ 50% de la population caucasienne) réduit la détoxification cutanée et hépatique, expliquant pourquoi certaines personnes sont plus sensibles aux irritants, aux UV et aux réactions cutanées aux cosmétiques.",
+    feedback_ok_en: "Exactly. GSTM1 is a Phase II enzyme that conjugates toxins with glutathione. Its genetic deletion (present in approximately 50% of the Caucasian population) reduces cutaneous and hepatic detoxification, explaining why some people are more sensitive to irritants, UV and skin reactions to cosmetics.",
+    feedback_ko_fr: "Les polymorphismes génétiques des enzymes de détoxification expliquent en partie pourquoi deux personnes avec la même alimentation et le même mode de vie peuvent avoir des peaux très différentes. C'est l'individualisation biochimique de la médecine fonctionnelle.",
+    feedback_ko_en: "Genetic polymorphisms of detoxification enzymes partly explain why two people with the same diet and lifestyle can have very different skin. This is the biochemical individualisation of functional medicine.",
+    reformulation_fr: "Certaines personnes sont-elles génétiquement plus sensibles aux irritants cutanés ?",
+    reformulation_en: "Are some people genetically more sensitive to skin irritants ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Des polymorphismes dans les enzymes de détoxification comme GSTM1 réduisent la capacité à éliminer certaines toxines, augmentant la réactivité cutanée.",
+    reformulation_explanation_en: "Polymorphisms in detoxification enzymes like GSTM1 reduce the ability to eliminate certain toxins, increasing skin reactivity."
+  },
+  {
+    question_fr: "La formule chinoise Xiao Yao San est utilisée pour l'acné hormonale parce qu'elle :",
+    question_en: "The Chinese formula Xiao Yao San is used for hormonal acne because it :",
+    options: [{"letter": "A", "text_fr": "Réduit directement le sébum", "text_en": "Directly reduces sebum"}, {"letter": "B", "text_fr": "Harmonise le Foie, tonifie la Rate et régule le Qi, agissant sur les causes profondes de l'acné hormonale", "text_en": "Harmonises the Liver, tonifies the Spleen and regulates Qi, acting on the deep causes of hormonal acne"}, {"letter": "C", "text_fr": "Hydrate la peau", "text_en": "Hydrates the skin"}, {"letter": "D", "text_fr": "Produit du collagène", "text_en": "Produces collagen"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le Xiao Yao San (Poudre de la Libre Errance) contient Chai Hu, Bai Shao, Dang Gui, Bai Zhu, Fu Ling, Gan Cao et Sheng Jiang. Il agit sur la stagnation du Foie, le déséquilibre émotionnel et la régulation hormonale. Une méta-analyse de 2024 montre de meilleurs résultats en combinant MTC et traitement biomédical standard pour l'acné.",
+    feedback_ok_en: "Exactly. Xiao Yao San (Free Wanderer Powder) contains Chai Hu, Bai Shao, Dang Gui, Bai Zhu, Fu Ling, Gan Cao and Sheng Jiang. It acts on Liver stagnation, emotional imbalance and hormonal regulation. A 2024 meta-analysis shows better results combining TCM and standard biomedical treatment for acne.",
+    feedback_ko_fr: "Le Xiao Yao San est l'une des formules les plus prescrites en médecine chinoise pour l'acné hormonale, le syndrome prémenstruel et la dépression légère liée au cycle. Son action sur le Foie explique son efficacité dans les problèmes cutanés d'origine hormonale.",
+    feedback_ko_en: "Xiao Yao San is one of the most prescribed formulas in Chinese medicine for hormonal acne, premenstrual syndrome and mild cycle-related depression. Its action on the Liver explains its effectiveness in skin problems of hormonal origin.",
+    reformulation_fr: "La médecine chinoise et la médecine occidentale peuvent-elles être combinées pour traiter l'acné ?",
+    reformulation_en: "Can Chinese medicine and Western medicine be combined to treat acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Une méta-analyse de 2024 confirme que la combinaison MTC et traitement biomédical donne de meilleurs résultats que chaque approche séparément.",
+    reformulation_explanation_en: "A 2024 meta-analysis confirms that combining TCM and biomedical treatment gives better results than each approach separately."
+  },
+  {
+    question_fr: "PIÈGE : La détox hépatique intensive de courte durée est-elle efficace pour améliorer la peau ?",
+    question_en: "TRAP : Is short intensive hepatic detox effective for improving the skin ?",
+    options: [{"letter": "A", "text_fr": "Oui, les cures détox de 3 à 7 jours améliorent significativement la peau", "text_en": "Yes, 3 to 7 day detox cures significantly improve the skin"}, {"letter": "B", "text_fr": "Non, aucune cure détox courte n'a montré d'efficacité prouvée. Le soutien hépatique doit être une approche nutritionnelle durable", "text_en": "No, no short detox cure has shown proven effectiveness. Liver support must be a sustainable nutritional approach"}, {"letter": "C", "text_fr": "Oui, le jeûne de 48h suffit", "text_en": "Yes, 48h fasting is enough"}, {"letter": "D", "text_fr": "Oui, les jus détox nettoient le foie en quelques jours", "text_en": "Yes, detox juices cleanse the liver in a few days"}],
+    correct: "B",
+    feedback_ok_fr: "Bonne réponse. Le concept de détox express est un mythe bien vendu. Le foie détoxifie en permanence, 24h sur 24. Ce qui l'aide vraiment : une alimentation durable riche en crucifères, polyphénols, fibres et nutriments cofacteurs (magnésium, B6, glutathion). Pas une cure de jus de 3 jours.",
+    feedback_ok_en: "Good answer. The express detox concept is a well-sold myth. The liver detoxifies permanently, 24 hours a day. What truly helps it: a sustainable diet rich in cruciferous vegetables, polyphenols, fibre and cofactor nutrients (magnesium, B6, glutathione). Not a 3-day juice cure.",
+    feedback_ko_fr: "Les cures détox courtes n'ont pas de preuve scientifique d'efficacité. Pire, certains jus détox en grande quantité peuvent surcharger le foie en oxalates. Le vrai soutien hépatique est quotidien et alimentaire.",
+    feedback_ko_en: "Short detox cures have no scientific proof of effectiveness. Worse, some detox juices in large quantities can overload the liver with oxalates. Real liver support is daily and dietary.",
+    reformulation_fr: "Les cures détox de quelques jours ont-elles une efficacité prouvée sur la peau ?",
+    reformulation_en: "Do detox cures of a few days have proven effectiveness on the skin ?",
+    reformulation_answer: "Non",
+    reformulation_explanation_fr: "Aucune étude sérieuse ne valide les cures détox courtes pour la peau. Le foie est soutenu durablement par l'alimentation quotidienne, pas par des cures ponctuelles.",
+    reformulation_explanation_en: "No serious study validates short detox cures for the skin. The liver is durably supported by daily diet, not by occasional cures."
+  },
+  {
+    question_fr: "La curcumine améliore-t-elle la peau via le foie ?",
+    question_en: "Does curcumin improve skin via the liver ?",
+    options: [{"letter": "A", "text_fr": "Non, elle agit uniquement sur la peau directement", "text_en": "No, it only acts directly on the skin"}, {"letter": "B", "text_fr": "Oui, elle inhibe NF-kB dans les hépatocytes et les kératinocytes, réduisant simultanément l'inflammation hépatique et cutanée", "text_en": "Yes, it inhibits NF-kB in hepatocytes and keratinocytes, simultaneously reducing hepatic and skin inflammation"}, {"letter": "C", "text_fr": "Non, aucune étude ne le confirme", "text_en": "No, no study confirms this"}, {"letter": "D", "text_fr": "Oui, mais uniquement en application topique", "text_en": "Yes, but only in topical application"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La curcumine est l'un des rares phytonutriments dont l'action simultanée sur le foie et la peau est bien documentée. Elle active également Nrf2, augmentant la production de glutathion dans les deux organes. Son absorption est améliorée par la pipérine (poivre noir) et les lipides.",
+    feedback_ok_en: "Exactly. Curcumin is one of the rare phytonutrients whose simultaneous action on the liver and skin is well documented. It also activates Nrf2, increasing glutathione production in both organs. Its absorption is improved by piperine (black pepper) and lipids.",
+    feedback_ko_fr: "La curcumine souffre d'une biodisponibilité naturellement faible. Les formulations avec pipérine, phospholipides ou nanoparticules multiplient son absorption. Sans ces cofacteurs, la curcumine seule a peu d'effet systémique.",
+    feedback_ko_en: "Curcumin naturally suffers from low bioavailability. Formulations with piperine, phospholipids or nanoparticles multiply its absorption. Without these cofactors, curcumin alone has little systemic effect.",
+    reformulation_fr: "La curcumine est-elle plus efficace prise avec du poivre noir ?",
+    reformulation_en: "Is curcumin more effective taken with black pepper ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La pipérine du poivre noir augmente l'absorption de la curcumine de 2000%. Sans elle, la curcumine est très peu absorbée par l'intestin.",
+    reformulation_explanation_en: "Piperine from black pepper increases curcumin absorption by 2000%. Without it, curcumin is very poorly absorbed by the intestine."
+  },
+  {
+    question_fr: "Le Gan Huo (chaleur du Foie) en MTC correspond à quel mécanisme en médecine fonctionnelle ?",
+    question_en: "What does Gan Huo (Liver Fire) in TCM correspond to in functional medicine ?",
+    options: [{"letter": "A", "text_fr": "Une carence en vitamine D", "text_en": "A vitamin D deficiency"}, {"letter": "B", "text_fr": "Un état pro-inflammatoire hépatique avec stress oxydatif et surcharge en cytokines pro-inflammatoires", "text_en": "A hepatic pro-inflammatory state with oxidative stress and pro-inflammatory cytokine overload"}, {"letter": "C", "text_fr": "Une infection bactérienne du foie", "text_en": "A bacterial liver infection"}, {"letter": "D", "text_fr": "Un excès de collagène", "text_en": "Collagen excess"}],
+    correct: "B",
+    feedback_ok_fr: "Excellente correspondance entre deux systèmes médicaux. Le Gan Huo décrit en MTC une chaleur interne générée par la stagnation du Qi du Foie. En médecine fonctionnelle, cela correspond à un état pro-inflammatoire hépatique avec activation de NF-kB, stress oxydatif et production de cytokines pro-inflammatoires qui montent vers la peau.",
+    feedback_ok_en: "Excellent correspondence between two medical systems. Gan Huo in TCM describes internal heat generated by Liver Qi stagnation. In functional medicine, this corresponds to a hepatic pro-inflammatory state with NF-kB activation, oxidative stress and pro-inflammatory cytokine production that rises to the skin.",
+    feedback_ko_fr: "La correspondance entre MTC et médecine fonctionnelle est l'un des axes les plus fertiles de la médecine intégrative. Refroidir le Foie en MTC revient à réduire l'inflammation hépatique en médecine fonctionnelle.",
+    feedback_ko_en: "The correspondence between TCM and functional medicine is one of the most fertile areas of integrative medicine. Cooling the Liver in TCM amounts to reducing hepatic inflammation in functional medicine.",
+    reformulation_fr: "La médecine chinoise et la médecine fonctionnelle décrivent-elles le même phénomène avec des langages différents ?",
+    reformulation_en: "Do Chinese medicine and functional medicine describe the same phenomenon with different languages ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les correspondances ne sont pas parfaites mais les concepts de chaleur du Foie et d'inflammation hépatique partagent des points communs cliniques et thérapeutiques importants.",
+    reformulation_explanation_en: "The correspondences are not perfect but the concepts of Liver fire and hepatic inflammation share important clinical and therapeutic common points."
+  },
+  {
+    question_fr: "Quels nutriments sont essentiels pour soutenir la Phase II hépatique bénéfique à la peau ?",
+    question_en: "Which nutrients are essential for supporting hepatic Phase II beneficial to the skin ?",
+    options: [{"letter": "A", "text_fr": "Calcium et vitamine D uniquement", "text_en": "Calcium and vitamin D only"}, {"letter": "B", "text_fr": "Magnésium, vitamine B6, indole-3-carbinol des crucifères et N-acétylcystéine", "text_en": "Magnesium, vitamin B6, indole-3-carbinol from cruciferous vegetables and N-acetylcysteine"}, {"letter": "C", "text_fr": "Oméga-3 et vitamine C uniquement", "text_en": "Omega-3 and vitamin C only"}, {"letter": "D", "text_fr": "Zinc et sélénium uniquement", "text_en": "Zinc and selenium only"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Ces nutriments sont les cofacteurs essentiels de la Phase II : le magnésium et la B6 pour la glucuronidation et la sulfation, l'indole-3-carbinol du brocoli pour la métabolisation des œstrogènes, et la NAC comme précurseur du glutathion pour la conjugaison. Leur déficit ralentit la détoxification et aggrave l'inflammation cutanée.",
+    feedback_ok_en: "Exactly. These nutrients are the essential cofactors of Phase II: magnesium and B6 for glucuronidation and sulphation, indole-3-carbinol from broccoli for oestrogen metabolism, and NAC as a glutathione precursor for conjugation. Their deficiency slows detoxification and worsens skin inflammation.",
+    feedback_ko_fr: "La Phase II hépatique est nutriment-dépendante. Une alimentation pauvre en légumes verts, légumineuses et crucifères peut ralentir significativement la détoxification hépatique, avec des conséquences cutanées directes.",
+    feedback_ko_en: "Hepatic Phase II is nutrient-dependent. A diet poor in green vegetables, legumes and cruciferous vegetables can significantly slow hepatic detoxification, with direct skin consequences.",
+    reformulation_fr: "Un manque de magnésium peut-il aggraver l'acné hormonale via le foie ?",
+    reformulation_en: "Can a magnesium deficiency worsen hormonal acne via the liver ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le magnésium est cofacteur de la glucuronidation hépatique qui élimine les œstrogènes. Sa carence ralentit cette élimination, laissant les œstrogènes stimuler les glandes sébacées.",
+    reformulation_explanation_en: "Magnesium is a cofactor of hepatic glucuronidation that eliminates oestrogens. Its deficiency slows this elimination, allowing oestrogens to stimulate sebaceous glands."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pf3', score); window.location.href = 'peau-et-foie-niveau3-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'la santé de la peau et la fonction hépatique' : 'skin health and liver function',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

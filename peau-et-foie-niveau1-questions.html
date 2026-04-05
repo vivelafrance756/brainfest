@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Peau et Foie — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/peau-et-foie-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='peau-et-foie.html'" aria-label="Retour">←</button>
+  <div id="score-display">🫁 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10820017/" target="_blank" rel="noopener">Liver skin axis functional medicine</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38931263/" target="_blank" rel="noopener">NAFLD skin manifestations</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Le foie joue-t-il un rôle dans la santé de la peau ?",
+    question_en: "Does the liver play a role in skin health ?",
+    options: [{"letter": "A", "text_fr": "Non, ce sont deux organes totalement indépendants", "text_en": "No, they are completely independent organs"}, {"letter": "B", "text_fr": "Oui, le foie filtre les toxines, métabolise les hormones et produit la bile. Quand ces fonctions sont altérées, la peau prend le relais", "text_en": "Yes, the liver filters toxins, metabolises hormones and produces bile. When these functions are impaired, the skin takes over"}, {"letter": "C", "text_fr": "Uniquement en cas de maladie grave du foie", "text_en": "Only in cases of serious liver disease"}, {"letter": "D", "text_fr": "Seulement via la production de vitamine D", "text_en": "Only via vitamin D production"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le foie filtre les toxines, métabolise les hormones et produit la bile. Quand ces fonctions sont altérées, les toxines et hormones en excès cherchent d'autres voies d'élimination dont la peau. Acné hormonale, teint terne, démangeaisons : autant de signaux d'un foie surchargé.",
+    feedback_ok_en: "Exactly. The liver filters toxins, metabolises hormones and produces bile. When these functions are impaired, excess toxins and hormones seek other elimination pathways including the skin. Hormonal acne, dull complexion, itching: all signals of an overloaded liver.",
+    feedback_ko_fr: "C'est pourtant vrai. En naturopathie et en médecine fonctionnelle, la peau est considérée comme un émonctoire de secours. Quand le foie ne suffit plus, la peau prend le relais dans l'élimination des toxines.",
+    feedback_ko_en: "It is true though. In naturopathy and functional medicine, the skin is considered a backup elimination organ. When the liver is no longer sufficient, the skin takes over in toxin elimination.",
+    reformulation_fr: "La peau peut-elle éliminer des toxines quand le foie est surchargé ?",
+    reformulation_en: "Can the skin eliminate toxins when the liver is overloaded ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "En naturopathie, la peau est l'un des cinq émonctoires. Elle prend le relais du foie quand ce dernier est débordé, se manifestant par de l'acné, des éruptions ou un teint terne.",
+    reformulation_explanation_en: "In naturopathy, the skin is one of the five emunctories. It takes over from the liver when it is overloaded, manifesting as acne, rashes or a dull complexion."
+  },
+  {
+    question_fr: "Quel signe cutané peut indiquer une surcharge hépatique ?",
+    question_en: "Which skin sign can indicate liver overload ?",
+    options: [{"letter": "A", "text_fr": "Des ongles qui poussent plus vite", "text_en": "Faster nail growth"}, {"letter": "B", "text_fr": "Un teint jaunâtre, des démangeaisons ou une acné hormonale persistante", "text_en": "A yellowish complexion, itching or persistent hormonal acne"}, {"letter": "C", "text_fr": "Une peau plus épaisse", "text_en": "Thicker skin"}, {"letter": "D", "text_fr": "Des cheveux plus brillants", "text_en": "Shinier hair"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le teint jaunâtre (ictère léger) signale une accumulation de bilirubine. Les démangeaisons peuvent indiquer une stase biliaire. L'acné hormonale persistante, notamment sur le menton et la mâchoire, peut refléter une mauvaise métabolisation des œstrogènes par le foie.",
+    feedback_ok_en: "Exactly. A yellowish complexion (mild jaundice) signals bilirubin accumulation. Itching can indicate biliary stasis. Persistent hormonal acne, particularly on the chin and jaw, can reflect poor oestrogen metabolism by the liver.",
+    feedback_ko_fr: "Plusieurs signaux cutanés pointent vers le foie. Le teint terne ou jaunâtre, les démangeaisons sans cause cutanée évidente, et l'acné hormonale sur le bas du visage sont des signes classiques d'une fonction hépatique compromise.",
+    feedback_ko_en: "Several skin signals point to the liver. A dull or yellowish complexion, itching without obvious skin cause, and hormonal acne on the lower face are classic signs of compromised hepatic function.",
+    reformulation_fr: "L'acné sur le menton et la mâchoire peut-elle être liée au foie ?",
+    reformulation_en: "Can acne on the chin and jaw be linked to the liver ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Cette localisation est classiquement associée à un déséquilibre hormonal, notamment un excès d'œstrogènes que le foie ne métabolise pas suffisamment.",
+    reformulation_explanation_en: "This location is classically associated with hormonal imbalance, notably excess oestrogens that the liver does not metabolise sufficiently."
+  },
+  {
+    question_fr: "En médecine chinoise traditionnelle, quel organe est associé à la santé de la peau et aux émotions comme la colère ?",
+    question_en: "In traditional Chinese medicine, which organ is associated with skin health and emotions like anger ?",
+    options: [{"letter": "A", "text_fr": "Le cœur", "text_en": "The Heart"}, {"letter": "B", "text_fr": "Le Foie", "text_en": "The Liver"}, {"letter": "C", "text_fr": "Les Reins", "text_en": "The Kidneys"}, {"letter": "D", "text_fr": "La Rate", "text_en": "The Spleen"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. En MTC, le Foie (Gan) gouverne la libre circulation du Qi et du sang. Sa stagnation produit de la chaleur qui monte vers la peau, causant acné inflammatoire, rougeurs et démangeaisons. Les émotions comme la colère et la frustration sont associées au Foie et peuvent aggraver les symptômes cutanés.",
+    feedback_ok_en: "Exactly. In TCM, the Liver (Gan) governs the free circulation of Qi and blood. Its stagnation produces heat that rises to the skin, causing inflammatory acne, redness and itching. Emotions like anger and frustration are associated with the Liver and can worsen skin symptoms.",
+    feedback_ko_fr: "En médecine chinoise, le Foie est l'organe central de la régulation émotionnelle et de la circulation du Qi. Sa chaleur interne (Gan Huo) se manifeste sur la peau par des rougeurs, de l'acné et des démangeaisons.",
+    feedback_ko_en: "In Chinese medicine, the Liver is the central organ of emotional regulation and Qi circulation. Its internal heat (Gan Huo) manifests on the skin as redness, acne and itching.",
+    reformulation_fr: "Le stress et la colère peuvent-ils aggraver l'acné selon la médecine chinoise ?",
+    reformulation_en: "Can stress and anger worsen acne according to Chinese medicine ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Ils créent une stagnation du Foie qui génère de la chaleur interne. Cette chaleur monte vers la peau et aggrave les inflammations cutanées.",
+    reformulation_explanation_en: "They create Liver stagnation which generates internal heat. This heat rises to the skin and worsens skin inflammations."
+  },
+  {
+    question_fr: "Le foie métabolise-t-il les hormones féminines (œstrogènes) ?",
+    question_en: "Does the liver metabolise female hormones (oestrogens) ?",
+    options: [{"letter": "A", "text_fr": "Non, les œstrogènes sont éliminées directement par les reins", "text_en": "No, oestrogens are eliminated directly by the kidneys"}, {"letter": "B", "text_fr": "Oui, le foie dégrade les œstrogènes en Phase I puis Phase II de détoxification", "text_en": "Yes, the liver breaks down oestrogens in Phase I then Phase II detoxification"}, {"letter": "C", "text_fr": "Non, les œstrogènes ne sont pas métabolisées", "text_en": "No, oestrogens are not metabolised"}, {"letter": "D", "text_fr": "Oui, mais uniquement après la ménopause", "text_en": "Yes, but only after menopause"}],
+    correct: "B",
+    feedback_ok_fr: "Vrai. Le foie dégrade les œstrogènes en deux temps : Phase I (CYP450) puis Phase II (glucuronidation, sulfation). Si la Phase II est ralentie par un manque de nutriments (magnésium, B6, indole-3-carbinol), les œstrogènes recirculent et stimulent les glandes sébacées, favorisant l'acné hormonale.",
+    feedback_ok_en: "True. The liver breaks down oestrogens in two stages: Phase I (CYP450) then Phase II (glucuronidation, sulphation). If Phase II is slowed by nutrient deficiency (magnesium, B6, indole-3-carbinol), oestrogens recirculate and stimulate sebaceous glands, promoting hormonal acne.",
+    feedback_ko_fr: "La détoxification hépatique des œstrogènes est essentielle pour éviter leur accumulation. Un foie surchargé ou carencé en nutriments cofacteurs laisse recirculer des œstrogènes actifs qui se manifestent sur la peau.",
+    feedback_ko_en: "Hepatic detoxification of oestrogens is essential to prevent their accumulation. An overloaded liver or one deficient in cofactor nutrients allows active oestrogens to recirculate, manifesting on the skin.",
+    reformulation_fr: "Une mauvaise détoxification des œstrogènes par le foie peut-elle aggraver l'acné ?",
+    reformulation_en: "Can poor liver detoxification of oestrogens worsen acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Quand le foie ne dégrade pas suffisamment les œstrogènes, ceux-ci recirculent dans le sang et stimulent les glandes sébacées, favorisant l'acné notamment en période prémenstruelle.",
+    reformulation_explanation_en: "When the liver does not sufficiently break down oestrogens, they recirculate in the blood and stimulate sebaceous glands, promoting acne particularly in the premenstrual period."
+  },
+  {
+    question_fr: "Laquelle de ces plantes est traditionnellement utilisée pour soutenir le foie et améliorer la peau en MTC ?",
+    question_en: "Which of these plants is traditionally used to support the liver and improve skin in TCM ?",
+    options: [{"letter": "A", "text_fr": "La camomille", "text_en": "Chamomile"}, {"letter": "B", "text_fr": "Le Chai Hu (Bupleurum chinense)", "text_en": "Chai Hu (Bupleurum chinense)"}, {"letter": "C", "text_fr": "La lavande", "text_en": "Lavender"}, {"letter": "D", "text_fr": "Le romarin", "text_en": "Rosemary"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le Chai Hu est l'une des plantes majeures de la pharmacopée chinoise pour lever la stagnation du Foie et harmoniser le Qi. Il est utilisé dans des formules classiques comme le Xiao Yao San pour traiter l'acné hormonale, les troubles émotionnels liés au cycle et la congestion hépatique.",
+    feedback_ok_en: "Exactly. Chai Hu is one of the major plants of the Chinese pharmacopoeia for lifting Liver stagnation and harmonising Qi. It is used in classic formulas like Xiao Yao San to treat hormonal acne, emotional disorders linked to the cycle and hepatic congestion.",
+    feedback_ko_fr: "Le Chai Hu (Bupleurum) est la plante emblématique du traitement de la stagnation du Foie en MTC. Associé à d'autres plantes dans le Xiao Yao San, il est l'une des formules les plus prescrites en médecine chinoise pour l'acné hormonale.",
+    feedback_ko_en: "Chai Hu (Bupleurum) is the emblematic plant for treating Liver stagnation in TCM. Combined with other plants in Xiao Yao San, it is one of the most prescribed formulas in Chinese medicine for hormonal acne.",
+    reformulation_fr: "Le Xiao Yao San est-il une formule chinoise utilisée pour l'acné hormonale ?",
+    reformulation_en: "Is Xiao Yao San a Chinese formula used for hormonal acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "C'est l'une des formules les plus étudiées pour l'acné liée au cycle hormonal. Elle harmonise le Foie, tonifie la Rate et régule le Qi.",
+    reformulation_explanation_en: "It is one of the most studied formulas for acne linked to the hormonal cycle. It harmonises the Liver, tonifies the Spleen and regulates Qi."
+  },
+  {
+    question_fr: "La stéatose hépatique non alcoolique (NAFLD) peut-elle affecter la peau ?",
+    question_en: "Can non-alcoholic fatty liver disease (NAFLD) affect the skin ?",
+    options: [{"letter": "A", "text_fr": "Non, le NAFLD n'affecte que le foie", "text_en": "No, NAFLD only affects the liver"}, {"letter": "B", "text_fr": "Oui, via la résistance à l'insuline qu'il génère, associée à l'acanthosis nigricans, au mélasma et à l'acné", "text_en": "Yes, via the insulin resistance it generates, associated with acanthosis nigricans, melasma and acne"}, {"letter": "C", "text_fr": "Uniquement chez les personnes obèses", "text_en": "Only in obese people"}, {"letter": "D", "text_fr": "Non, aucun lien documenté", "text_en": "No, no documented link"}],
+    correct: "B",
+    feedback_ok_fr: "Vrai. Le NAFLD est associé à l'acanthosis nigricans (peau épaissie et assombrie dans les plis), au mélasma et à l'acné via la résistance à l'insuline qu'il génère. Ces signes cutanés peuvent être les premiers indicateurs visibles d'une stéatose hépatique.",
+    feedback_ok_en: "True. NAFLD is associated with acanthosis nigricans (thickened and darkened skin in folds), melasma and acne via the insulin resistance it generates. These skin signs can be the first visible indicators of hepatic steatosis.",
+    feedback_ko_fr: "La stéatose hépatique génère une résistance à l'insuline qui augmente l'IGF-1, stimulant les glandes sébacées. L'acanthosis nigricans dans les plis cutanés est un signe classique de résistance à l'insuline associée au NAFLD.",
+    feedback_ko_en: "Hepatic steatosis generates insulin resistance that increases IGF-1, stimulating sebaceous glands. Acanthosis nigricans in skin folds is a classic sign of insulin resistance associated with NAFLD.",
+    reformulation_fr: "Des taches sombres dans les plis cutanés peuvent-elles signaler un problème hépatique ?",
+    reformulation_en: "Can dark patches in skin folds signal a liver problem ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "L'acanthosis nigricans est un signe de résistance à l'insuline, souvent associée à un NAFLD ou un prédiabète. C'est un signal qui doit conduire à un bilan.",
+    reformulation_explanation_en: "Acanthosis nigricans is a sign of insulin resistance, often associated with NAFLD or prediabetes. It is a signal that should lead to an assessment."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pf1', score); window.location.href = 'peau-et-foie-niveau1-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'la santé de la peau et la fonction hépatique' : 'skin health and liver function',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

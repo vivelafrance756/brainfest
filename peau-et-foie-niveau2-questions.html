@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Peau et Foie — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/peau-et-foie-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='peau-et-foie.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12142353/" target="_blank" rel="noopener">Hepatic detoxification skin inflammation 2024</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/25734562/" target="_blank" rel="noopener">Liver oestrogen detoxification acne</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "La Phase I de détoxification hépatique peut-elle être problématique pour la peau ?",
+    question_en: "Can Phase I hepatic detoxification be problematic for the skin ?",
+    options: [{"letter": "A", "text_fr": "Non, elle est toujours bénéfique", "text_en": "No, it is always beneficial"}, {"letter": "B", "text_fr": "Oui, si la Phase II est insuffisante, les intermédiaires réactifs produits s'accumulent et augmentent l'inflammation cutanée", "text_en": "Yes, if Phase II is insufficient, the reactive intermediates produced accumulate and increase skin inflammation"}, {"letter": "C", "text_fr": "Non, elle ne concerne que le foie", "text_en": "No, it only concerns the liver"}, {"letter": "D", "text_fr": "Oui, elle détruit le collagène", "text_en": "Yes, it destroys collagen"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les enzymes CYP450 de Phase I transforment les toxines en intermédiaires réactifs, parfois plus toxiques que les molécules originales. Si la Phase II (glucuronidation, sulfation, conjugaison au glutathion) ne suit pas, ces intermédiaires circulent et génèrent un stress oxydatif qui se manifeste sur la peau.",
+    feedback_ok_en: "Exactly. Phase I CYP450 enzymes transform toxins into reactive intermediates, sometimes more toxic than the original molecules. If Phase II (glucuronidation, sulphation, glutathione conjugation) does not follow, these intermediates circulate and generate oxidative stress that manifests on the skin.",
+    feedback_ko_fr: "La Phase I sans Phase II efficace est comme ouvrir une vanne sans sortie. Les intermédiaires réactifs s'accumulent, génèrent un stress oxydatif systémique et peuvent aggraver l'acné, l'eczéma et les réactions cutanées inflammatoires.",
+    feedback_ko_en: "Phase I without effective Phase II is like opening a valve with no outlet. Reactive intermediates accumulate, generate systemic oxidative stress and can worsen acne, eczema and inflammatory skin reactions.",
+    reformulation_fr: "Un déséquilibre entre Phase I et Phase II de détoxification peut-il aggraver les problèmes de peau ?",
+    reformulation_en: "Can an imbalance between Phase I and Phase II detoxification worsen skin problems ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "C'est l'un des mécanismes centraux de la dermatologie fonctionnelle. Soutenir la Phase II avec magnésium, B6, brocoli et artichaut est une approche naturopathique classique.",
+    reformulation_explanation_en: "This is one of the central mechanisms of functional dermatology. Supporting Phase II with magnesium, B6, broccoli and artichoke is a classic naturopathic approach."
+  },
+  {
+    question_fr: "La glucuronidation est importante pour la peau parce qu'elle :",
+    question_en: "Glucuronidation is important for the skin because it :",
+    options: [{"letter": "A", "text_fr": "Produit du collagène", "text_en": "Produces collagen"}, {"letter": "B", "text_fr": "Permet l'élimination des œstrogènes en les rendant hydrosolubles, évitant leur recirculation", "text_en": "Enables the elimination of oestrogens by making them water-soluble, preventing their recirculation"}, {"letter": "C", "text_fr": "Hydrate la barrière cutanée", "text_en": "Hydrates the skin barrier"}, {"letter": "D", "text_fr": "Stimule la production de sébum", "text_en": "Stimulates sebum production"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La glucuronidation est la principale voie de Phase II pour les œstrogènes. Elle conjugue ces molécules avec l'acide glucuronique pour les rendre hydrosolubles et éliminables. Un déficit en magnésium ou en B6 ralentit cette voie, laissant les œstrogènes recirculer et stimuler les glandes sébacées.",
+    feedback_ok_en: "Exactly. Glucuronidation is the main Phase II pathway for oestrogens. It conjugates these molecules with glucuronic acid to make them water-soluble and eliminable. A deficiency in magnesium or B6 slows this pathway, allowing oestrogens to recirculate and stimulate sebaceous glands.",
+    feedback_ko_fr: "La glucuronidation est une étape clé de la détoxification hépatique. Son dysfonctionnement est impliqué dans l'acné hormonale, l'endométriose et le syndrome prémenstruel. L'indole-3-carbinol des crucifères (brocoli, chou) la soutient activement.",
+    feedback_ko_en: "Glucuronidation is a key step in hepatic detoxification. Its dysfunction is implicated in hormonal acne, endometriosis and premenstrual syndrome. Indole-3-carbinol from cruciferous vegetables (broccoli, cabbage) actively supports it.",
+    reformulation_fr: "Manger du brocoli peut-il aider à réduire l'acné hormonale ?",
+    reformulation_en: "Can eating broccoli help reduce hormonal acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le brocoli contient de l'indole-3-carbinol qui soutient la glucuronidation et l'élimination des œstrogènes par le foie, réduisant leur effet pro-acnéique.",
+    reformulation_explanation_en: "Broccoli contains indole-3-carbinol that supports glucuronidation and oestrogen elimination by the liver, reducing their pro-acne effect."
+  },
+  {
+    question_fr: "NF-kB est impliqué dans l'axe foie-peau parce que :",
+    question_en: "NF-kB is involved in the liver-skin axis because :",
+    options: [{"letter": "A", "text_fr": "Il produit du collagène dans le foie", "text_en": "It produces collagen in the liver"}, {"letter": "B", "text_fr": "Son activation par les toxines hépatiques génère des cytokines pro-inflammatoires qui aggravent les maladies cutanées", "text_en": "Its activation by hepatic toxins generates pro-inflammatory cytokines that worsen skin diseases"}, {"letter": "C", "text_fr": "Il régule la mélanine", "text_en": "It regulates melanin"}, {"letter": "D", "text_fr": "Il hydrate la barrière cutanée", "text_en": "It hydrates the skin barrier"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Quand le foie est surchargé par l'alcool, les toxines ou les LPS intestinaux, NF-kB est activé dans les hépatocytes et génère IL-6, TNF-alpha et IL-1beta. Ces cytokines circulent dans le sang et aggravent acné, psoriasis et dermatite atopique.",
+    feedback_ok_en: "Exactly. When the liver is overloaded by alcohol, toxins or intestinal LPS, NF-kB is activated in hepatocytes and generates IL-6, TNF-alpha and IL-1beta. These cytokines circulate in the blood and worsen acne, psoriasis and atopic dermatitis.",
+    feedback_ko_fr: "NF-kB est le facteur de transcription central de l'inflammation systémique. Son activation hépatique crée une inflammation de bas grade qui se manifeste sur la peau. La curcumine et le resvératrol inhibent NF-kB à la fois dans le foie et dans les kératinocytes.",
+    feedback_ko_en: "NF-kB is the central transcription factor of systemic inflammation. Its hepatic activation creates low-grade inflammation that manifests on the skin. Curcumin and resveratrol inhibit NF-kB both in the liver and in keratinocytes.",
+    reformulation_fr: "La curcumine peut-elle réduire à la fois l'inflammation hépatique et cutanée ?",
+    reformulation_en: "Can curcumin reduce both hepatic and skin inflammation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Elle inhibe NF-kB dans les hépatocytes et les kératinocytes simultanément. C'est l'un des phytonutriments dont l'action sur l'axe foie-peau est la mieux documentée.",
+    reformulation_explanation_en: "It inhibits NF-kB in hepatocytes and keratinocytes simultaneously. It is one of the phytonutrients whose action on the liver-skin axis is best documented."
+  },
+  {
+    question_fr: "Le NAFLD aggrave-t-il l'acné ?",
+    question_en: "Does NAFLD worsen acne ?",
+    options: [{"letter": "A", "text_fr": "Non, aucun lien documenté", "text_en": "No, no documented link"}, {"letter": "B", "text_fr": "Oui, via la résistance à l'insuline qu'il génère, augmentant l'IGF-1 et la stimulation des glandes sébacées", "text_en": "Yes, via the insulin resistance it generates, increasing IGF-1 and sebaceous gland stimulation"}, {"letter": "C", "text_fr": "Non, il affecte seulement le foie", "text_en": "No, it only affects the liver"}, {"letter": "D", "text_fr": "Oui, mais uniquement chez les hommes", "text_en": "Yes, but only in men"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le NAFLD génère une résistance à l'insuline qui augmente l'IGF-1, la principale hormone pro-acnéique. Il altère aussi la détoxification des œstrogènes et amplifie l'inflammation systémique via NF-kB. Le régime méditerranéen et l'exercice sont les interventions les mieux documentées pour le réverser.",
+    feedback_ok_en: "Exactly. NAFLD generates insulin resistance that increases IGF-1, the main pro-acne hormone. It also impairs oestrogen detoxification and amplifies systemic inflammation via NF-kB. The Mediterranean diet and exercise are the best-documented interventions for reversing it.",
+    feedback_ko_fr: "Le NAFLD est beaucoup plus fréquent qu'on ne le croit et souvent asymptomatique. Ses conséquences cutanées, acanthosis nigricans, mélasma, acné, sont parfois les premiers signes visibles.",
+    feedback_ko_en: "NAFLD is much more common than believed and often asymptomatic. Its skin consequences, acanthosis nigricans, melasma, acne, are sometimes the first visible signs.",
+    reformulation_fr: "Le NAFLD peut-il être asymptomatique tout en se manifestant sur la peau ?",
+    reformulation_en: "Can NAFLD be asymptomatic while manifesting on the skin ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les signes cutanés comme l'acanthosis nigricans ou une acné résistante aux traitements locaux peuvent être les premiers indicateurs d'une stéatose hépatique non diagnostiquée.",
+    reformulation_explanation_en: "Skin signs such as acanthosis nigricans or acne resistant to topical treatments can be the first indicators of undiagnosed hepatic steatosis."
+  },
+  {
+    question_fr: "Le chardon-Marie est utilisé pour la peau parce qu'il :",
+    question_en: "Milk thistle is used for the skin because it :",
+    options: [{"letter": "A", "text_fr": "Produit du collagène", "text_en": "Produces collagen"}, {"letter": "B", "text_fr": "Protège les hépatocytes du stress oxydatif via la silymarine, améliorant indirectement la peau", "text_en": "Protects hepatocytes from oxidative stress via silymarin, indirectly improving the skin"}, {"letter": "C", "text_fr": "Hydrate directement la barrière cutanée", "text_en": "Directly hydrates the skin barrier"}, {"letter": "D", "text_fr": "Réduit la mélanine", "text_en": "Reduces melanin"}],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La silymarine du chardon-Marie est l'un des hépatoprotecteurs les mieux documentés. Elle inhibe NF-kB dans les hépatocytes, active Nrf2 et réduit la peroxydation lipidique. Son action hépatique se traduit indirectement par une meilleure détoxification des hormones et une réduction de l'inflammation cutanée.",
+    feedback_ok_en: "Exactly. Silymarin from milk thistle is one of the best-documented hepatoprotectors. It inhibits NF-kB in hepatocytes, activates Nrf2 and reduces lipid peroxidation. Its hepatic action translates indirectly into better hormone detoxification and reduced skin inflammation.",
+    feedback_ko_fr: "Le chardon-Marie est la plante hépatoprotectrice de référence en phytothérapie occidentale. Son action sur la détoxification hépatique a des répercussions directes sur la peau, notamment dans l'acné hormonale et les peaux réactives.",
+    feedback_ko_en: "Milk thistle is the reference hepatoprotective plant in Western herbal medicine. Its action on hepatic detoxification has direct repercussions on the skin, particularly in hormonal acne and reactive skin.",
+    reformulation_fr: "Le chardon-Marie peut-il aider indirectement contre l'acné hormonale ?",
+    reformulation_en: "Can milk thistle help indirectly against hormonal acne ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "En protégeant les hépatocytes et en soutenant la détoxification des œstrogènes, il agit en amont sur l'une des causes de l'acné hormonale.",
+    reformulation_explanation_en: "By protecting hepatocytes and supporting oestrogen detoxification, it acts upstream on one of the causes of hormonal acne."
+  },
+  {
+    question_fr: "L'alcool aggrave-t-il les problèmes de peau en surchargeant le foie ?",
+    question_en: "Does alcohol worsen skin problems by overloading the liver ?",
+    options: [{"letter": "A", "text_fr": "Non, l'alcool n'affecte que le foie", "text_en": "No, alcohol only affects the liver"}, {"letter": "B", "text_fr": "Oui, il active NF-kB, augmente la perméabilité intestinale, réduit le glutathion hépatique et altère la détoxification des hormones", "text_en": "Yes, it activates NF-kB, increases intestinal permeability, reduces hepatic glutathione and impairs hormone detoxification"}, {"letter": "C", "text_fr": "Uniquement en cas de consommation excessive", "text_en": "Only in cases of excessive consumption"}, {"letter": "D", "text_fr": "Non, aucun lien documenté", "text_en": "No, no documented link"}],
+    correct: "B",
+    feedback_ok_fr: "Vrai. L'alcool active NF-kB dans les hépatocytes, augmente la perméabilité intestinale (laissant passer les LPS), réduit le glutathion hépatique et altère la détoxification des hormones. Ces effets combinés aggravent l'acné, la rosacée, le psoriasis et la dermatite séborrhéique.",
+    feedback_ok_en: "True. Alcohol activates NF-kB in hepatocytes, increases intestinal permeability (allowing LPS through), reduces hepatic glutathione and impairs hormone detoxification. These combined effects worsen acne, rosacea, psoriasis and seborrhoeic dermatitis.",
+    feedback_ko_fr: "La corrélation entre consommation d'alcool et aggravation de la rosacée et du psoriasis est bien documentée. L'alcool surcharge le foie, réduit ses capacités de détoxification et génère une inflammation systémique.",
+    feedback_ko_en: "The correlation between alcohol consumption and worsening of rosacea and psoriasis is well documented. Alcohol overloads the liver, reduces its detoxification capacity and generates systemic inflammation.",
+    reformulation_fr: "La rosacée peut-elle être aggravée par une consommation régulière d'alcool ?",
+    reformulation_en: "Can rosacea be worsened by regular alcohol consumption ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "L'alcool dilate les vaisseaux, surcharge le foie et génère une inflammation systémique. Ces trois mécanismes combinés aggravent directement la rosacée.",
+    reformulation_explanation_en: "Alcohol dilates blood vessels, overloads the liver and generates systemic inflammation. These three combined mechanisms directly worsen rosacea."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pf2', score); window.location.href = 'peau-et-foie-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'la santé de la peau et la fonction hépatique' : 'skin health and liver function',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
