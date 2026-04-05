@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 4 Questions — Stratège Anti-Inflammatoire — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/anti-inflammatoire-niveau4-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='anti-inflammatoire.html'" aria-label="Retour">←</button>
+  <div id="score-display">🧠 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38442149/" target="_blank" rel="noopener">NLRP3 inflammasome diet nutrition 2024</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31806905/" target="_blank" rel="noopener">Cellular senescence SASP inflammation aging</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/33167080/" target="_blank" rel="noopener">mTOR autophagy inflammation fasting</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "L'inflammasome NLRP3 est impliqué dans l'inflammation chronique parce que :",
+    question_en: "The NLRP3 inflammasome is involved in chronic inflammation because :",
+    options: [
+      {"letter": "A", "text_fr": "Il produit du collagène", "text_en": "It produces collagen"},
+      {"letter": "B", "text_fr": "C'est un complexe protéique intracellulaire activé par les cristaux, les AGE et les acides gras saturés, qui clive l'IL-1beta et l'IL-18 en leurs formes actives pro-inflammatoires", "text_en": "It is an intracellular protein complex activated by crystals, AGEs and saturated fatty acids, that cleaves IL-1beta and IL-18 into their pro-inflammatory active forms"},
+      {"letter": "C", "text_fr": "Il régule uniquement la douleur articulaire", "text_en": "It only regulates joint pain"},
+      {"letter": "D", "text_fr": "Il est actif uniquement dans les maladies rares", "text_en": "It is only active in rare diseases"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. NLRP3 est l'inflammasome le plus étudié. Il est activé par les cristaux d'urate (goutte), les cristaux de cholestérol (athérosclérose), les AGE, les acides gras saturés et les LPS. Une fois activé, il clive la pro-IL-1beta en IL-1beta active, déclenchant une inflammation puissante. La curcumine, les oméga-3 et le sulforaphane l'inhibent.",
+    feedback_ok_en: "Exactly. NLRP3 is the most studied inflammasome. It is activated by urate crystals (gout), cholesterol crystals (atherosclerosis), AGEs, saturated fatty acids and LPS. Once activated, it cleaves pro-IL-1beta into active IL-1beta, triggering powerful inflammation. Curcumin, omega-3 and sulforaphane inhibit it.",
+    feedback_ko_fr: "NLRP3 explique le lien moléculaire entre alimentation pro-inflammatoire et maladies comme la goutte, l'athérosclérose et le diabète de type 2. Son inhibition par les phytonutriments est l'une des pistes les plus prometteuses de la pharmacologie naturelle.",
+    feedback_ko_en: "NLRP3 explains the molecular link between pro-inflammatory diet and diseases such as gout, atherosclerosis and type 2 diabetes. Its inhibition by phytonutrients is one of the most promising avenues of natural pharmacology.",
+    reformulation_fr: "Les acides gras saturés en excès peuvent-ils activer l'inflammasome NLRP3 ?",
+    reformulation_en: "Can excess saturated fatty acids activate the NLRP3 inflammasome ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les acides gras saturés à longue chaîne activent NLRP3 dans les macrophages, contribuant à l'inflammation de bas grade associée à l'obésité et au diabète de type 2.",
+    reformulation_explanation_en: "Long-chain saturated fatty acids activate NLRP3 in macrophages, contributing to the low-grade inflammation associated with obesity and type 2 diabetes."
+  },
+  {
+    question_fr: "La sénescence cellulaire contribue-t-elle à l'inflammation chronique ?",
+    question_en: "Does cellular senescence contribute to chronic inflammation ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, les cellules sénescentes sont inactives", "text_en": "No, senescent cells are inactive"},
+      {"letter": "B", "text_fr": "Oui, elles sécrètent le SASP (Senescence-Associated Secretory Phenotype), un cocktail pro-inflammatoire de cytokines, protéases et facteurs de croissance", "text_en": "Yes, they secrete the SASP (Senescence-Associated Secretory Phenotype), a pro-inflammatory cocktail of cytokines, proteases and growth factors"},
+      {"letter": "C", "text_fr": "Non, la sénescence est protectrice", "text_en": "No, senescence is protective"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement dans le cerveau", "text_en": "Yes, but only in the brain"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les cellules sénescentes ne meurent pas mais sécrètent le SASP, qui contient IL-6, IL-8, TNF-alpha, MMP et d'autres facteurs pro-inflammatoires. Ce SASP crée un micro-environnement inflammatoire chronique qui accélère le vieillissement des tissus voisins. Les sénolytiques (quercétine, dasatinib) éliminent les cellules sénescentes.",
+    feedback_ok_en: "Exactly. Senescent cells do not die but secrete the SASP, which contains IL-6, IL-8, TNF-alpha, MMPs and other pro-inflammatory factors. This SASP creates a chronic inflammatory microenvironment that accelerates ageing of neighbouring tissues. Senolytics (quercetin, dasatinib) eliminate senescent cells.",
+    feedback_ko_fr: "L'inflammaging (inflammation + aging) est le terme utilisé pour décrire l'inflammation chronique de bas grade associée au vieillissement. La sénescence cellulaire et le SASP en sont l'un des mécanismes centraux.",
+    feedback_ko_en: "Inflammaging (inflammation + aging) is the term used to describe the low-grade chronic inflammation associated with ageing. Cellular senescence and SASP are one of its central mechanisms.",
+    reformulation_fr: "La quercétine a-t-elle des propriétés sénolytiques potentielles ?",
+    reformulation_en: "Does quercetin have potential senolytic properties ?",
+    reformulation_answer: "Oui selon les données préliminaires",
+    reformulation_explanation_fr: "Des études in vitro et sur modèles animaux montrent que la quercétine peut induire l'apoptose des cellules sénescentes. Des essais cliniques sont en cours pour valider cet effet chez l'humain.",
+    reformulation_explanation_en: "In vitro and animal model studies show that quercetin can induce apoptosis of senescent cells. Clinical trials are ongoing to validate this effect in humans."
+  },
+  {
+    question_fr: "La voie mTOR est impliquée dans l'inflammation chronique parce que :",
+    question_en: "The mTOR pathway is involved in chronic inflammation because :",
+    options: [
+      {"letter": "A", "text_fr": "Elle produit du collagène", "text_en": "It produces collagen"},
+      {"letter": "B", "text_fr": "Son activation chronique par les acides aminés, l'insuline et les facteurs de croissance inhibe l'autophagie et favorise un état pro-inflammatoire", "text_en": "Its chronic activation by amino acids, insulin and growth factors inhibits autophagy and promotes a pro-inflammatory state"},
+      {"letter": "C", "text_fr": "Elle régule uniquement la croissance musculaire", "text_en": "It only regulates muscle growth"},
+      {"letter": "D", "text_fr": "Elle inhibe toujours l'inflammation", "text_en": "It always inhibits inflammation"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. mTORC1 intègre les signaux nutritionnels (acides aminés, glucose, facteurs de croissance) et régule l'anabolisme et l'autophagie. Son activation chronique par une alimentation hypercalorique inhibe l'autophagie (élimination des protéines endommagées) et favorise la sénescence cellulaire et l'inflammation. La restriction calorique et le jeûne inhibent mTOR et activent l'autophagie.",
+    feedback_ok_en: "Exactly. mTORC1 integrates nutritional signals (amino acids, glucose, growth factors) and regulates anabolism and autophagy. Its chronic activation by a hypercaloric diet inhibits autophagy (elimination of damaged proteins) and promotes cellular senescence and inflammation. Caloric restriction and fasting inhibit mTOR and activate autophagy.",
+    feedback_ko_fr: "mTOR est le carrefour métabolique central qui explique pourquoi une alimentation hypercalorique et sédentaire génère de l'inflammation chronique, et pourquoi la restriction calorique et le jeûne sont anti-inflammatoires.",
+    feedback_ko_en: "mTOR is the central metabolic crossroads that explains why a hypercaloric and sedentary diet generates chronic inflammation, and why caloric restriction and fasting are anti-inflammatory.",
+    reformulation_fr: "Le jeûne peut-il réduire l'inflammation en inhibant mTOR ?",
+    reformulation_en: "Can fasting reduce inflammation by inhibiting mTOR ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Le jeûne inhibe mTORC1, active l'autophagie et réduit la production de cytokines pro-inflammatoires. C'est l'un des mécanismes par lesquels le jeûne intermittent réduit l'inflammation chronique.",
+    reformulation_explanation_en: "Fasting inhibits mTORC1, activates autophagy and reduces the production of pro-inflammatory cytokines. This is one of the mechanisms by which intermittent fasting reduces chronic inflammation."
+  },
+  {
+    question_fr: "PIÈGE : Un régime sans gluten est-il anti-inflammatoire pour tout le monde ?",
+    question_en: "TRAP : Is a gluten-free diet anti-inflammatory for everyone ?",
+    options: [
+      {"letter": "A", "text_fr": "Oui, le gluten est universellement pro-inflammatoire", "text_en": "Yes, gluten is universally pro-inflammatory"},
+      {"letter": "B", "text_fr": "Non, seules les personnes avec maladie cœliaque ou sensibilité au gluten non cœliaque bénéficient d'un régime sans gluten. Pour les autres, il peut être moins anti-inflammatoire qu'un régime complet en céréales complètes", "text_en": "No, only people with coeliac disease or non-coeliac gluten sensitivity benefit from a gluten-free diet. For others, it can be less anti-inflammatory than a diet complete in whole grains"},
+      {"letter": "C", "text_fr": "Oui, tous les inflammatologistes le recommandent", "text_en": "Yes, all inflammatologists recommend it"},
+      {"letter": "D", "text_fr": "Non, mais il est utile pour maigrir", "text_en": "No, but it is useful for weight loss"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le gluten est pro-inflammatoire pour les personnes atteintes de maladie cœliaque (1% de la population) et de sensibilité au gluten non cœliaque (estimée à 3-6%). Pour les autres, les céréales complètes contenant du gluten (blé complet, seigle, avoine) sont anti-inflammatoires grâce à leurs fibres, polyphénols et vitamines B. Les produits sans gluten industriels sont souvent ultra-transformés.",
+    feedback_ok_en: "Exactly. Gluten is pro-inflammatory for people with coeliac disease (1% of the population) and non-coeliac gluten sensitivity (estimated at 3-6%). For others, whole grains containing gluten (whole wheat, rye, oats) are anti-inflammatory thanks to their fibre, polyphenols and B vitamins. Industrial gluten-free products are often ultra-processed.",
+    feedback_ko_fr: "Le gluten-free est l'un des marketing nutritionnels les plus réussis de la décennie. Sans indication médicale claire, un régime sans gluten n'améliore pas l'inflammation et peut même la dégrader si les céréales complètes sont remplacées par des produits sans gluten ultra-transformés.",
+    feedback_ko_en: "Gluten-free is one of the most successful nutritional marketing campaigns of the decade. Without clear medical indication, a gluten-free diet does not improve inflammation and can even worsen it if whole grains are replaced by ultra-processed gluten-free products.",
+    reformulation_fr: "Les céréales complètes avec gluten sont-elles anti-inflammatoires pour les personnes sans maladie cœliaque ?",
+    reformulation_en: "Are whole grains with gluten anti-inflammatory for people without coeliac disease ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les céréales complètes sont riches en fibres prébiotiques, polyphénols et vitamines B qui ont des effets anti-inflammatoires documentés chez les personnes ne présentant pas de sensibilité au gluten.",
+    reformulation_explanation_en: "Whole grains are rich in prebiotic fibres, polyphenols and B vitamins that have documented anti-inflammatory effects in people without gluten sensitivity."
+  },
+  {
+    question_fr: "Les acides gras trans industriels sont-ils les graisses les plus pro-inflammatoires ?",
+    question_en: "Are industrial trans fatty acids the most pro-inflammatory fats ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, les graisses saturées sont pires", "text_en": "No, saturated fats are worse"},
+      {"letter": "B", "text_fr": "Oui, ils activent TLR4, inhibent la désaturation des acides gras essentiels et perturbent la fluidité membranaire, générant une inflammation sévère", "text_en": "Yes, they activate TLR4, inhibit desaturation of essential fatty acids and disrupt membrane fluidity, generating severe inflammation"},
+      {"letter": "C", "text_fr": "Non, ils sont neutres pour l'inflammation", "text_en": "No, they are neutral for inflammation"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement les graisses trans naturelles", "text_en": "Yes, but only natural trans fats"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les acides gras trans industriels (acide élaïdique) sont les graisses les plus pro-inflammatoires connues. Ils activent TLR4 sur les macrophages (comme les LPS bactériens), inhibent les désaturases delta-5 et delta-6 (bloquant la production d'EPA et DHA), s'incorporent dans les membranes cellulaires et perturbent leur fluidité. C'est pourquoi ils sont interdits dans l'UE depuis 2021.",
+    feedback_ok_en: "Exactly. Industrial trans fatty acids (elaidic acid) are the most pro-inflammatory fats known. They activate TLR4 on macrophages (like bacterial LPS), inhibit delta-5 and delta-6 desaturases (blocking EPA and DHA production), incorporate into cell membranes and disrupt their fluidity. This is why they are banned in the EU since 2021.",
+    feedback_ko_fr: "La bonne nouvelle : les acides gras trans industriels sont interdits dans l'UE depuis avril 2021. La mauvaise : ils persistent dans les produits importés et les stocks anciens. Vérifiez les étiquettes pour les mentions huiles partiellement hydrogénées.",
+    feedback_ko_en: "The good news: industrial trans fatty acids have been banned in the EU since April 2021. The bad news: they persist in imported products and old stocks. Check labels for mentions of partially hydrogenated oils.",
+    reformulation_fr: "Les acides gras trans industriels sont-ils interdits dans l'Union Européenne ?",
+    reformulation_en: "Are industrial trans fatty acids banned in the European Union ?",
+    reformulation_answer: "Oui depuis 2021",
+    reformulation_explanation_fr: "Le règlement européen 2019/649 interdit les acides gras trans industriels dans les aliments vendus en UE depuis avril 2021, avec une limite maximale de 2g pour 100g de matières grasses.",
+    reformulation_explanation_en: "European regulation 2019/649 bans industrial trans fatty acids in foods sold in the EU since April 2021, with a maximum limit of 2g per 100g of fat."
+  },
+  {
+    question_fr: "Comment mesurer objectivement son niveau d'inflammation chronique ?",
+    question_en: "How to objectively measure one's level of chronic inflammation ?",
+    options: [
+      {"letter": "A", "text_fr": "Uniquement par les symptômes", "text_en": "Only by symptoms"},
+      {"letter": "B", "text_fr": "Par la CRP ultra-sensible, l'IL-6, le fibrinogène et le ratio oméga-6/oméga-3 érythrocytaire", "text_en": "By ultra-sensitive CRP, IL-6, fibrinogen and erythrocyte omega-6/omega-3 ratio"},
+      {"letter": "C", "text_fr": "Par la glycémie uniquement", "text_en": "Only by blood sugar"},
+      {"letter": "D", "text_fr": "Aucun test ne permet de mesurer l'inflammation", "text_en": "No test can measure inflammation"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La CRP ultra-sensible (CRPus) est le marqueur le plus utilisé en pratique clinique. Un taux inférieur à 1mg/L est optimal, entre 1 et 3mg/L indique un risque modéré, au-dessus de 3mg/L un risque élevé. L'IL-6 est plus précoce que la CRP. Le ratio oméga-6/oméga-3 érythrocytaire reflète le statut inflammatoire nutritionnel.",
+    feedback_ok_en: "Exactly. Ultra-sensitive CRP (hsCRP) is the most used marker in clinical practice. A level below 1mg/L is optimal, between 1 and 3mg/L indicates moderate risk, above 3mg/L high risk. IL-6 is earlier than CRP. The erythrocyte omega-6/omega-3 ratio reflects nutritional inflammatory status.",
+    feedback_ko_fr: "La CRPus est disponible dans la plupart des bilans biologiques. Demandez-la spécifiquement car la CRP standard (pour les infections) a une sensibilité trop faible pour détecter l'inflammation chronique de bas grade.",
+    feedback_ko_en: "hsCRP is available in most biological assessments. Request it specifically because standard CRP (for infections) has too low sensitivity to detect low-grade chronic inflammation.",
+    reformulation_fr: "La CRP ultra-sensible est-elle différente de la CRP standard ?",
+    reformulation_en: "Is ultra-sensitive CRP different from standard CRP ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La CRP ultra-sensible (hsCRP) mesure des concentrations beaucoup plus faibles que la CRP standard. Elle est indispensable pour détecter l'inflammation chronique de bas grade qui échappe à la CRP standard.",
+    reformulation_explanation_en: "Ultra-sensitive CRP (hsCRP) measures much lower concentrations than standard CRP. It is essential for detecting low-grade chronic inflammation that escapes standard CRP."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_ai4', score); window.location.href = 'anti-inflammatoire-niveau4-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? "l'inflammation chronique et l'alimentation anti-inflammatoire" : 'chronic inflammation and anti-inflammatory diet',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

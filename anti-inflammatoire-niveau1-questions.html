@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Stratège Anti-Inflammatoire — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/anti-inflammatoire-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='anti-inflammatoire.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔥 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38442149/" target="_blank" rel="noopener">Ultra-processed food inflammation meta-analysis 2024</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/23432189/" target="_blank" rel="noopener">Mediterranean diet PREDIMED anti-inflammatory</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Qu'est-ce que l'inflammation chronique de bas grade ?",
+    question_en: "What is low-grade chronic inflammation ?",
+    options: [
+      {"letter": "A", "text_fr": "Une infection bactérienne persistante", "text_en": "A persistent bacterial infection"},
+      {"letter": "B", "text_fr": "Une activation prolongée et silencieuse du système immunitaire sans infection aiguë, associée aux maladies modernes", "text_en": "A prolonged and silent activation of the immune system without acute infection, associated with modern diseases"},
+      {"letter": "C", "text_fr": "Une inflammation visible comme une blessure", "text_en": "A visible inflammation like an injury"},
+      {"letter": "D", "text_fr": "Un simple excès de globules blancs", "text_en": "Simply an excess of white blood cells"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. L'inflammation chronique de bas grade est une activation persistante et silencieuse du système immunitaire. Contrairement à l'inflammation aiguë (rougeur, chaleur, douleur), elle est invisible mais destructrice sur le long terme. Elle est associée aux maladies cardiovasculaires, au diabète de type 2, aux maladies auto-immunes et aux cancers.",
+    feedback_ok_en: "Exactly. Low-grade chronic inflammation is a persistent and silent activation of the immune system. Unlike acute inflammation (redness, heat, pain), it is invisible but destructive in the long term. It is associated with cardiovascular disease, type 2 diabetes, autoimmune diseases and cancers.",
+    feedback_ko_fr: "L'inflammation chronique de bas grade est souvent appelée le feu silencieux. Elle se mesure par des marqueurs sanguins comme la CRP ultra-sensible, l'IL-6 et le TNF-alpha. Son origine est multifactorielle : alimentation, sédentarité, stress, dysbiose intestinale.",
+    feedback_ko_en: "Low-grade chronic inflammation is often called the silent fire. It is measured by blood markers such as ultra-sensitive CRP, IL-6 and TNF-alpha. Its origin is multifactorial: diet, sedentary lifestyle, stress, intestinal dysbiosis.",
+    reformulation_fr: "L'inflammation chronique de bas grade peut-elle exister sans symptômes visibles ?",
+    reformulation_en: "Can low-grade chronic inflammation exist without visible symptoms ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "C'est précisément ce qui la rend dangereuse. Elle progresse silencieusement pendant des années avant de se manifester par une maladie chronique.",
+    reformulation_explanation_en: "This is precisely what makes it dangerous. It progresses silently for years before manifesting as a chronic disease."
+  },
+  {
+    question_fr: "Quel facteur alimentaire est le principal promoteur d'inflammation chronique ?",
+    question_en: "Which dietary factor is the main promoter of chronic inflammation ?",
+    options: [
+      {"letter": "A", "text_fr": "Les graisses saturées des produits laitiers entiers", "text_en": "Saturated fats from whole dairy products"},
+      {"letter": "B", "text_fr": "Les aliments ultra-transformés riches en sucres raffinés, graisses trans et additifs", "text_en": "Ultra-processed foods rich in refined sugars, trans fats and additives"},
+      {"letter": "C", "text_fr": "Les protéines animales", "text_en": "Animal proteins"},
+      {"letter": "D", "text_fr": "Le sel", "text_en": "Salt"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les aliments ultra-transformés (UPF) sont le principal facteur alimentaire pro-inflammatoire. Leur index glycémique élevé génère des pics d'insuline, leurs acides gras trans activent TLR4, leurs additifs perturbent le microbiote et augmentent la perméabilité intestinale. Une méta-analyse de 2024 confirme leur association avec l'inflammation systémique.",
+    feedback_ok_en: "Exactly. Ultra-processed foods (UPF) are the main dietary pro-inflammatory factor. Their high glycaemic index generates insulin spikes, their trans fatty acids activate TLR4, their additives disrupt the microbiome and increase intestinal permeability. A 2024 meta-analysis confirms their association with systemic inflammation.",
+    feedback_ko_fr: "Les graisses saturées des produits laitiers entiers ont un effet pro-inflammatoire modeste comparé aux acides gras trans industriels. Les UPF cumulent plusieurs facteurs pro-inflammatoires simultanément, les rendant particulièrement néfastes.",
+    feedback_ko_en: "Saturated fats from whole dairy products have a modest pro-inflammatory effect compared to industrial trans fatty acids. UPFs combine several pro-inflammatory factors simultaneously, making them particularly harmful.",
+    reformulation_fr: "Les aliments ultra-transformés sont-ils associés à une augmentation de l'inflammation systémique ?",
+    reformulation_en: "Are ultra-processed foods associated with increased systemic inflammation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "De nombreuses études montrent une corrélation entre consommation d'aliments ultra-transformés et marqueurs inflammatoires élevés comme la CRP et l'IL-6.",
+    reformulation_explanation_en: "Many studies show a correlation between ultra-processed food consumption and elevated inflammatory markers such as CRP and IL-6."
+  },
+  {
+    question_fr: "Le régime méditerranéen est-il anti-inflammatoire ?",
+    question_en: "Is the Mediterranean diet anti-inflammatory ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, il est trop riche en graisses", "text_en": "No, it is too rich in fats"},
+      {"letter": "B", "text_fr": "Oui, ses composants (huile d'olive, poissons gras, légumineuses, végétaux colorés) agissent synergiquement pour réduire l'inflammation", "text_en": "Yes, its components (olive oil, oily fish, legumes, colourful vegetables) act synergistically to reduce inflammation"},
+      {"letter": "C", "text_fr": "Uniquement pour les maladies cardiovasculaires", "text_en": "Only for cardiovascular diseases"},
+      {"letter": "D", "text_fr": "Non, aucune preuve scientifique", "text_en": "No, no scientific evidence"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le régime méditerranéen est le régime anti-inflammatoire le plus documenté scientifiquement. L'huile d'olive extra vierge inhibe NF-kB via l'oléocanthal. Les oméga-3 des poissons gras réduisent les eicosanoïdes pro-inflammatoires. Les polyphénols des végétaux colorés activent Nrf2. L'action est synergique et globale.",
+    feedback_ok_en: "Exactly. The Mediterranean diet is the most scientifically documented anti-inflammatory diet. Extra virgin olive oil inhibits NF-kB via oleocanthal. Omega-3 from oily fish reduce pro-inflammatory eicosanoids. Polyphenols from colourful vegetables activate Nrf2. The action is synergistic and global.",
+    feedback_ko_fr: "L'étude PREDIMED a montré que le régime méditerranéen réduit les événements cardiovasculaires de 30%. Son effet anti-inflammatoire est l'un des mécanismes principaux expliquant ces bénéfices.",
+    feedback_ko_en: "The PREDIMED study showed that the Mediterranean diet reduces cardiovascular events by 30%. Its anti-inflammatory effect is one of the main mechanisms explaining these benefits.",
+    reformulation_fr: "L'huile d'olive extra vierge a-t-elle des propriétés anti-inflammatoires documentées ?",
+    reformulation_en: "Does extra virgin olive oil have documented anti-inflammatory properties ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "L'oléocanthal de l'huile d'olive extra vierge inhibe les mêmes enzymes (COX-1 et COX-2) que l'ibuprofène, avec un mécanisme similaire mais à des doses alimentaires.",
+    reformulation_explanation_en: "Oleocanthal from extra virgin olive oil inhibits the same enzymes (COX-1 and COX-2) as ibuprofen, with a similar mechanism but at dietary doses."
+  },
+  {
+    question_fr: "Les oméga-3 réduisent-ils l'inflammation ?",
+    question_en: "Do omega-3 fatty acids reduce inflammation ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, ils augmentent l'inflammation", "text_en": "No, they increase inflammation"},
+      {"letter": "B", "text_fr": "Oui, l'EPA et le DHA sont précurseurs de résolvines et protectines qui résolvent activement l'inflammation", "text_en": "Yes, EPA and DHA are precursors of resolvins and protectins that actively resolve inflammation"},
+      {"letter": "C", "text_fr": "Uniquement en injection", "text_en": "Only by injection"},
+      {"letter": "D", "text_fr": "Oui, mais uniquement l'ALA des végétaux", "text_en": "Yes, but only ALA from plants"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. L'EPA et le DHA ne se contentent pas de réduire passivement l'inflammation. Ils sont les précurseurs des résolvines, protectines et marésines, des médiateurs lipidiques spécialisés qui résolvent activement l'inflammation. C'est un changement de paradigme : les oméga-3 ne sont pas anti-inflammatoires passifs mais pro-résolutifs actifs.",
+    feedback_ok_en: "Exactly. EPA and DHA do not merely passively reduce inflammation. They are the precursors of resolvins, protectins and maresins, specialised lipid mediators that actively resolve inflammation. This is a paradigm shift: omega-3 are not passive anti-inflammatories but active pro-resolving agents.",
+    feedback_ko_fr: "L'ALA des végétaux (lin, chia, chanvre) est converti en EPA et DHA avec un rendement de seulement 5 à 15%. Pour un effet anti-inflammatoire significatif, les poissons gras ou la supplémentation en EPA/DHA direct sont nécessaires.",
+    feedback_ko_en: "ALA from plants (flax, chia, hemp) is converted to EPA and DHA with a yield of only 5 to 15%. For a significant anti-inflammatory effect, oily fish or direct EPA/DHA supplementation are necessary.",
+    reformulation_fr: "Les résolvines produites par les oméga-3 aident-elles à résoudre l'inflammation ?",
+    reformulation_en: "Do resolvins produced by omega-3 help resolve inflammation ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Les résolvines et protectines dérivées de l'EPA et du DHA sont des médiateurs actifs de la résolution de l'inflammation. Elles signalent la fin du processus inflammatoire et facilitent la réparation tissulaire.",
+    reformulation_explanation_en: "Resolvins and protectins derived from EPA and DHA are active mediators of inflammation resolution. They signal the end of the inflammatory process and facilitate tissue repair."
+  },
+  {
+    question_fr: "Le sucre raffiné est-il pro-inflammatoire ?",
+    question_en: "Is refined sugar pro-inflammatory ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, le sucre est neutre pour l'inflammation", "text_en": "No, sugar is neutral for inflammation"},
+      {"letter": "B", "text_fr": "Oui, via les pics d'insuline, la glycation des protéines et l'activation de NF-kB", "text_en": "Yes, via insulin spikes, protein glycation and NF-kB activation"},
+      {"letter": "C", "text_fr": "Uniquement en grande quantité", "text_en": "Only in large quantities"},
+      {"letter": "D", "text_fr": "Non, seul le fructose est problématique", "text_en": "No, only fructose is problematic"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le sucre raffiné active l'inflammation par trois mécanismes : les pics d'insuline augmentent IGF-1 et activent NF-kB, la glycation des protéines (AGE) génère du stress oxydatif et de l'inflammation, et l'excès de fructose surcharge le foie et génère des lipides pro-inflammatoires.",
+    feedback_ok_en: "Exactly. Refined sugar activates inflammation through three mechanisms: insulin spikes increase IGF-1 and activate NF-kB, protein glycation (AGEs) generates oxidative stress and inflammation, and excess fructose overloads the liver and generates pro-inflammatory lipids.",
+    feedback_ko_fr: "Tous les sucres raffinés sont problématiques mais le fructose industriel (sirop de glucose-fructose) est particulièrement néfaste car il est métabolisé quasi exclusivement par le foie, générant de la stéatose et de l'inflammation hépatique.",
+    feedback_ko_en: "All refined sugars are problematic but industrial fructose (glucose-fructose syrup) is particularly harmful as it is metabolised almost exclusively by the liver, generating steatosis and hepatic inflammation.",
+    reformulation_fr: "Réduire le sucre raffiné peut-il diminuer les marqueurs d'inflammation ?",
+    reformulation_en: "Can reducing refined sugar decrease inflammation markers ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "Plusieurs études montrent une réduction de la CRP et d'autres marqueurs inflammatoires après réduction de la consommation de sucres raffinés.",
+    reformulation_explanation_en: "Several studies show a reduction in CRP and other inflammatory markers after reducing refined sugar consumption."
+  },
+  {
+    question_fr: "Le curcuma a-t-il des propriétés anti-inflammatoires prouvées ?",
+    question_en: "Does turmeric have proven anti-inflammatory properties ?",
+    options: [
+      {"letter": "A", "text_fr": "Non, c'est un mythe", "text_en": "No, it is a myth"},
+      {"letter": "B", "text_fr": "Oui, la curcumine inhibe NF-kB et COX-2, mais sa biodisponibilité naturelle est très faible", "text_en": "Yes, curcumin inhibits NF-kB and COX-2, but its natural bioavailability is very low"},
+      {"letter": "C", "text_fr": "Oui, toutes les formes sont également efficaces", "text_en": "Yes, all forms are equally effective"},
+      {"letter": "D", "text_fr": "Uniquement en application topique", "text_en": "Only in topical application"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La curcumine est l'un des anti-inflammatoires naturels les mieux documentés. Elle inhibe NF-kB, COX-2 et les cytokines pro-inflammatoires. Mais sa biodisponibilité orale est de moins de 1% sans adjuvant. La pipérine du poivre noir augmente son absorption de 2000%. Les formulations liposomales ou phospholipidiques sont encore plus efficaces.",
+    feedback_ok_en: "Exactly. Curcumin is one of the best-documented natural anti-inflammatories. It inhibits NF-kB, COX-2 and pro-inflammatory cytokines. But its oral bioavailability is less than 1% without adjuvant. Black pepper piperine increases its absorption by 2000%. Liposomal or phospholipid formulations are even more effective.",
+    feedback_ko_fr: "Le curcuma saupoudré sur les plats a peu d'effet systémique en raison de la très faible biodisponibilité de la curcumine. Pour un effet anti-inflammatoire réel, il faut des formulations optimisées ou au minimum l'associer au poivre noir.",
+    feedback_ko_en: "Turmeric sprinkled on dishes has little systemic effect due to the very low bioavailability of curcumin. For a real anti-inflammatory effect, optimised formulations are needed or at minimum combining it with black pepper.",
+    reformulation_fr: "Associer le curcuma au poivre noir améliore-t-il son absorption ?",
+    reformulation_en: "Does combining turmeric with black pepper improve its absorption ?",
+    reformulation_answer: "Oui",
+    reformulation_explanation_fr: "La pipérine du poivre noir inhibe les enzymes intestinales qui dégradent la curcumine, augmentant son absorption de 2000% selon une étude de référence.",
+    reformulation_explanation_en: "Piperine from black pepper inhibits intestinal enzymes that degrade curcumin, increasing its absorption by 2000% according to a reference study."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_ai1', score); window.location.href = 'anti-inflammatoire-niveau1-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? "l'inflammation chronique et l'alimentation anti-inflammatoire" : 'chronic inflammation and anti-inflammatory diet',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
