@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 4 Questions — Votre peau a une histoire — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/votre-peau-niveau4-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='votre-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🧠 <span id="score-text">Score : 0/1</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/1</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:100%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/35317980/" target="_blank" rel="noopener">JAK inhibitors dermatology ruxolitinib vitiligo</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31806905/" target="_blank" rel="noopener">Precision medicine dermatology atopic dermatitis subtypes</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/33167080/" target="_blank" rel="noopener">Cutaneous epigenetics environment gene expression</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "Les inhibiteurs de JAK (janus kinases) représentent une avancée majeure en dermatologie parce qu'ils :",
+    question_en: "JAK (janus kinase) inhibitors represent a major advance in dermatology because they :",
+    options: [
+      {letter:"A", text_fr:"Hydratent la peau directement", text_en:"Directly hydrate the skin"},
+      {letter:"B", text_fr:"Bloquent la signalisation intracellulaire de multiples cytokines inflammatoires simultanément (IL-4, IL-13, IL-31, IFN-gamma) en inhibant JAK1/2", text_en:"Block intracellular signalling of multiple inflammatory cytokines simultaneously (IL-4, IL-13, IL-31, IFN-gamma) by inhibiting JAK1/2"},
+      {letter:"C", text_fr:"Remplacent tous les autres traitements", text_en:"Replace all other treatments"},
+      {letter:"D", text_fr:"N'agissent que sur le psoriasis", text_en:"Only act on psoriasis"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les inhibiteurs de JAK (abrocitinib, upadacitinib oraux ; ruxolitinib topique) bloquent la voie JAK-STAT, par laquelle de nombreuses cytokines pro-inflammatoires (IL-4, IL-13, IL-31, IFN-gamma, TSLP) transmettent leur signal. Ils ont transformé le traitement de la DA sévère et du vitiligo (ruxolitinib topique) avec une repigmentation significative.",
+    feedback_ok_en: "Exactly. JAK inhibitors (abrocitinib, upadacitinib oral; ruxolitinib topical) block the JAK-STAT pathway, through which many pro-inflammatory cytokines (IL-4, IL-13, IL-31, IFN-gamma, TSLP) transmit their signal. They have transformed the treatment of severe AD and vitiligo (topical ruxolitinib) with significant repigmentation.",
+    feedback_ko_fr: "La voie JAK-STAT est un carrefour de signalisation intracellulaire commun à de nombreuses cytokines. Son inhibition explique l'efficacité des iJAK dans des maladies aussi différentes que l'eczéma, le vitiligo, l'alopécie areata et la polyarthrite rhumatoïde.",
+    feedback_ko_en: "The JAK-STAT pathway is a common intracellular signalling crossroads for many cytokines. Its inhibition explains the effectiveness of JAK inhibitors in diseases as different as eczema, vitiligo, alopecia areata and rheumatoid arthritis.",
+    reformulation_fr: "Les inhibiteurs de JAK sont-ils efficaces dans le vitiligo ?",
+    reformulation_en: "Are JAK inhibitors effective in vitiligo ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Le ruxolitinib topique (inhibiteur de JAK1/2) a montré une repigmentation significative dans des essais cliniques de phase 3 et est approuvé par la FDA pour le vitiligo non segmentaire.",
+    reformulation_explanation_en: "Topical ruxolitinib (JAK1/2 inhibitor) has shown significant repigmentation in phase 3 clinical trials and is FDA-approved for non-segmental vitiligo."
+  },
+  {
+    question_fr: "Le microbiome cutané produit des acides gras à chaîne courte qui :",
+    question_en: "The skin microbiome produces short-chain fatty acids that :",
+    options: [
+      {letter:"A", text_fr:"N'ont aucun effet sur la peau", text_en:"Have no effect on the skin"},
+      {letter:"B", text_fr:"Maintiennent un pH cutané acide (4.5-5.5) qui inhibe S. aureus et favorise les espèces protectrices comme S. epidermidis", text_en:"Maintain an acidic skin pH (4.5-5.5) that inhibits S. aureus and favours protective species like S. epidermidis"},
+      {letter:"C", text_fr:"Augmentent la production de sébum", text_en:"Increase sebum production"},
+      {letter:"D", text_fr:"Détruisent la barrière cutanée", text_en:"Destroy the skin barrier"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les bactéries cutanées commensales produisent des acides gras à chaîne courte qui maintiennent le pH cutané entre 4.5 et 5.5. Ce pH acide est bactériostatique pour S. aureus (qui préfère un pH neutre) et favorise S. epidermidis. L'utilisation de savons alcalins ou de produits à pH neutre perturbe cet équilibre et favorise la colonisation par S. aureus.",
+    feedback_ok_en: "Exactly. Commensal skin bacteria produce short-chain fatty acids that maintain skin pH between 4.5 and 5.5. This acidic pH is bacteriostatic for S. aureus (which prefers neutral pH) and favours S. epidermidis. Use of alkaline soaps or pH-neutral products disrupts this balance and promotes S. aureus colonisation.",
+    feedback_ko_fr: "Le pH cutané est un paramètre souvent négligé. Les savons alcalins traditionnels (pH 9-10) perturbent le microbiote cutané et la barrière lipidique. Les syndets (pH 5-6) et les nettoyants sans savon respectent mieux le microbiote cutané.",
+    feedback_ko_en: "Skin pH is an often neglected parameter. Traditional alkaline soaps (pH 9-10) disrupt the skin microbiome and lipid barrier. Syndets (pH 5-6) and soap-free cleansers better respect the skin microbiome.",
+    reformulation_fr: "Le pH des produits nettoyants influence-t-il le microbiote cutané ?",
+    reformulation_en: "Does the pH of cleansing products influence the skin microbiome ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les savons alcalins élèvent le pH cutané, favorisant S. aureus et perturbant les bactéries protectrices. Les syndets à pH acide (5-6) respectent mieux l'équilibre microbien cutané.",
+    reformulation_explanation_en: "Alkaline soaps raise skin pH, favouring S. aureus and disrupting protective bacteria. Acidic pH syndets (5-6) better respect cutaneous microbial balance."
+  },
+  {
+    question_fr: "La voie Wnt/beta-caténine est impliquée dans les maladies cutanées parce que :",
+    question_en: "The Wnt/beta-catenin pathway is involved in skin diseases because :",
+    options: [
+      {letter:"A", text_fr:"Elle produit du sébum", text_en:"It produces sebum"},
+      {letter:"B", text_fr:"Elle régule la prolifération et différenciation des kératinocytes, et son activation anormale contribue au psoriasis et à certains carcinomes cutanés", text_en:"It regulates keratinocyte proliferation and differentiation, and its abnormal activation contributes to psoriasis and certain cutaneous carcinomas"},
+      {letter:"C", text_fr:"Elle régule uniquement la mélanine", text_en:"It only regulates melanin"},
+      {letter:"D", text_fr:"Aucun rôle documenté dans la peau", text_en:"No documented role in skin"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La voie Wnt/beta-caténine est une voie de signalisation fondamentale dans le développement cutané et la régénération épidermique. Son activation anormale contribue à l'hyperkératose du psoriasis et à la carcinogenèse cutanée. Elle est aussi impliquée dans la pigmentation (via MITF) et les tumeurs mélanocytaires.",
+    feedback_ok_en: "Exactly. The Wnt/beta-catenin pathway is a fundamental signalling pathway in skin development and epidermal regeneration. Its abnormal activation contributes to psoriasis hyperkeratosis and cutaneous carcinogenesis. It is also involved in pigmentation (via MITF) and melanocytic tumours.",
+    feedback_ko_fr: "La voie Wnt est l'une des voies de signalisation les plus conservées évolutivement. Ses rôles dans la peau vont de la morphogenèse des follicules pileux à la carcinogenèse, en passant par la régénération épidermique.",
+    feedback_ko_en: "The Wnt pathway is one of the most evolutionarily conserved signalling pathways. Its roles in skin range from hair follicle morphogenesis to carcinogenesis, including epidermal regeneration.",
+    reformulation_fr: "La voie Wnt joue-t-elle un rôle dans la prolifération des kératinocytes dans le psoriasis ?",
+    reformulation_en: "Does the Wnt pathway play a role in keratinocyte proliferation in psoriasis ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "L'activation anormale de la voie Wnt/beta-caténine dans les kératinocytes contribue à leur hyperprolifération caractéristique du psoriasis.",
+    reformulation_explanation_en: "Abnormal activation of the Wnt/beta-catenin pathway in keratinocytes contributes to their hyperproliferation characteristic of psoriasis."
+  },
+  {
+    question_fr: "PIÈGE : Les probiotiques cutanés topiques sont-ils validés scientifiquement pour traiter l'eczéma ?",
+    question_en: "TRAP : Are topical cutaneous probiotics scientifically validated to treat eczema ?",
+    options: [
+      {letter:"A", text_fr:"Oui, ils sont validés et recommandés par toutes les sociétés savantes", text_en:"Yes, they are validated and recommended by all learned societies"},
+      {letter:"B", text_fr:"Non, les données sont prometteuses mais insuffisantes pour des recommandations cliniques fermes. Les probiotiques oraux ont plus de preuves", text_en:"No, data are promising but insufficient for firm clinical recommendations. Oral probiotics have more evidence"},
+      {letter:"C", text_fr:"Non, les probiotiques topiques n'ont aucune efficacité", text_en:"No, topical probiotics have no effectiveness"},
+      {letter:"D", text_fr:"Oui, ils remplacent les corticoïdes topiques", text_en:"Yes, they replace topical corticosteroids"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les probiotiques topiques (application de bactéries vivantes sur la peau) sont une approche prometteuse pour restaurer le microbiote cutané. Des études montrent une réduction de S. aureus et une amélioration du score SCORAD. Mais les études sont encore trop petites et hétérogènes pour des recommandations cliniques fermes. Les probiotiques oraux (notamment Lactobacillus rhamnosus GG) ont un niveau de preuve plus solide.",
+    feedback_ok_en: "Exactly. Topical probiotics (application of living bacteria to the skin) are a promising approach for restoring the skin microbiome. Studies show a reduction in S. aureus and improvement in SCORAD score. But studies are still too small and heterogeneous for firm clinical recommendations. Oral probiotics (notably Lactobacillus rhamnosus GG) have a more solid evidence level.",
+    feedback_ko_fr: "La recherche sur les probiotiques cutanés topiques est en plein essor. Des sociétés comme Glowbiotics et S-Biomedic développent des produits basés sur des bactéries cultivées. Mais la validation clinique rigoureuse est encore en cours.",
+    feedback_ko_en: "Research on topical cutaneous probiotics is booming. Companies like Glowbiotics and S-Biomedic are developing products based on cultured bacteria. But rigorous clinical validation is still ongoing.",
+    reformulation_fr: "Les probiotiques oraux ont-ils plus de preuves que les probiotiques topiques dans l'eczéma ?",
+    reformulation_en: "Do oral probiotics have more evidence than topical probiotics in eczema ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les probiotiques oraux, notamment Lactobacillus rhamnosus GG, ont été évalués dans plusieurs méta-analyses montrant une réduction du score SCORAD dans la dermatite atopique.",
+    reformulation_explanation_en: "Oral probiotics, notably Lactobacillus rhamnosus GG, have been evaluated in several meta-analyses showing a reduction in SCORAD score in atopic dermatitis."
+  },
+  {
+    question_fr: "L'épigénétique cutanée est importante parce que :",
+    question_en: "Cutaneous epigenetics is important because :",
+    options: [
+      {letter:"A", text_fr:"Elle modifie l'ADN de façon permanente", text_en:"It permanently modifies DNA"},
+      {letter:"B", text_fr:"Elle explique comment l'environnement (alimentation, stress, UV, polluants) module l'expression des gènes cutanés sans modifier la séquence ADN, et comment ces modifications peuvent être partiellement réversibles", text_en:"It explains how the environment (diet, stress, UV, pollutants) modulates cutaneous gene expression without modifying DNA sequence, and how these modifications can be partially reversible"},
+      {letter:"C", text_fr:"Elle concerne uniquement le vieillissement cutané", text_en:"It only concerns skin ageing"},
+      {letter:"D", text_fr:"Aucun impact documenté sur les maladies cutanées", text_en:"No documented impact on skin diseases"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. L'épigénétique cutanée explique comment des facteurs environnementaux (alimentation anti-inflammatoire, stress, UV, pollution) modulent l'expression de gènes impliqués dans l'inflammation, la barrière cutanée et la carcinogenèse via la méthylation de l'ADN, les modifications d'histones et les ARN non codants. Ces modifications sont partiellement réversibles par des interventions nutritionnelles et lifestyle.",
+    feedback_ok_en: "Exactly. Cutaneous epigenetics explains how environmental factors (anti-inflammatory diet, stress, UV, pollution) modulate expression of genes involved in inflammation, skin barrier and carcinogenesis via DNA methylation, histone modifications and non-coding RNAs. These modifications are partially reversible through nutritional and lifestyle interventions.",
+    feedback_ko_fr: "L'épigénétique réconcilie la génétique et l'environnement. Elle explique pourquoi des jumeaux identiques peuvent avoir des maladies cutanées différentes selon leur alimentation, stress et expositions environnementales.",
+    feedback_ko_en: "Epigenetics reconciles genetics and environment. It explains why identical twins can have different skin diseases according to their diet, stress and environmental exposures.",
+    reformulation_fr: "L'alimentation peut-elle modifier l'expression des gènes cutanés via l'épigénétique ?",
+    reformulation_en: "Can diet modify cutaneous gene expression via epigenetics ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les polyphénols, les oméga-3 et d'autres nutriments modifient la méthylation de l'ADN et les modifications d'histones dans les kératinocytes, modulant l'expression de gènes pro ou anti-inflammatoires.",
+    reformulation_explanation_en: "Polyphenols, omega-3 and other nutrients modify DNA methylation and histone modifications in keratinocytes, modulating the expression of pro or anti-inflammatory genes."
+  },
+  {
+    question_fr: "La médecine de précision appliquée à la dermatologie permet :",
+    question_en: "Precision medicine applied to dermatology allows :",
+    options: [
+      {letter:"A", text_fr:"De guérir toutes les maladies cutanées", text_en:"Curing all skin diseases"},
+      {letter:"B", text_fr:"D'identifier les sous-types moléculaires des maladies cutanées pour adapter les biothérapies ciblées au profil inflammatoire individuel du patient", text_en:"Identifying the molecular subtypes of skin diseases to adapt targeted biotherapies to the individual inflammatory profile of the patient"},
+      {letter:"C", text_fr:"De remplacer la biopsie cutanée", text_en:"Replacing skin biopsy"},
+      {letter:"D", text_fr:"D'utiliser uniquement des traitements naturels", text_en:"Using only natural treatments"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La dermatologie de précision utilise la génomique, la transcriptomique et l'immunophénotypage pour identifier les sous-types moléculaires des maladies cutanées. Dans la DA par exemple, on distingue les sous-types Th2 dominant (répondeurs au dupilumab), Th17 dominant (répondeurs aux anti-IL-17) et Th22 dominant. Cette stratification guide le choix de la biothérapie optimale.",
+    feedback_ok_en: "Exactly. Precision dermatology uses genomics, transcriptomics and immunophenotyping to identify molecular subtypes of skin diseases. In AD for example, one distinguishes Th2 dominant subtypes (dupilumab responders), Th17 dominant (anti-IL-17 responders) and Th22 dominant. This stratification guides the choice of optimal biotherapy.",
+    feedback_ko_fr: "La dermatologie de précision transforme des maladies considérées comme homogènes (un psoriasis, un eczéma) en collections de sous-types moléculaires distincts, chacun avec ses marqueurs biologiques et ses traitements optimaux.",
+    feedback_ko_en: "Precision dermatology transforms diseases considered homogeneous (one psoriasis, one eczema) into collections of distinct molecular subtypes, each with its biological markers and optimal treatments.",
+    reformulation_fr: "Tous les patients atteints de dermatite atopique répondent-ils aux mêmes traitements ?",
+    reformulation_en: "Do all patients with atopic dermatitis respond to the same treatments ?",
+    reformulation_answer: "Non / No",
+    reformulation_explanation_fr: "La DA est une maladie hétérogène avec différents sous-types immunologiques. La médecine de précision permet d'identifier le sous-type de chaque patient pour choisir la biothérapie la plus adaptée.",
+    reformulation_explanation_en: "AD is a heterogeneous disease with different immunological subtypes. Precision medicine allows identification of each patient's subtype to choose the most appropriate biotherapy."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_vp4', score); window.location.href = 'votre-peau-niveau4-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/' + questions.length;
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/' + questions.length;
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'les maladies cutanées et leurs causes profondes en naturopathie' : 'skin diseases and their deep causes in naturopathy',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

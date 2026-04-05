@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 3 Questions — Votre peau a une histoire — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/votre-peau-niveau3-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='votre-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🎯 <span id="score-text">Score : 0/1</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/1</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:100%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31806905/" target="_blank" rel="noopener">Dupilumab atopic dermatitis phase 3 trial</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31447415/" target="_blank" rel="noopener">Psychodermatology brain skin axis stress</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "PIÈGE : Les régimes d'élimination (sans gluten, sans laitages) guérissent-ils l'eczéma ?",
+    question_en: "TRAP : Do elimination diets (gluten-free, dairy-free) cure eczema ?",
+    options: [
+      {letter:"A", text_fr:"Oui, ils guérissent systématiquement l'eczéma", text_en:"Yes, they systematically cure eczema"},
+      {letter:"B", text_fr:"Non, ils peuvent aider certains patients avec allergies alimentaires confirmées mais ne guérissent pas l'eczéma en général", text_en:"No, they can help certain patients with confirmed food allergies but do not cure eczema in general"},
+      {letter:"C", text_fr:"Oui, tous les dermatologues les recommandent", text_en:"Yes, all dermatologists recommend them"},
+      {letter:"D", text_fr:"Non, l'alimentation n'a aucun lien avec l'eczéma", text_en:"No, diet has no link with eczema"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les régimes d'élimination ne sont justifiés que chez les patients avec allergies alimentaires IgE-médiées confirmées par tests. Chez les enfants atopiques, environ 35% ont une allergie alimentaire associée. Chez les adultes, ce chiffre tombe à moins de 10%. Un régime d'élimination injustifié peut causer des carences nutritionnelles.",
+    feedback_ok_en: "Exactly. Elimination diets are only justified in patients with IgE-mediated food allergies confirmed by testing. In atopic children, approximately 35% have an associated food allergy. In adults, this figure falls to less than 10%. An unjustified elimination diet can cause nutritional deficiencies.",
+    feedback_ko_fr: "Les régimes d'élimination sont souvent tentés sans indication précise. Avant d'éliminer le gluten ou les laitages, il faut confirmer une sensibilité par des tests allergologiques. Sans indication, ces régimes peuvent nuire.",
+    feedback_ko_en: "Elimination diets are often attempted without precise indication. Before eliminating gluten or dairy, sensitivity must be confirmed by allergy testing. Without indication, these diets can be harmful.",
+    reformulation_fr: "Faut-il confirmer une allergie alimentaire avant de faire un régime d'élimination dans l'eczéma ?",
+    reformulation_en: "Should a food allergy be confirmed before doing an elimination diet in eczema ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Sans confirmation allergologique, un régime d'élimination expose à des carences nutritionnelles sans bénéfice prouvé pour la majorité des patients atopiques adultes.",
+    reformulation_explanation_en: "Without allergological confirmation, an elimination diet exposes to nutritional deficiencies without proven benefit for the majority of adult atopic patients."
+  },
+  {
+    question_fr: "Le dupilumab révolutionne-t-il le traitement de la dermatite atopique sévère ?",
+    question_en: "Does dupilumab revolutionise the treatment of severe atopic dermatitis ?",
+    options: [
+      {letter:"A", text_fr:"Non, il est peu efficace", text_en:"No, it is not very effective"},
+      {letter:"B", text_fr:"Oui, en ciblant les récepteurs IL-4Ralpha il bloque simultanément IL-4 et IL-13, les cytokines centrales de la polarisation Th2 dans l'eczéma", text_en:"Yes, by targeting IL-4Ralpha receptors it simultaneously blocks IL-4 and IL-13, the central cytokines of Th2 polarisation in eczema"},
+      {letter:"C", text_fr:"Oui, mais uniquement chez les enfants", text_en:"Yes, but only in children"},
+      {letter:"D", text_fr:"Non, il aggrave souvent l'eczéma", text_en:"No, it often worsens eczema"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le dupilumab (Dupixent) est un anticorps monoclonal anti-IL-4Ralpha qui bloque simultanément les voies IL-4 et IL-13. Des essais cliniques montrent une réduction de 75% du score EASI chez 40-50% des patients. Il représente la première biothérapie ciblée approuvée pour la DA modérée à sévère, transformant le pronostic des formes réfractaires.",
+    feedback_ok_en: "Exactly. Dupilumab (Dupixent) is an anti-IL-4Ralpha monoclonal antibody that simultaneously blocks IL-4 and IL-13 pathways. Clinical trials show a 75% reduction in EASI score in 40-50% of patients. It represents the first targeted biotherapy approved for moderate to severe AD, transforming the prognosis of refractory forms.",
+    feedback_ko_fr: "Le dupilumab illustre parfaitement comment la compréhension moléculaire de la maladie (polarisation Th2, IL-4, IL-13) a permis de développer un traitement ciblé transformateur.",
+    feedback_ko_en: "Dupilumab perfectly illustrates how molecular understanding of the disease (Th2 polarisation, IL-4, IL-13) enabled development of a transformative targeted treatment.",
+    reformulation_fr: "Le dupilumab est-il efficace dans la dermatite atopique sévère ?",
+    reformulation_en: "Is dupilumab effective in severe atopic dermatitis ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Le dupilumab réduit de 75% le score EASI chez environ 40-50% des patients avec dermatite atopique modérée à sévère dans les essais cliniques de phase 3.",
+    reformulation_explanation_en: "Dupilumab reduces the EASI score by 75% in approximately 40-50% of patients with moderate to severe atopic dermatitis in phase 3 clinical trials."
+  },
+  {
+    question_fr: "La contraception orale combinée améliore-t-elle l'acné ?",
+    question_en: "Does combined oral contraception improve acne ?",
+    options: [
+      {letter:"A", text_fr:"Non, elle aggrave toujours l'acné", text_en:"No, it always worsens acne"},
+      {letter:"B", text_fr:"Oui, en augmentant la SHBG elle réduit les androgènes libres qui stimulent les glandes sébacées, mais certaines progestatives androgéniques l'aggravent", text_en:"Yes, by increasing SHBG it reduces free androgens that stimulate sebaceous glands, but certain androgenic progestins worsen it"},
+      {letter:"C", text_fr:"Oui, toutes les pilules améliorent l'acné", text_en:"Yes, all pills improve acne"},
+      {letter:"D", text_fr:"Non, aucun lien hormonal documenté", text_en:"No, no documented hormonal link"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La contraception orale combinée augmente la SHBG (Sex Hormone Binding Globulin) hépatique, réduisant les androgènes libres. Les pilules avec progestatives anti-androgéniques (drospirénone, acétate de cyprotérone) sont les plus efficaces sur l'acné. Celles avec progestatives androgéniques (lévonorgestrel, norgestrel) peuvent l'aggraver.",
+    feedback_ok_en: "Exactly. Combined oral contraception increases hepatic SHBG (Sex Hormone Binding Globulin), reducing free androgens. Pills with anti-androgenic progestins (drospirenone, cyproterone acetate) are most effective on acne. Those with androgenic progestins (levonorgestrel, norgestrel) can worsen it.",
+    feedback_ko_fr: "Le choix de la progestative dans la pilule contraceptive est crucial pour l'acné. Toutes les pilules ne se valent pas. La consultation d'un gynécologue ou dermatologue est recommandée pour choisir la contraception adaptée en cas d'acné hormonale.",
+    feedback_ko_en: "The choice of progestin in the contraceptive pill is crucial for acne. Not all pills are equal. Consulting a gynaecologist or dermatologist is recommended to choose appropriate contraception in cases of hormonal acne.",
+    reformulation_fr: "Le choix de la progestative dans la pilule influence-t-il l'acné ?",
+    reformulation_en: "Does the choice of progestin in the pill influence acne ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les progestatives anti-androgéniques améliorent l'acné, les progestatives androgéniques peuvent l'aggraver. Le choix de la pilule doit tenir compte de ce critère chez les femmes acnéiques.",
+    reformulation_explanation_en: "Anti-androgenic progestins improve acne, androgenic progestins can worsen it. The choice of pill must take this criterion into account in acne-prone women."
+  },
+  {
+    question_fr: "L'isotrétinoïne (Roaccutane) agit sur l'acné par quel mécanisme principal ?",
+    question_en: "Isotretinoin (Roaccutane) acts on acne by which main mechanism ?",
+    options: [
+      {letter:"A", text_fr:"Il tue directement C. acnes", text_en:"It directly kills C. acnes"},
+      {letter:"B", text_fr:"Il réduit drastiquement la taille et l'activité des glandes sébacées via les récepteurs RAR et RXR, réduisant le sébum de 90%", text_en:"It drastically reduces the size and activity of sebaceous glands via RAR and RXR receptors, reducing sebum by 90%"},
+      {letter:"C", text_fr:"Il réduit uniquement l'inflammation", text_en:"It only reduces inflammation"},
+      {letter:"D", text_fr:"Il augmente la desquamation", text_en:"It increases desquamation"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. L'isotrétinoïne est un rétinoïde oral qui active les récepteurs RAR et RXR dans les glandes sébacées, induisant leur apoptose et réduisant leur taille de 90%. Elle réduit aussi la kératinisation folliculaire et a un effet anti-inflammatoire indirect via la réduction du substrat pour C. acnes. C'est le seul traitement modifiant durablement l'histoire de l'acné.",
+    feedback_ok_en: "Exactly. Isotretinoin is an oral retinoid that activates RAR and RXR receptors in sebaceous glands, inducing their apoptosis and reducing their size by 90%. It also reduces follicular keratinisation and has an indirect anti-inflammatory effect via reduction of substrate for C. acnes. It is the only treatment that lastingly modifies the history of acne.",
+    feedback_ko_fr: "L'isotrétinoïne est le traitement le plus efficace de l'acné sévère avec des rémissions prolongées chez 85% des patients après une cure. Ses effets tératogènes imposent une contraception stricte pendant le traitement.",
+    feedback_ko_en: "Isotretinoin is the most effective treatment for severe acne with prolonged remissions in 85% of patients after a course. Its teratogenic effects require strict contraception during treatment.",
+    reformulation_fr: "L'isotrétinoïne réduit-elle la production de sébum de façon significative ?",
+    reformulation_en: "Does isotretinoin significantly reduce sebum production ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "L'isotrétinoïne réduit la production de sébum de 90% via l'atrophie des glandes sébacées. C'est son mécanisme d'action principal et la raison de son efficacité exceptionnelle dans l'acné sévère.",
+    reformulation_explanation_en: "Isotretinoin reduces sebum production by 90% via sebaceous gland atrophy. This is its main mechanism of action and the reason for its exceptional effectiveness in severe acne."
+  },
+  {
+    question_fr: "PIÈGE : Les cosmétiques naturels sont-ils toujours mieux tolérés par les peaux sensibles ?",
+    question_en: "TRAP : Are natural cosmetics always better tolerated by sensitive skin ?",
+    options: [
+      {letter:"A", text_fr:"Oui, le naturel est toujours meilleur pour la peau", text_en:"Yes, natural is always better for the skin"},
+      {letter:"B", text_fr:"Non, de nombreuses huiles essentielles et extraits botaniques sont des allergènes et irritants cutanés documentés", text_en:"No, many essential oils and botanical extracts are documented skin allergens and irritants"},
+      {letter:"C", text_fr:"Oui, les cosmétiques naturels sont sans risque", text_en:"Yes, natural cosmetics are risk-free"},
+      {letter:"D", text_fr:"Non, les cosmétiques synthétiques sont toujours meilleurs", text_en:"No, synthetic cosmetics are always better"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La lavande, l'arbre à thé (tea tree), le baume du Pérou, la camomille, le propolis et de nombreuses huiles essentielles sont des allergènes de contact documentés. Le fait qu'un ingrédient soit naturel ne garantit pas sa tolérance cutanée. La dermatite de contact allergique aux cosmétiques naturels est en augmentation.",
+    feedback_ok_en: "Exactly. Lavender, tea tree, Peru balsam, chamomile, propolis and many essential oils are documented contact allergens. The fact that an ingredient is natural does not guarantee skin tolerance. Allergic contact dermatitis from natural cosmetics is increasing.",
+    feedback_ko_fr: "L'huile essentielle de tea tree est l'un des allergènes de contact les plus fréquents en dermatologie. Sa popularité comme remède naturel contre l'acné est inversement proportionnelle à la prudence avec laquelle il faut l'utiliser.",
+    feedback_ko_en: "Tea tree essential oil is one of the most frequent contact allergens in dermatology. Its popularity as a natural remedy against acne is inversely proportional to the caution with which it should be used.",
+    reformulation_fr: "Les huiles essentielles peuvent-elles provoquer des allergies cutanées ?",
+    reformulation_en: "Can essential oils cause skin allergies ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "De nombreuses huiles essentielles sont des allergènes de contact documentés. La lavande et le tea tree sont parmi les plus fréquents en dermatologie de contact.",
+    reformulation_explanation_en: "Many essential oils are documented contact allergens. Lavender and tea tree are among the most frequent in contact dermatology."
+  },
+  {
+    question_fr: "La médecine psychosomatique cutanée (psychodermatologie) est pertinente parce que :",
+    question_en: "Cutaneous psychosomatic medicine (psychodermatology) is relevant because :",
+    options: [
+      {letter:"A", text_fr:"Les maladies cutanées sont dans la tête uniquement", text_en:"Skin diseases are only in the head"},
+      {letter:"B", text_fr:"L'axe cerveau-peau est bidirectionnel : le stress aggrave les maladies cutanées via le cortisol et les neuropeptides, et les maladies cutanées génèrent anxiété et dépression", text_en:"The brain-skin axis is bidirectional: stress worsens skin diseases via cortisol and neuropeptides, and skin diseases generate anxiety and depression"},
+      {letter:"C", text_fr:"Uniquement pour le psoriasis", text_en:"Only for psoriasis"},
+      {letter:"D", text_fr:"Le stress n'a aucun effet sur la peau", text_en:"Stress has no effect on the skin"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. L'axe cerveau-peau est bidirectionnel. Le stress libère cortisol et neuropeptides (substance P, VIP, CGRP) qui aggravent acné, psoriasis, eczéma et urticaire. Réciproquement, les maladies cutanées visibles génèrent anxiété sociale, dépression et altération de la qualité de vie. Les approches intégratives incluant TCC et techniques de gestion du stress améliorent les outcomes cutanés.",
+    feedback_ok_en: "Exactly. The brain-skin axis is bidirectional. Stress releases cortisol and neuropeptides (substance P, VIP, CGRP) that worsen acne, psoriasis, eczema and urticaria. Reciprocally, visible skin diseases generate social anxiety, depression and impaired quality of life. Integrative approaches including CBT and stress management techniques improve skin outcomes.",
+    feedback_ko_fr: "La psychodermatologie est une spécialité à part entière qui reconnaît l'impact bidirectionnel du psychisme et de la peau. Les thérapies cognitivo-comportementales sont un complément validé aux traitements dermatologiques dans plusieurs maladies cutanées.",
+    feedback_ko_en: "Psychodermatology is a specialty in its own right that recognises the bidirectional impact of the psyche and skin. Cognitive behavioural therapies are a validated complement to dermatological treatments in several skin diseases.",
+    reformulation_fr: "Le stress chronique peut-il aggraver le psoriasis et l'eczéma ?",
+    reformulation_en: "Can chronic stress worsen psoriasis and eczema ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Via la libération de cortisol et de neuropeptides pro-inflammatoires, le stress chronique aggrave le psoriasis, l'eczéma, l'acné et l'urticaire. C'est un facteur déclenchant majeur des poussées.",
+    reformulation_explanation_en: "Via the release of cortisol and pro-inflammatory neuropeptides, chronic stress worsens psoriasis, eczema, acne and urticaria. It is a major triggering factor for flares."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_vp3', score); window.location.href = 'votre-peau-niveau3-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/' + questions.length;
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/' + questions.length;
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'les maladies cutanées et leurs causes profondes en naturopathie' : 'skin diseases and their deep causes in naturopathy',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

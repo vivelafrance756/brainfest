@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Votre peau a une histoire — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/votre-peau-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='votre-peau.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/1</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/1</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:100%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31806905/" target="_blank" rel="noopener">Filaggrin ceramides skin barrier atopic dermatitis</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38931263/" target="_blank" rel="noopener">SIBO rosacea gut skin axis</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+  {
+    question_fr: "La filaggrine est importante parce qu'elle :",
+    question_en: "Filaggrin is important because it :",
+    options: [
+      {letter:"A", text_fr:"Produit le sébum", text_en:"Produces sebum"},
+      {letter:"B", text_fr:"Maintient la cohésion de la couche cornée et retient l'eau dans l'épiderme, formant la barrière cutanée", text_en:"Maintains cohesion of the stratum corneum and retains water in the epidermis, forming the skin barrier"},
+      {letter:"C", text_fr:"Produit la mélanine", text_en:"Produces melanin"},
+      {letter:"D", text_fr:"Régule le sébum", text_en:"Regulates sebum"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La filaggrine est une protéine clé de la différenciation terminale des kératinocytes. Elle agrège les filaments de kératine, maintient la cohésion de la couche cornée et génère des facteurs hydratants naturels (NMF). Sa mutation (R501X, 2282del4) est le principal facteur génétique de la dermatite atopique, présent chez 30% des patients atopiques.",
+    feedback_ok_en: "Exactly. Filaggrin is a key protein in terminal keratinocyte differentiation. It aggregates keratin filaments, maintains stratum corneum cohesion and generates natural moisturising factors (NMF). Its mutation (R501X, 2282del4) is the main genetic factor in atopic dermatitis, present in 30% of atopic patients.",
+    feedback_ko_fr: "La filaggrine est dégradée en acides aminés qui constituent le facteur naturel d'hydratation (NMF) de la peau. Sa carence génétique ou nutritionnelle se manifeste par une peau sèche, squameuse et perméable aux allergènes.",
+    feedback_ko_en: "Filaggrin is degraded into amino acids that constitute the natural moisturising factor (NMF) of the skin. Its genetic or nutritional deficiency manifests as dry, scaly skin permeable to allergens.",
+    reformulation_fr: "Une mutation de la filaggrine augmente-t-elle le risque de dermatite atopique ?",
+    reformulation_en: "Does a filaggrin mutation increase the risk of atopic dermatitis ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les mutations du gène FLG sont le principal facteur de risque génétique de la dermatite atopique. Elles fragilisent la barrière cutanée et facilitent la pénétration des allergènes.",
+    reformulation_explanation_en: "FLG gene mutations are the main genetic risk factor for atopic dermatitis. They weaken the skin barrier and facilitate allergen penetration."
+  },
+  {
+    question_fr: "Les céramides sont importantes pour la peau parce qu'elles :",
+    question_en: "Ceramides are important for the skin because they :",
+    options: [
+      {letter:"A", text_fr:"Produisent de la mélanine", text_en:"Produce melanin"},
+      {letter:"B", text_fr:"Constituent 50% des lipides de la couche cornée et assurent l'étanchéité de la barrière cutanée", text_en:"Constitute 50% of stratum corneum lipids and ensure the waterproofing of the skin barrier"},
+      {letter:"C", text_fr:"Stimulent la production de sébum", text_en:"Stimulate sebum production"},
+      {letter:"D", text_fr:"Ne jouent aucun rôle structural", text_en:"Play no structural role"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Les céramides constituent 50% des lipides intercellulaires de la couche cornée avec le cholestérol et les acides gras libres. Elles forment des lamelles lipidiques qui imperméabilisent la barrière cutanée. Leur déficit dans l'eczéma et le psoriasis explique la peau sèche et la perte d'eau transépidermique augmentée.",
+    feedback_ok_en: "Exactly. Ceramides constitute 50% of intercellular lipids in the stratum corneum along with cholesterol and free fatty acids. They form lipid lamellae that waterproof the skin barrier. Their deficit in eczema and psoriasis explains dry skin and increased transepidermal water loss.",
+    feedback_ko_fr: "Les céramides peuvent être apportées par les cosmétiques (émollients) mais aussi soutenues par l'alimentation : les acides gras essentiels (oméga-6 linoléique et oméga-3) sont les précurseurs de la synthèse des céramides cutanées.",
+    feedback_ko_en: "Ceramides can be provided by cosmetics (emollients) but also supported by diet: essential fatty acids (omega-6 linoleic and omega-3) are precursors of cutaneous ceramide synthesis.",
+    reformulation_fr: "Un déficit en céramides peut-il aggraver l'eczéma ?",
+    reformulation_en: "Can a ceramide deficit worsen eczema ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les patients atopiques ont un déficit en céramides dans la couche cornée. Cette carence augmente la perte d'eau transépidermique et la pénétration des allergènes et irritants.",
+    reformulation_explanation_en: "Atopic patients have a ceramide deficit in the stratum corneum. This deficiency increases transepidermal water loss and penetration of allergens and irritants."
+  },
+  {
+    question_fr: "Le microbiote cutané dans l'eczéma atopique est caractérisé par :",
+    question_en: "The skin microbiome in atopic eczema is characterised by :",
+    options: [
+      {letter:"A", text_fr:"Une augmentation de la diversité microbienne", text_en:"An increase in microbial diversity"},
+      {letter:"B", text_fr:"Une dominance de Staphylococcus aureus qui produit des superantigènes et des protéases qui aggravent l'inflammation", text_en:"A dominance of Staphylococcus aureus which produces superantigens and proteases that worsen inflammation"},
+      {letter:"C", text_fr:"Une absence totale de bactéries", text_en:"A total absence of bacteria"},
+      {letter:"D", text_fr:"Une augmentation de Lactobacillus", text_en:"An increase in Lactobacillus"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Dans la dermatite atopique, S. aureus colonise jusqu'à 90% des lésions. Il produit des superantigènes (SEA, SEB) qui activent directement les lymphocytes T, des protéases qui dégradent la filaggrine et l'épiderme, et des toxines qui activent les mastocytes. Sa réduction par les traitements locaux (émollients, antibiotiques) améliore les symptômes.",
+    feedback_ok_en: "Exactly. In atopic dermatitis, S. aureus colonises up to 90% of lesions. It produces superantigens (SEA, SEB) that directly activate T lymphocytes, proteases that degrade filaggrin and epidermis, and toxins that activate mast cells. Its reduction by local treatments (emollients, antibiotics) improves symptoms.",
+    feedback_ko_fr: "La compétition entre S. aureus et S. epidermidis est fascinante. S. epidermidis produit des bactériocines et des acides gras qui inhibent S. aureus. Restaurer cette compétition naturelle est une piste thérapeutique prometteuse.",
+    feedback_ko_en: "The competition between S. aureus and S. epidermidis is fascinating. S. epidermidis produces bacteriocins and fatty acids that inhibit S. aureus. Restoring this natural competition is a promising therapeutic avenue.",
+    reformulation_fr: "Réduire Staphylococcus aureus sur la peau améliore-t-il la dermatite atopique ?",
+    reformulation_en: "Does reducing Staphylococcus aureus on the skin improve atopic dermatitis ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Les stratégies réduisant S. aureus (émollients, bains de javel dilué, probiotiques cutanés) améliorent les scores cliniques de sévérité de la dermatite atopique.",
+    reformulation_explanation_en: "Strategies reducing S. aureus (emollients, diluted bleach baths, cutaneous probiotics) improve clinical severity scores of atopic dermatitis."
+  },
+  {
+    question_fr: "L'acné hormonale se localise préférentiellement :",
+    question_en: "Hormonal acne preferentially localises :",
+    options: [
+      {letter:"A", text_fr:"Sur le front et le nez uniquement", text_en:"On the forehead and nose only"},
+      {letter:"B", text_fr:"Sur le menton, la mâchoire et le cou, reflétant l'influence des androgènes et des oestrogènes", text_en:"On the chin, jaw and neck, reflecting the influence of androgens and oestrogens"},
+      {letter:"C", text_fr:"Uniquement sur le dos", text_en:"Only on the back"},
+      {letter:"D", text_fr:"La localisation est aléatoire", text_en:"Localisation is random"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. La cartographie de l'acné est un outil diagnostic précieux. Le menton et la mâchoire (jawline acne) signalent un déséquilibre hormonal : excès d'androgènes ou mauvaise détoxification des oestrogènes par le foie. Cette distribution aggravée en période prémenstruelle confirme le lien hormonal.",
+    feedback_ok_en: "Exactly. Acne mapping is a valuable diagnostic tool. Chin and jaw (jawline acne) signal a hormonal imbalance: excess androgens or poor oestrogen detoxification by the liver. This distribution worsened in the premenstrual period confirms the hormonal link.",
+    feedback_ko_fr: "La cartographie de l'acné selon la face map chinoise est un outil intéressant mais doit être nuancé. La localisation sur le bas du visage est statistiquement associée aux déséquilibres hormonaux mais n'est pas une règle absolue.",
+    feedback_ko_en: "Acne mapping according to the Chinese face map is an interesting tool but must be nuanced. Localisation on the lower face is statistically associated with hormonal imbalances but is not an absolute rule.",
+    reformulation_fr: "L'acné sur le menton et la mâchoire est-elle souvent liée aux hormones ?",
+    reformulation_en: "Is acne on the chin and jaw often linked to hormones ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Cette localisation est classiquement associée aux fluctuations hormonales du cycle menstruel et à un excès d'androgènes ou une mauvaise élimination des oestrogènes.",
+    reformulation_explanation_en: "This localisation is classically associated with hormonal fluctuations of the menstrual cycle and excess androgens or poor oestrogen elimination."
+  },
+  {
+    question_fr: "Le vitiligo est :",
+    question_en: "Vitiligo is :",
+    options: [
+      {letter:"A", text_fr:"Une infection fongique de la peau", text_en:"A fungal skin infection"},
+      {letter:"B", text_fr:"Une maladie auto-immune où les lymphocytes T CD8+ détruisent les mélanocytes via le stress oxydatif et les cytokines IFN-gamma et CXCL10", text_en:"An autoimmune disease where CD8+ T lymphocytes destroy melanocytes via oxidative stress and IFN-gamma and CXCL10 cytokines"},
+      {letter:"C", text_fr:"Une carence en mélanine d'origine nutritionnelle", text_en:"A nutritional melanin deficiency"},
+      {letter:"D", text_fr:"Une réaction allergique au soleil", text_en:"An allergic reaction to the sun"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Le vitiligo est une maladie auto-immune où les lymphocytes T CD8+ reconnaissent les mélanocytes comme antigènes et les détruisent. L'axe IFN-gamma/CXCL10 est central. Les inhibiteurs de JAK (ruxolitinib topique) ont montré une repigmentation significative dans les essais cliniques récents.",
+    feedback_ok_en: "Exactly. Vitiligo is an autoimmune disease where CD8+ T lymphocytes recognise melanocytes as antigens and destroy them. The IFN-gamma/CXCL10 axis is central. JAK inhibitors (topical ruxolitinib) have shown significant repigmentation in recent clinical trials.",
+    feedback_ko_fr: "Le vitiligo n'est pas contagieux et n'est pas causé par une carence nutritionnelle. C'est une maladie auto-immune complexe avec des déclencheurs environnementaux (stress oxydatif, traumatismes cutanés, infections) sur un terrain génétique prédisposant.",
+    feedback_ko_en: "Vitiligo is not contagious and is not caused by a nutritional deficiency. It is a complex autoimmune disease with environmental triggers (oxidative stress, skin trauma, infections) on a predisposing genetic background.",
+    reformulation_fr: "Le vitiligo est-il une maladie auto-immune ?",
+    reformulation_en: "Is vitiligo an autoimmune disease ?",
+    reformulation_answer: "Oui / Yes",
+    reformulation_explanation_fr: "Le vitiligo implique une destruction auto-immune des mélanocytes par les lymphocytes T CD8+. C'est la même catégorie de maladie que le diabète de type 1 ou la thyroïdite de Hashimoto.",
+    reformulation_explanation_en: "Vitiligo involves autoimmune destruction of melanocytes by CD8+ T lymphocytes. It is the same category of disease as type 1 diabetes or Hashimoto thyroiditis."
+  },
+  {
+    question_fr: "Le SIBO (Small Intestinal Bacterial Overgrowth) est associé à la rosacée parce que :",
+    question_en: "SIBO (Small Intestinal Bacterial Overgrowth) is associated with rosacea because :",
+    options: [
+      {letter:"A", text_fr:"Il produit de la mélanine", text_en:"It produces melanin"},
+      {letter:"B", text_fr:"La prolifération bactérienne dans l'intestin grêle génère une endotoxémie et une inflammation systémique qui aggravent la vascularisation cutanée de la rosacée", text_en:"Bacterial overgrowth in the small intestine generates endotoxaemia and systemic inflammation that worsen the cutaneous vascularisation of rosacea"},
+      {letter:"C", text_fr:"Il affecte uniquement le côlon", text_en:"It only affects the colon"},
+      {letter:"D", text_fr:"Aucun lien documenté", text_en:"No documented link"}
+    ],
+    correct: "B",
+    feedback_ok_fr: "Exactement. Plusieurs études montrent une prévalence élevée du SIBO chez les patients rosacéens. Le traitement du SIBO par la rifaximine améliore les symptômes cutanés de la rosacée dans certains cas. Ce lien illustre l'axe intestin-peau dans une maladie longtemps considérée comme purement dermatologique.",
+    feedback_ok_en: "Exactly. Several studies show a high prevalence of SIBO in rosacea patients. Treatment of SIBO with rifaximin improves skin symptoms of rosacea in some cases. This link illustrates the gut-skin axis in a disease long considered purely dermatological.",
+    feedback_ko_fr: "Le SIBO génère une fermentation excessive dans l'intestin grêle, produisant des LPS et d'autres endotoxines qui traversent une barrière intestinale fragilisée et génèrent une inflammation systémique.",
+    feedback_ko_en: "SIBO generates excessive fermentation in the small intestine, producing LPS and other endotoxins that cross a weakened intestinal barrier and generate systemic inflammation.",
+    reformulation_fr: "Traiter un SIBO peut-il améliorer la rosacée ?",
+    reformulation_en: "Can treating SIBO improve rosacea ?",
+    reformulation_answer: "Dans certains cas / In some cases",
+    reformulation_explanation_fr: "Plusieurs études de cas et études pilotes montrent une amélioration de la rosacée après traitement du SIBO, mais des essais contrôlés randomisés de grande taille manquent encore.",
+    reformulation_explanation_en: "Several case studies and pilot studies show improvement of rosacea after SIBO treatment, but large randomised controlled trials are still lacking."
+  }
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_vp2', score); window.location.href = 'votre-peau-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/' + questions.length;
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/' + questions.length;
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'les maladies cutanées et leurs causes profondes en naturopathie' : 'skin diseases and their deep causes in naturopathy',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
