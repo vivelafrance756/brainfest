@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lexique Santé — BrainFest</title>
+<meta name="description" content="Tous les termes utilisés dans BrainFest, expliqués simplement.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/lexique.html">
+<script>if(!sessionStorage.getItem('bf_access')){window.location.href='index.html';}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --rose-nude: #e8c4b8;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-width: 375px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #fdf9f6;
+  color: var(--indigo-dark);
+  overflow-x: hidden;
+  min-width: 375px;
+}
+
+#header {
+  width: 100%;
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+#header-logo .brain { color: var(--cream); font-weight: 400; }
+#header-logo .fest  { color: var(--amber); font-weight: 600; }
+
+#lang-toggle {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 6px 18px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 64px;
+  letter-spacing: 0.5px;
+}
+
+#back-bar {
+  width: 100%;
+  background: var(--cream);
+  padding: 12px 20px;
+}
+
+#back-btn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+}
+
+#title-block {
+  background: var(--cream);
+  padding: 24px 20px;
+}
+
+#title-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+#title-block .subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #888;
+}
+
+#search-block {
+  background: var(--cream);
+  padding: 16px 20px;
+}
+
+#search-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--indigo-dark);
+  background: #fff;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+#search-input::placeholder { color: #aaa; }
+
+#filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: var(--cream);
+  color: var(--indigo-dark);
+  min-height: 36px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filter-btn.active {
+  background: var(--indigo-dark);
+  color: var(--cream);
+  border-color: var(--indigo-dark);
+}
+
+#glossary-list {
+  background: #ffffff;
+  padding: 0 20px;
+}
+
+.glossary-entry {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.glossary-entry:last-child {
+  border-bottom: none;
+}
+
+.entry-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.entry-term {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+}
+
+.entry-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  border-radius: 10px;
+  padding: 3px 10px;
+}
+
+.badge-Peau        { background: #e8c4b8; color: #2d3d4a; }
+.badge-Nutrition   { background: #f7e9c8; color: #2d3d4a; }
+.badge-Microbiote  { background: #d4e8d4; color: #2d3d4a; }
+.badge-Inflammation{ background: #fde8e8; color: #2d3d4a; }
+.badge-Plantes     { background: #d4e8e0; color: #2d3d4a; }
+.badge-Magnésium   { background: #e8e0f7; color: #2d3d4a; }
+
+.entry-def {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--indigo-dark);
+  line-height: 1.7;
+}
+
+.entry-def-en {
+  margin-top: 6px;
+  color: #666;
+  display: none;
+}
+
+.entry-def-en.show { display: block; }
+
+#no-results {
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #888;
+  background: #ffffff;
+  display: none;
+}
+
+#footer {
+  background: var(--indigo-mid);
+  padding: 32px 20px;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#footer-text-top {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#newsletter-btn {
+  width: 100%;
+  background: var(--amber);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#footer-text-bottom {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+#footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--amber);
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+#footer-links a:hover { text-decoration: underline; }
+
+#footer-copyright {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="header">
+  <a href="index.html" id="header-logo">
+    <span class="brain">Brain</span><span class="fest">Fest</span>
+  </a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+</header>
+
+<!-- ── BACK BAR ── -->
+<div id="back-bar">
+  <button id="back-btn" onclick="window.location.href='index.html'">
+    ← <span data-fr="Accueil" data-en="Home">Accueil</span>
+  </button>
+</div>
+
+<!-- ── TITLE BLOCK ── -->
+<div id="title-block">
+  <h1 data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</h1>
+  <p class="subtitle" data-fr="Tous les termes utilisés dans BrainFest, expliqués simplement." data-en="All terms used in BrainFest, explained simply.">Tous les termes utilisés dans BrainFest, expliqués simplement.</p>
+</div>
+
+<!-- ── SEARCH BLOCK ── -->
+<div id="search-block">
+  <input type="text" id="search-input" placeholder="Rechercher un terme..." oninput="applyFilters()">
+  <div id="filter-row">
+    <button class="filter-btn active" data-cat="" data-fr="Tous" data-en="All" onclick="setFilter(this)">Tous</button>
+    <button class="filter-btn" data-cat="Peau" data-fr="Peau" data-en="Skin" onclick="setFilter(this)">Peau</button>
+    <button class="filter-btn" data-cat="Nutrition" data-fr="Nutrition" data-en="Nutrition" onclick="setFilter(this)">Nutrition</button>
+    <button class="filter-btn" data-cat="Microbiote" data-fr="Microbiote" data-en="Microbiome" onclick="setFilter(this)">Microbiote</button>
+    <button class="filter-btn" data-cat="Inflammation" data-fr="Inflammation" data-en="Inflammation" onclick="setFilter(this)">Inflammation</button>
+    <button class="filter-btn" data-cat="Plantes" data-fr="Plantes" data-en="Plants" onclick="setFilter(this)">Plantes</button>
+    <button class="filter-btn" data-cat="Magnésium" data-fr="Magnésium" data-en="Magnesium" onclick="setFilter(this)">Magnésium</button>
+  </div>
+</div>
+
+<!-- ── GLOSSARY LIST ── -->
+<div id="glossary-list"></div>
+<div id="no-results" data-fr="Aucun terme trouvé." data-en="No terms found.">Aucun terme trouvé.</div>
+
+<!-- ── FOOTER ── -->
+<footer id="footer">
+  <p id="footer-text-top"
+     data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+     data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+    Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+  </p>
+  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+    S'inscrire à la newsletter
+  </a>
+  <p id="footer-text-bottom"
+     data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
+     data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
+    Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+  </p>
+  <div id="footer-links">
+    <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+    <a href="/confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="/conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="/lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+  </div>
+  <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+</footer>
+
+<script>
+var currentLang = 'fr';
+var activeCategory = '';
+
+var glossaryData = [
+  {term_fr:"Acanthosis nigricans", term_en:"Acanthosis nigricans", category:"Peau",
+  definition_fr:"Épaississement et assombrissement de la peau dans les plis (cou, aisselles, aine). Signe classique de résistance à l'insuline souvent associé au NAFLD ou au prédiabète.",
+  definition_en:"Thickening and darkening of the skin in folds (neck, armpits, groin). Classic sign of insulin resistance often associated with NAFLD or prediabetes."},
+
+  {term_fr:"Acemannane", term_en:"Acemannan", category:"Plantes",
+  definition_fr:"Polysaccharide actif de l'aloe vera. Stimule la cicatrisation, active les macrophages et réduit l'inflammation via l'inhibition de NF-kB.",
+  definition_en:"Active polysaccharide from aloe vera. Stimulates healing, activates macrophages and reduces inflammation via NF-kB inhibition."},
+
+  {term_fr:"Acide linoléique", term_en:"Linoleic acid", category:"Nutrition",
+  definition_fr:"Acide gras oméga-6 essentiel, précurseur des céramides cutanées. Sa carence fragilise la barrière cutanée. Sources : huiles de chanvre, tournesol, lin.",
+  definition_en:"Essential omega-6 fatty acid, precursor of cutaneous ceramides. Its deficiency weakens the skin barrier. Sources: hemp, sunflower, flaxseed oils."},
+
+  {term_fr:"AGCC (Acides Gras à Chaîne Courte)", term_en:"SCFAs (Short-Chain Fatty Acids)", category:"Microbiote",
+  definition_fr:"Molécules produites par la fermentation des fibres par le microbiote intestinal (butyrate, propionate, acétate). Inhibent NF-kB, renforcent la barrière intestinale et réduisent l'inflammation systémique.",
+  definition_en:"Molecules produced by fibre fermentation by the gut microbiome (butyrate, propionate, acetate). Inhibit NF-kB, strengthen the intestinal barrier and reduce systemic inflammation."},
+
+  {term_fr:"AGE (Advanced Glycation End-products)", term_en:"AGEs (Advanced Glycation End-products)", category:"Inflammation",
+  definition_fr:"Produits de la glycation des protéines par les sucres. Dans la peau, ils rigidifient et jaunissent le collagène et l'élastine. Accélérés par une alimentation riche en sucres raffinés et aliments cuits à haute température.",
+  definition_en:"Products of protein glycation by sugars. In the skin, they stiffen and yellow collagen and elastin. Accelerated by a diet rich in refined sugars and foods cooked at high temperature."},
+
+  {term_fr:"AhR (Aryl hydrocarbon receptor)", term_en:"AhR (Aryl hydrocarbon receptor)", category:"Microbiote",
+  definition_fr:"Récepteur exprimé dans les kératinocytes et les cellules de Langerhans. Activé par des métabolites microbiens du tryptophane, il régule l'immunité de barrière cutanée. Son dysfonctionnement est impliqué dans la dermatite atopique et le psoriasis.",
+  definition_en:"Receptor expressed in keratinocytes and Langerhans cells. Activated by microbial tryptophan metabolites, it regulates skin barrier immunity. Its dysfunction is implicated in atopic dermatitis and psoriasis."},
+
+  {term_fr:"Alpha-bisabolol", term_en:"Alpha-bisabolol", category:"Plantes",
+  definition_fr:"Composé actif de la camomille allemande. Inhibe NF-kB et COX-2. Propriétés anti-inflammatoires et cicatrisantes documentées pour les peaux sensibles.",
+  definition_en:"Active compound from German chamomile. Inhibits NF-kB and COX-2. Documented anti-inflammatory and healing properties for sensitive skin."},
+
+  {term_fr:"Astaxanthine", term_en:"Astaxanthin", category:"Nutrition",
+  definition_fr:"Antioxydant caroténoïde produit par des microalgues. 6000 fois plus puissant que la vitamine C selon les mesures ORAC. Protège les cellules cutanées du stress oxydatif. Pigment rouge du saumon sauvage.",
+  definition_en:"Carotenoid antioxidant produced by microalgae. 6000 times more powerful than vitamin C according to ORAC measurements. Protects skin cells from oxidative stress. Red pigment of wild salmon."},
+
+  {term_fr:"ATP (Adénosine Triphosphate)", term_en:"ATP (Adenosine Triphosphate)", category:"Magnésium",
+  definition_fr:"Molécule énergétique universelle des cellules. Le magnésium est indispensable à sa production et à son utilisation. Une carence en magnésium réduit la production d'ATP et génère fatigue et crampes.",
+  definition_en:"Universal energy molecule of cells. Magnesium is essential for its production and use. A magnesium deficiency reduces ATP production and generates fatigue and cramps."},
+
+  {term_fr:"Axe intestin-peau", term_en:"Gut-skin axis", category:"Microbiote",
+  definition_fr:"Réseau de communication bidirectionnel entre le microbiote intestinal et la peau, via des médiateurs immunitaires, métabolites (AGCC) et voies neurologiques. Un microbiote intestinal en dysbiose peut déclencher une inflammation cutanée.",
+  definition_en:"Bidirectional communication network between the gut microbiome and skin, via immune mediators, metabolites (SCFAs) and neurological pathways. A dysbiotic gut microbiome can trigger skin inflammation."},
+
+  {term_fr:"Barrière cutanée", term_en:"Skin barrier", category:"Peau",
+  definition_fr:"Structure protectrice de l'épiderme composée de kératinocytes, céramides, cholestérol et acides gras. Maintient l'hydratation et protège contre les agents pathogènes. Sa fragilisation est centrale dans l'eczéma.",
+  definition_en:"Protective structure of the epidermis composed of keratinocytes, ceramides, cholesterol and fatty acids. Maintains hydration and protects against pathogens. Its weakening is central in eczema."},
+
+  {term_fr:"Berbérine", term_en:"Berberine", category:"Plantes",
+  definition_fr:"Alcaloïde végétal extrait de l'épine-vinette et du curcuma. Propriétés antimicrobiennes, anti-inflammatoires et hypoglycémiantes. Active l'AMPK. Montre une activité contre certaines bactéries résistantes aux antibiotiques.",
+  definition_en:"Plant alkaloid extracted from barberry and turmeric. Antimicrobial, anti-inflammatory and hypoglycaemic properties. Activates AMPK. Shows activity against certain antibiotic-resistant bacteria."},
+
+  {term_fr:"Butyrate", term_en:"Butyrate", category:"Microbiote",
+  definition_fr:"Acide gras à chaîne courte produit par la fermentation des fibres. Inhibe NF-kB dans les colonocytes et les cellules immunitaires, réduit la perméabilité intestinale et stimule les lymphocytes T régulateurs.",
+  definition_en:"Short-chain fatty acid produced by fibre fermentation. Inhibits NF-kB in colonocytes and immune cells, reduces intestinal permeability and stimulates regulatory T lymphocytes."},
+
+  {term_fr:"Céramides", term_en:"Ceramides", category:"Peau",
+  definition_fr:"Lipides constituant 50% de la couche cornée. Forment des lamelles lipidiques qui imperméabilisent la barrière cutanée. Déficitaires dans l'eczéma et le psoriasis. Précurseurs : acides gras essentiels (oméga-6 linoléique).",
+  definition_en:"Lipids constituting 50% of the stratum corneum. Form lipid lamellae that waterproof the skin barrier. Deficient in eczema and psoriasis. Precursors: essential fatty acids (omega-6 linoleic)."},
+
+  {term_fr:"Chémotype", term_en:"Chemotype", category:"Plantes",
+  definition_fr:"Variété chimique d'une plante de même espèce mais avec une composition en principes actifs différente selon son origine géographique. Crucial en aromathérapie car des chémotypes différents peuvent avoir des effets et des risques très distincts.",
+  definition_en:"Chemical variety of a plant of the same species but with a different composition in active principles depending on its geographical origin. Crucial in aromatherapy as different chemotypes can have very distinct effects and risks."},
+
+  {term_fr:"COX-2 (Cyclo-oxygénase 2)", term_en:"COX-2 (Cyclo-oxygenase 2)", category:"Inflammation",
+  definition_fr:"Enzyme inductible qui produit des prostaglandines pro-inflammatoires. Cible des anti-inflammatoires non stéroïdiens (AINS) comme l'ibuprofène. Inhibée par la curcumine, l'oléocanthal de l'huile d'olive et d'autres polyphénols.",
+  definition_en:"Inducible enzyme that produces pro-inflammatory prostaglandins. Target of non-steroidal anti-inflammatory drugs (NSAIDs) like ibuprofen. Inhibited by curcumin, oleocanthal from olive oil and other polyphenols."},
+
+  {term_fr:"CRP ultra-sensible (hsCRP)", term_en:"Ultra-sensitive CRP (hsCRP)", category:"Inflammation",
+  definition_fr:"Marqueur biologique de l'inflammation chronique de bas grade. Optimal sous 1 mg/L. Entre 1 et 3 mg/L : risque modéré. Au-dessus de 3 mg/L : risque élevé. Plus sensible que la CRP standard utilisée pour les infections aiguës.",
+  definition_en:"Biological marker of low-grade chronic inflammation. Optimal below 1 mg/L. Between 1 and 3 mg/L: moderate risk. Above 3 mg/L: high risk. More sensitive than standard CRP used for acute infections."},
+
+  {term_fr:"Curcumine", term_en:"Curcumin", category:"Plantes",
+  definition_fr:"Principe actif du curcuma. Inhibe NF-kB et COX-2. Biodisponibilité naturelle inférieure à 1% sans adjuvant. La pipérine du poivre noir augmente son absorption de 2000%. Action simultanée sur le foie et la peau via Nrf2.",
+  definition_en:"Active principle of turmeric. Inhibits NF-kB and COX-2. Natural bioavailability below 1% without adjuvant. Black pepper piperine increases its absorption by 2000%. Simultaneous action on liver and skin via Nrf2."},
+
+  {term_fr:"Cutibacterium acnes", term_en:"Cutibacterium acnes", category:"Peau",
+  definition_fr:"Bactérie anaérobie commensale du follicule pilo-sébacé. Sa surprolifération est l'un des quatre mécanismes de l'acné. Cible des antibiotiques topiques, du peroxyde de benzoyle et de l'huile essentielle de tea tree.",
+  definition_en:"Anaerobic commensal bacterium of the pilosebaceous follicle. Its overproliferation is one of the four mechanisms of acne. Target of topical antibiotics, benzoyl peroxide and tea tree essential oil."},
+
+  {term_fr:"CYP450 (Cytochrome P450)", term_en:"CYP450 (Cytochrome P450)", category:"Plantes",
+  definition_fr:"Famille d'enzymes hépatiques de Phase I de détoxification. Métabolisent la majorité des médicaments. Certaines plantes inhibent (curcumine, chardon-Marie) ou induisent (millepertuis) ces enzymes, créant des interactions médicamenteuses potentiellement graves.",
+  definition_en:"Family of hepatic Phase I detoxification enzymes. Metabolise the majority of medications. Certain plants inhibit (curcumin, milk thistle) or induce (St John's wort) these enzymes, creating potentially serious drug interactions."},
+
+  {term_fr:"Dermatite atopique", term_en:"Atopic dermatitis", category:"Peau",
+  definition_fr:"Maladie inflammatoire chronique de la peau caractérisée par une mutation de la filaggrine, une polarisation immunitaire Th2 et une dominance de Staphylococcus aureus. Traitée par dupilumab (anti-IL-4Ralpha) dans les formes sévères.",
+  definition_en:"Chronic inflammatory skin disease characterised by a filaggrin mutation, Th2 immune polarisation and Staphylococcus aureus dominance. Treated by dupilumab (anti-IL-4Ralpha) in severe forms."},
+
+  {term_fr:"Dysbiose", term_en:"Dysbiosis", category:"Microbiote",
+  definition_fr:"Déséquilibre du microbiote intestinal ou cutané caractérisé par une réduction de la diversité microbienne et une augmentation des bactéries pro-inflammatoires. Associée à l'acné, l'eczéma et le psoriasis.",
+  definition_en:"Imbalance of the intestinal or cutaneous microbiome characterised by reduced microbial diversity and increased pro-inflammatory bacteria. Associated with acne, eczema and psoriasis."},
+
+  {term_fr:"Endotoxémie métabolique", term_en:"Metabolic endotoxaemia", category:"Inflammation",
+  definition_fr:"Passage de LPS bactériens dans la circulation sanguine via une barrière intestinale fragilisée. Active TLR4 sur les cellules immunitaires et génère une inflammation systémique chronique qui peut atteindre la peau.",
+  definition_en:"Passage of bacterial LPS into the bloodstream via a weakened intestinal barrier. Activates TLR4 on immune cells and generates systemic chronic inflammation that can reach the skin."},
+
+  {term_fr:"Faecalibacterium prausnitzii", term_en:"Faecalibacterium prausnitzii", category:"Microbiote",
+  definition_fr:"Bactérie anti-inflammatoire majeure du microbiote intestinal sain. Produit du butyrate. Sa réduction est un marqueur de dysbiose associé au psoriasis, à l'eczéma et à la maladie de Crohn.",
+  definition_en:"Major anti-inflammatory bacterium of the healthy gut microbiome. Produces butyrate. Its reduction is a dysbiosis marker associated with psoriasis, eczema and Crohn's disease."},
+
+  {term_fr:"Filaggrine", term_en:"Filaggrin", category:"Peau",
+  definition_fr:"Protéine structurale essentielle à l'intégrité de la barrière cutanée. Agrège les filaments de kératine et génère le facteur naturel d'hydratation (NMF). Sa mutation génétique (gène FLG) est le principal facteur de risque de la dermatite atopique.",
+  definition_en:"Structural protein essential to skin barrier integrity. Aggregates keratin filaments and generates the natural moisturising factor (NMF). Its genetic mutation (FLG gene) is the main risk factor for atopic dermatitis."},
+
+  {term_fr:"Glucuronidation", term_en:"Glucuronidation", category:"Inflammation",
+  definition_fr:"Voie principale de Phase II de détoxification hépatique des oestrogènes. Conjugue les hormones avec l'acide glucuronique pour les éliminer. Cofacteurs : magnésium, vitamine B6, indole-3-carbinol du brocoli.",
+  definition_en:"Main Phase II pathway of hepatic oestrogen detoxification. Conjugates hormones with glucuronic acid for elimination. Cofactors: magnesium, vitamin B6, indole-3-carbinol from broccoli."},
+
+  {term_fr:"IGF-1 (Insulin-like Growth Factor 1)", term_en:"IGF-1 (Insulin-like Growth Factor 1)", category:"Nutrition",
+  definition_fr:"Facteur de croissance stimulé par l'insuline et les protéines laitières. Active les glandes sébacées et favorise la prolifération de C. acnes via mTORC1. Mécanisme central de l'acné nutritionnelle.",
+  definition_en:"Growth factor stimulated by insulin and dairy proteins. Activates sebaceous glands and promotes C. acnes proliferation via mTORC1. Central mechanism of nutritional acne."},
+
+  {term_fr:"IL-17 (Interleukine 17)", term_en:"IL-17 (Interleukin 17)", category:"Inflammation",
+  definition_fr:"Cytokine pro-inflammatoire produite par les lymphocytes Th17. Cytokine centrale du psoriasis. Cible des biothérapies anti-IL-17 (secukinumab, ixekizumab) qui ont révolutionné le traitement du psoriasis modéré à sévère.",
+  definition_en:"Pro-inflammatory cytokine produced by Th17 lymphocytes. Central cytokine of psoriasis. Target of anti-IL-17 biotherapies (secukinumab, ixekizumab) that have revolutionised treatment of moderate to severe psoriasis."},
+
+  {term_fr:"IL-23 (Interleukine 23)", term_en:"IL-23 (Interleukin 23)", category:"Inflammation",
+  definition_fr:"Cytokine qui active et maintient les lymphocytes Th17. Cible des biothérapies anti-IL-23 (guselkumab, risankizumab) dans le psoriasis. Amplifiée par la dysbiose intestinale spécifique au psoriasis (Prevotella copri).",
+  definition_en:"Cytokine that activates and maintains Th17 lymphocytes. Target of anti-IL-23 biotherapies (guselkumab, risankizumab) in psoriasis. Amplified by psoriasis-specific intestinal dysbiosis (Prevotella copri)."},
+
+  {term_fr:"Indole-3-carbinol", term_en:"Indole-3-carbinol", category:"Nutrition",
+  definition_fr:"Composé des crucifères (brocoli, chou) qui soutient la glucuronidation hépatique et l'élimination des oestrogènes. Réduit l'acné hormonale en améliorant la détoxification des hormones par le foie.",
+  definition_en:"Compound from cruciferous vegetables (broccoli, cabbage) that supports hepatic glucuronidation and oestrogen elimination. Reduces hormonal acne by improving liver hormone detoxification."},
+
+  {term_fr:"Inflammasome NLRP3", term_en:"NLRP3 inflammasome", category:"Inflammation",
+  definition_fr:"Complexe protéique intracellulaire activé par les cristaux (urate, cholestérol), les AGE et les acides gras saturés. Clive l'IL-1beta en sa forme active pro-inflammatoire. Impliqué dans la goutte, l'athérosclérose et le diabète de type 2.",
+  definition_en:"Intracellular protein complex activated by crystals (urate, cholesterol), AGEs and saturated fatty acids. Cleaves IL-1beta into its pro-inflammatory active form. Implicated in gout, atherosclerosis and type 2 diabetes."},
+
+  {term_fr:"Index glycémique (IG)", term_en:"Glycaemic index (GI)", category:"Nutrition",
+  definition_fr:"Mesure de la vitesse à laquelle un aliment élève la glycémie. Un IG élevé provoque un pic d'insuline qui augmente l'IGF-1 et stimule les glandes sébacées. Alimentation à faible IG documentée pour réduire l'acné.",
+  definition_en:"Measure of the speed at which a food raises blood sugar. A high GI causes an insulin spike that increases IGF-1 and stimulates sebaceous glands. Low GI diet documented for reducing acne."},
+
+  {term_fr:"Kératinocyte", term_en:"Keratinocyte", category:"Peau",
+  definition_fr:"Cellule principale de l'épiderme (90% des cellules épidermiques). Produit la kératine, la filaggrine et les céramides. Sa différenciation terminale forme la couche cornée. Cible de nombreuses cytokines inflammatoires dans l'eczéma et le psoriasis.",
+  definition_en:"Main cell of the epidermis (90% of epidermal cells). Produces keratin, filaggrin and ceramides. Its terminal differentiation forms the stratum corneum. Target of many inflammatory cytokines in eczema and psoriasis."},
+
+  {term_fr:"LPS (Lipopolysaccharides)", term_en:"LPS (Lipopolysaccharides)", category:"Microbiote",
+  definition_fr:"Fragments de parois bactériennes Gram-négatives. Traversent une barrière intestinale fragilisée, activent TLR4 sur les cellules immunitaires et déclenchent NF-kB. Mécanisme central de l'endotoxémie métabolique et de l'inflammation systémique.",
+  definition_en:"Fragments of Gram-negative bacterial walls. Cross a weakened intestinal barrier, activate TLR4 on immune cells and trigger NF-kB. Central mechanism of metabolic endotoxaemia and systemic inflammation."},
+
+  {term_fr:"Magnésium élémentaire", term_en:"Elemental magnesium", category:"Magnésium",
+  definition_fr:"Quantité réelle de magnésium absorbable dans un supplément, distincte du poids total du sel de magnésium. Une gélule de 500mg de magnésium oxyde ne contient que 20mg de magnésium élémentaire (4% de biodisponibilité).",
+  definition_en:"Actual amount of absorbable magnesium in a supplement, distinct from the total weight of the magnesium salt. A 500mg magnesium oxide capsule contains only 20mg of elemental magnesium (4% bioavailability)."},
+
+  {term_fr:"Magnésium glycinate", term_en:"Magnesium glycinate", category:"Magnésium",
+  definition_fr:"Forme de magnésium chélatée à la glycine. Biodisponibilité de 60 à 80%. Non laxative et très bien tolérée. Forme recommandée pour le sommeil, le stress et les personnes ayant un transit sensible.",
+  definition_en:"Form of magnesium chelated to glycine. Bioavailability of 60 to 80%. Non-laxative and very well tolerated. Recommended form for sleep, stress and people with sensitive digestion."},
+
+  {term_fr:"Magnésium L-thréonate", term_en:"Magnesium L-threonate", category:"Magnésium",
+  definition_fr:"Seule forme de magnésium démontrant la capacité de traverser la barrière hémato-encéphalique. Augmente les concentrations cérébrales de magnésium. Indiqué pour les objectifs cognitifs : mémoire, concentration, anxiété.",
+  definition_en:"Only form of magnesium demonstrated to cross the blood-brain barrier. Increases cerebral magnesium concentrations. Indicated for cognitive objectives: memory, concentration, anxiety."},
+
+  {term_fr:"Mélanocyte", term_en:"Melanocyte", category:"Peau",
+  definition_fr:"Cellule productrice de mélanine dans l'épiderme. Dans le vitiligo, les mélanocytes sont détruits par les lymphocytes T CD8+ via un mécanisme auto-immun. Cible des inhibiteurs de JAK (ruxolitinib topique) qui permettent la repigmentation.",
+  definition_en:"Melanin-producing cell in the epidermis. In vitiligo, melanocytes are destroyed by CD8+ T lymphocytes via an autoimmune mechanism. Target of JAK inhibitors (topical ruxolitinib) that allow repigmentation."},
+
+  {term_fr:"Microbiote cutané", term_en:"Skin microbiome", category:"Microbiote",
+  definition_fr:"Ensemble des micro-organismes (bactéries, champignons, virus) colonisant la surface de la peau. Rôle protecteur contre les agents pathogènes via la production d'acides gras et de peptides antimicrobiens. Perturbé dans l'acné, l'eczéma et la rosacée.",
+  definition_en:"Community of micro-organisms (bacteria, fungi, viruses) colonising the skin surface. Protective role against pathogens via production of fatty acids and antimicrobial peptides. Disrupted in acne, eczema and rosacea."},
+
+  {term_fr:"mTORC1", term_en:"mTORC1", category:"Inflammation",
+  definition_fr:"Voie de signalisation activée par les acides aminés, l'insuline et les facteurs de croissance. Son activation chronique inhibe l'autophagie et favorise la sébogenèse et la prolifération des kératinocytes. Mécanisme central de l'acné nutritionnelle.",
+  definition_en:"Signalling pathway activated by amino acids, insulin and growth factors. Its chronic activation inhibits autophagy and promotes sebogenesis and keratinocyte proliferation. Central mechanism of nutritional acne."},
+
+  {term_fr:"NAFLD (Stéatose hépatique non alcoolique)", term_en:"NAFLD (Non-alcoholic fatty liver disease)", category:"Inflammation",
+  definition_fr:"Accumulation de graisses dans le foie sans consommation excessive d'alcool. Génère une résistance à l'insuline et une inflammation systémique. Manifestations cutanées : acanthosis nigricans, mélasma, acné résistante.",
+  definition_en:"Accumulation of fat in the liver without excessive alcohol consumption. Generates insulin resistance and systemic inflammation. Skin manifestations: acanthosis nigricans, melasma, resistant acne."},
+
+  {term_fr:"NF-kB", term_en:"NF-kB", category:"Inflammation",
+  definition_fr:"Facteur de transcription maître de l'inflammation chronique. Activé par les LPS, les acides gras saturés, le glucose et les AGE. Induit la production d'IL-1beta, IL-6, TNF-alpha et COX-2. Inhibé par la curcumine, le resvératrol et l'EGCG.",
+  definition_en:"Master transcription factor of chronic inflammation. Activated by LPS, saturated fatty acids, glucose and AGEs. Induces production of IL-1beta, IL-6, TNF-alpha and COX-2. Inhibited by curcumin, resveratrol and EGCG."},
+
+  {term_fr:"Nrf2", term_en:"Nrf2", category:"Inflammation",
+  definition_fr:"Facteur de transcription maître de la défense antioxydante. Activé par le sulforaphane du brocoli, la curcumine et le resvératrol. Induit la production de glutathion et superoxyde dismutase dans les kératinocytes et les hépatocytes.",
+  definition_en:"Master antioxidant defence transcription factor. Activated by broccoli sulforaphane, curcumin and resveratrol. Induces production of glutathione and superoxide dismutase in keratinocytes and hepatocytes."},
+
+  {term_fr:"Oléocanthal", term_en:"Oleocanthal", category:"Plantes",
+  definition_fr:"Polyphénol de l'huile d'olive extra vierge. Inhibe COX-1 et COX-2 avec un mécanisme similaire à l'ibuprofène. Responsable de la sensation piquante de l'huile d'olive fraîche. Anti-inflammatoire documenté.",
+  definition_en:"Polyphenol from extra virgin olive oil. Inhibits COX-1 and COX-2 with a mechanism similar to ibuprofen. Responsible for the stinging sensation of fresh olive oil. Documented anti-inflammatory."},
+
+  {term_fr:"Oméga-3 (EPA et DHA)", term_en:"Omega-3 (EPA and DHA)", category:"Nutrition",
+  definition_fr:"Acides gras essentiels à action anti-inflammatoire et pro-résolutive. Précurseurs des résolvines, protectines et marésines (SPM). Sources : poissons gras, huile d'algues. L'ALA végétal est converti en EPA/DHA avec seulement 5 à 15% de rendement.",
+  definition_en:"Essential fatty acids with anti-inflammatory and pro-resolving action. Precursors of resolvins, protectins and maresins (SPM). Sources: oily fish, algae oil. Plant ALA is converted to EPA/DHA with only 5 to 15% yield."},
+
+  {term_fr:"Perméabilité intestinale", term_en:"Intestinal permeability", category:"Microbiote",
+  definition_fr:"Capacité de la barrière intestinale à laisser passer des molécules. Une perméabilité augmentée (leaky gut) permet aux LPS et autres antigènes de passer dans la circulation, générant une inflammation systémique.",
+  definition_en:"Capacity of the intestinal barrier to allow molecules through. Increased permeability (leaky gut) allows LPS and other antigens to enter circulation, generating systemic inflammation."},
+
+  {term_fr:"Phase I et Phase II de détoxification", term_en:"Phase I and Phase II detoxification", category:"Inflammation",
+  definition_fr:"Étapes de la détoxification hépatique. Phase I (enzymes CYP450) : transformation des toxines en intermédiaires réactifs. Phase II (glucuronidation, sulfation) : conjugaison pour élimination. Un déséquilibre entre les deux augmente le stress oxydatif.",
+  definition_en:"Stages of hepatic detoxification. Phase I (CYP450 enzymes): transformation of toxins into reactive intermediates. Phase II (glucuronidation, sulphation): conjugation for elimination. An imbalance between the two increases oxidative stress."},
+
+  {term_fr:"Probiotiques", term_en:"Probiotics", category:"Microbiote",
+  definition_fr:"Micro-organismes vivants qui, ingérés en quantité suffisante, exercent un effet bénéfique sur la santé. L'efficacité dépend de la souche, de la dose et de la condition ciblée. Lactobacillus rhamnosus GG est la souche la mieux documentée pour la dermatite atopique.",
+  definition_en:"Living micro-organisms that, ingested in sufficient quantities, exert a beneficial effect on health. Effectiveness depends on strain, dose and targeted condition. Lactobacillus rhamnosus GG is the best-documented strain for atopic dermatitis."},
+
+  {term_fr:"Psoriasis", term_en:"Psoriasis", category:"Peau",
+  definition_fr:"Maladie auto-immune chronique médiée par les lymphocytes Th17 et la voie IL-23/IL-17. Caractérisée par une hyperprolifération des kératinocytes. Composante génétique (HLA-Cw6). Traitements : méthotrexate, biothérapies anti-IL-17, anti-IL-23.",
+  definition_en:"Chronic autoimmune disease mediated by Th17 lymphocytes and the IL-23/IL-17 pathway. Characterised by keratinocyte hyperproliferation. Genetic component (HLA-Cw6). Treatments: methotrexate, anti-IL-17, anti-IL-23 biotherapies."},
+
+  {term_fr:"Résolvines et Protectines", term_en:"Resolvins and Protectins", category:"Inflammation",
+  definition_fr:"Médiateurs lipidiques spécialisés (SPM) dérivés des oméga-3 (EPA et DHA). Résolvent activement l'inflammation plutôt que de simplement la bloquer. Stimulent l'élimination des débris et la restauration tissulaire.",
+  definition_en:"Specialised lipid mediators (SPMs) derived from omega-3 (EPA and DHA). Actively resolve inflammation rather than simply blocking it. Stimulate debris elimination and tissue restoration."},
+
+  {term_fr:"Resvératrol", term_en:"Resveratrol", category:"Plantes",
+  definition_fr:"Polyphénol de la peau du raisin et des myrtilles. Active SIRT1 et inhibe NF-kB et MMP-1. Biodisponibilité orale inférieure à 1% sans formulation adaptée. Les formulations liposomales améliorent significativement son absorption.",
+  definition_en:"Polyphenol from grape skin and blueberries. Activates SIRT1 and inhibits NF-kB and MMP-1. Oral bioavailability below 1% without appropriate formulation. Liposomal formulations significantly improve its absorption."},
+
+  {term_fr:"Rosacée", term_en:"Rosacea", category:"Peau",
+  definition_fr:"Maladie vasculaire et inflammatoire chronique du visage. Déclencheurs : chaleur, UV, alcool, épices, stress, Demodex folliculorum. Association fréquente avec le SIBO. Traitements : métronidazole topique, ivermectine, doxycycline, laser.",
+  definition_en:"Chronic vascular and inflammatory disease of the face. Triggers: heat, UV, alcohol, spices, stress, Demodex folliculorum. Frequent association with SIBO. Treatments: topical metronidazole, ivermectin, doxycycline, laser."},
+
+  {term_fr:"SIBO (Small Intestinal Bacterial Overgrowth)", term_en:"SIBO (Small Intestinal Bacterial Overgrowth)", category:"Microbiote",
+  definition_fr:"Prolifération bactérienne excessive dans l'intestin grêle. Génère une endotoxémie et une inflammation systémique. Associé à la rosacée. Traité par la rifaximine. Diagnostic par test respiratoire à l'hydrogène.",
+  definition_en:"Excessive bacterial overgrowth in the small intestine. Generates endotoxaemia and systemic inflammation. Associated with rosacea. Treated with rifaximin. Diagnosed by hydrogen breath test."},
+
+  {term_fr:"Silymarine", term_en:"Silymarin", category:"Plantes",
+  definition_fr:"Principe actif du chardon-Marie (Silybum marianum). Hépatoprotecteur majeur. Inhibe NF-kB dans les hépatocytes, active Nrf2 et réduit la peroxydation lipidique. Améliore indirectement la peau via la détoxification hépatique des hormones.",
+  definition_en:"Active principle of milk thistle (Silybum marianum). Major hepatoprotector. Inhibits NF-kB in hepatocytes, activates Nrf2 and reduces lipid peroxidation. Indirectly improves skin via hepatic hormone detoxification."},
+
+  {term_fr:"Staphylococcus aureus", term_en:"Staphylococcus aureus", category:"Microbiote",
+  definition_fr:"Bactérie qui colonise jusqu'à 90% des lésions de dermatite atopique. Produit des superantigènes et des protéases qui aggravent l'inflammation et dégradent la filaggrine. Cible thérapeutique dans l'eczéma.",
+  definition_en:"Bacterium that colonises up to 90% of atopic dermatitis lesions. Produces superantigens and proteases that worsen inflammation and degrade filaggrin. Therapeutic target in eczema."},
+
+  {term_fr:"Sulforaphane", term_en:"Sulforaphane", category:"Nutrition",
+  definition_fr:"Composé du brocoli et des crucifères. Activateur puissant de Nrf2. Induit la production de glutathion dans les kératinocytes et les hépatocytes. Réduit les dommages oxydatifs causés par les UV dans la peau.",
+  definition_en:"Compound from broccoli and cruciferous vegetables. Powerful Nrf2 activator. Induces glutathione production in keratinocytes and hepatocytes. Reduces UV-induced oxidative damage in skin."},
+
+  {term_fr:"TLR4 (Toll-like Receptor 4)", term_en:"TLR4 (Toll-like Receptor 4)", category:"Inflammation",
+  definition_fr:"Récepteur de l'immunité innée qui reconnaît les LPS bactériens et les acides gras saturés. Son activation déclenche NF-kB et une cascade pro-inflammatoire. Cible moléculaire expliquant les liens entre alimentation, microbiote et inflammation.",
+  definition_en:"Innate immunity receptor that recognises bacterial LPS and saturated fatty acids. Its activation triggers NF-kB and a pro-inflammatory cascade. Molecular target explaining links between diet, microbiome and inflammation."},
+
+  {term_fr:"TRPM7", term_en:"TRPM7", category:"Magnésium",
+  definition_fr:"Canal ionique ubiquitaire régulant l'entrée du magnésium dans toutes les cellules. Son dysfonctionnement est impliqué dans l'hypertension et les maladies neurodégénératives. Explique pourquoi un magnésium sérique normal peut coexister avec une carence intracellulaire.",
+  definition_en:"Ubiquitous ion channel regulating magnesium entry into all cells. Its dysfunction is implicated in hypertension and neurodegenerative diseases. Explains why normal serum magnesium can coexist with intracellular deficiency."},
+
+  {term_fr:"Vitamine D et VDR", term_en:"Vitamin D and VDR", category:"Nutrition",
+  definition_fr:"La vitamine D active le VDR (Vitamin D Receptor) dans les cellules intestinales et les kératinocytes. Module la composition du microbiote intestinal et régule l'immunité cutanée. Sa carence aggrave l'eczéma et le psoriasis.",
+  definition_en:"Vitamin D activates the VDR (Vitamin D Receptor) in intestinal cells and keratinocytes. Modulates gut microbiome composition and regulates skin immunity. Its deficiency worsens eczema and psoriasis."},
+
+  {term_fr:"Xiao Yao San", term_en:"Xiao Yao San", category:"Plantes",
+  definition_fr:"Formule de médecine traditionnelle chinoise utilisée pour l'acné hormonale et le syndrome prémenstruel. Harmonise le Foie, tonifie la Rate et régule le Qi. Contient Chai Hu (Bupleurum), Bai Shao, Dang Gui et d'autres plantes.",
+  definition_en:"Traditional Chinese medicine formula used for hormonal acne and premenstrual syndrome. Harmonises the Liver, tonifies the Spleen and regulates Qi. Contains Chai Hu (Bupleurum), Bai Shao, Dang Gui and other plants."},
+
+  {term_fr:"Zinc", term_en:"Zinc", category:"Nutrition",
+  definition_fr:"Oligo-élément cofacteur de plus de 300 enzymes. Régule la production de sébum via l'inhibition de la 5-alpha-réductase. Accélère la cicatrisation. La couche externe de la peau contient 5 fois plus de zinc que la couche inférieure.",
+  definition_en:"Trace element cofactor of more than 300 enzymes. Regulates sebum production via 5-alpha-reductase inhibition. Accelerates healing. The outer layer of skin contains 5 times more zinc than the layer beneath."}
+];
+
+function renderGlossary(entries) {
+  var list = document.getElementById('glossary-list');
+  var noResults = document.getElementById('no-results');
+  if (entries.length === 0) {
+    list.innerHTML = '';
+    noResults.style.display = 'block';
+    noResults.textContent = currentLang === 'fr' ? 'Aucun terme trouvé.' : 'No terms found.';
+    return;
+  }
+  noResults.style.display = 'none';
+  var html = '';
+  entries.forEach(function(e) {
+    var term = currentLang === 'fr' ? e.term_fr : e.term_en;
+    var defFr = e.definition_fr;
+    var defEn = e.definition_en;
+    var badgeClass = 'badge-' + e.category.replace(/\s/g,'').replace('é','e').replace('è','e');
+    var badgeLabel = currentLang === 'fr' ? e.category : categoryLabelEn(e.category);
+    html += '<div class="glossary-entry" data-category="' + e.category + '" data-term-fr="' + e.term_fr.toLowerCase() + '" data-term-en="' + e.term_en.toLowerCase() + '" data-def-fr="' + defFr.toLowerCase() + '" data-def-en="' + defEn.toLowerCase() + '">';
+    html += '<div class="entry-header">';
+    html += '<span class="entry-term">' + term + '</span>';
+    html += '<span class="entry-badge ' + badgeClass + '">' + badgeLabel + '</span>';
+    html += '</div>';
+    html += '<p class="entry-def entry-def-fr">' + defFr + '</p>';
+    html += '<p class="entry-def entry-def-en' + (currentLang === 'en' ? ' show' : '') + '">' + defEn + '</p>';
+    html += '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function categoryLabelEn(cat) {
+  var map = {
+    'Peau': 'Skin',
+    'Nutrition': 'Nutrition',
+    'Microbiote': 'Microbiome',
+    'Inflammation': 'Inflammation',
+    'Plantes': 'Plants',
+    'Magnésium': 'Magnesium'
+  };
+  return map[cat] || cat;
+}
+
+function applyFilters() {
+  var query = document.getElementById('search-input').value.toLowerCase().trim();
+  var filtered = glossaryData.filter(function(e) {
+    var catMatch = activeCategory === '' || e.category === activeCategory;
+    if (!catMatch) return false;
+    if (query === '') return true;
+    return e.term_fr.toLowerCase().indexOf(query) !== -1 ||
+           e.term_en.toLowerCase().indexOf(query) !== -1 ||
+           e.definition_fr.toLowerCase().indexOf(query) !== -1 ||
+           e.definition_en.toLowerCase().indexOf(query) !== -1;
+  });
+  renderGlossary(filtered);
+}
+
+function setFilter(btn) {
+  activeCategory = btn.getAttribute('data-cat');
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+  applyLangStatic();
+  applyFilters();
+  var input = document.getElementById('search-input');
+  input.placeholder = currentLang === 'fr' ? 'Rechercher un terme...' : 'Search a term...';
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    var val = btn.getAttribute('data-' + currentLang);
+    if (val) btn.textContent = val;
+  });
+}
+
+function applyLangStatic() {
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + currentLang);
+    if (val !== null) {
+      if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'P') {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    }
+  });
+}
+
+// Initial render
+renderGlossary(glossaryData);
+</script>
+</body>
+</html>
