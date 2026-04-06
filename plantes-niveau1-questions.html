@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 1 Questions — Plantes — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/plantes-niveau1-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='plantes.html'" aria-label="Retour">←</button>
+  <div id="score-display">🌿 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11573812/" target="_blank" rel="noopener">Aloe vera skin clinical review</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/25734562/" target="_blank" rel="noopener">Tea tree oil acne contact allergy</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+{
+  question_fr: "Le gel d'aloe vera a-t-il des effets prouvés sur la peau ?",
+  question_en: "Does aloe vera gel have proven effects on the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, c'est uniquement marketing", text_en:"No, it is purely marketing"},
+    {letter:"B", text_fr:"Oui, des études cliniques confirment ses effets cicatrisants, hydratants et anti-inflammatoires via les polysaccharides et l'acemannane", text_en:"Yes, clinical studies confirm its healing, moisturising and anti-inflammatory effects via polysaccharides and acemannan"},
+    {letter:"C", text_fr:"Oui, mais uniquement sur les brûlures graves", text_en:"Yes, but only on serious burns"},
+    {letter:"D", text_fr:"Non, il irrite toujours la peau", text_en:"No, it always irritates the skin"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. L'aloe vera contient de l'acemannane, un polysaccharide qui stimule la cicatrisation, active les macrophages et réduit l'inflammation via l'inhibition de NF-kB. Des essais cliniques confirment son efficacité sur les brûlures légères, la dermatite séborrhéique et les ulcères de pression. Sa concentration active doit être supérieure à 10%.",
+  feedback_ok_en: "Exactly. Aloe vera contains acemannan, a polysaccharide that stimulates healing, activates macrophages and reduces inflammation via NF-kB inhibition. Clinical trials confirm its effectiveness on minor burns, seborrhoeic dermatitis and pressure ulcers. Its active concentration must be above 10%.",
+  feedback_ko_fr: "L'aloe vera fait partie des plantes les mieux documentées en dermatologie. Ses effets ne sont pas du marketing mais reposent sur des mécanismes moléculaires identifiés et des études cliniques sérieuses.",
+  feedback_ko_en: "Aloe vera is one of the best-documented plants in dermatology. Its effects are not marketing but are based on identified molecular mechanisms and serious clinical studies.",
+  reformulation_fr: "L'aloe vera réduit-il l'inflammation cutanée ?",
+  reformulation_en: "Does aloe vera reduce skin inflammation ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "L'acemannane de l'aloe vera inhibe NF-kB et réduit la production de cytokines pro-inflammatoires dans les kératinocytes et les fibroblastes.",
+  reformulation_explanation_en: "Acemannan from aloe vera inhibits NF-kB and reduces production of pro-inflammatory cytokines in keratinocytes and fibroblasts."
+},
+{
+  question_fr: "L'huile essentielle de tea tree (arbre à thé) est-elle efficace contre l'acné ?",
+  question_en: "Is tea tree essential oil effective against acne ?",
+  options: [
+    {letter:"A", text_fr:"Non, aucune preuve scientifique", text_en:"No, no scientific evidence"},
+    {letter:"B", text_fr:"Oui, le terpinène-4-ol inhibe Cutibacterium acnes et réduit l'inflammation, mais elle est aussi un allergène de contact fréquent", text_en:"Yes, terpinen-4-ol inhibits Cutibacterium acnes and reduces inflammation, but it is also a frequent contact allergen"},
+    {letter:"C", text_fr:"Oui, elle est sans aucun effet indésirable", text_en:"Yes, it has no adverse effects"},
+    {letter:"D", text_fr:"Non, elle aggrave systématiquement l'acné", text_en:"No, it systematically worsens acne"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. Le terpinène-4-ol du tea tree inhibe C. acnes et a des propriétés anti-inflammatoires documentées. Un essai clinique de référence (Bassett 1990) a montré une efficacité comparable au peroxyde de benzoyle 5% mais avec moins d'effets secondaires immédiats. Cependant, le tea tree est l'un des allergènes de contact les plus fréquents en dermatologie. Ne jamais l'utiliser pur.",
+  feedback_ok_en: "Exactly. Terpinen-4-ol from tea tree inhibits C. acnes and has documented anti-inflammatory properties. A reference clinical trial (Bassett 1990) showed comparable effectiveness to 5% benzoyl peroxide but with fewer immediate side effects. However, tea tree is one of the most frequent contact allergens in dermatology. Never use it undiluted.",
+  feedback_ko_fr: "Le tea tree illustre parfaitement le principe : efficace mais pas sans risque. Son oxydation à l'air amplifie son potentiel allergisant. Un flacon ouvert depuis plus de 6 mois doit être jeté.",
+  feedback_ko_en: "Tea tree perfectly illustrates the principle: effective but not risk-free. Its oxidation in air amplifies its allergenic potential. A bottle open for more than 6 months should be discarded.",
+  reformulation_fr: "L'huile essentielle de tea tree peut-elle provoquer des allergies cutanées ?",
+  reformulation_en: "Can tea tree essential oil cause skin allergies ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "Le tea tree est l'un des allergènes de contact les plus fréquents en dermatologie. Il ne doit jamais être utilisé pur et doit être dilué à 5% maximum dans une huile végétale.",
+  reformulation_explanation_en: "Tea tree is one of the most frequent contact allergens in dermatology. It should never be used undiluted and must be diluted to 5% maximum in a carrier oil."
+},
+{
+  question_fr: "La camomille allemande (Matricaria chamomilla) est utilisée pour la peau parce que :",
+  question_en: "German chamomile (Matricaria chamomilla) is used for skin because :",
+  options: [
+    {letter:"A", text_fr:"Elle est uniquement apaisante par son odeur", text_en:"It is only soothing through its scent"},
+    {letter:"B", text_fr:"L'alpha-bisabolol et l'apigénine inhibent NF-kB et COX-2, réduisant l'inflammation et accélérant la cicatrisation", text_en:"Alpha-bisabolol and apigenin inhibit NF-kB and COX-2, reducing inflammation and accelerating healing"},
+    {letter:"C", text_fr:"Elle produit du collagène directement", text_en:"It directly produces collagen"},
+    {letter:"D", text_fr:"Aucune preuve scientifique de ses effets cutanés", text_en:"No scientific evidence of its skin effects"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. L'alpha-bisabolol de la camomille inhibe NF-kB et COX-2. L'apigénine (flavonoïde) a des propriétés antioxydantes et anti-inflammatoires documentées. Le chamazulène (responsable de la couleur bleue de l'huile essentielle) est un anti-inflammatoire puissant. La camomille est l'une des plantes les mieux documentées pour les peaux sensibles et l'eczéma léger.",
+  feedback_ok_en: "Exactly. Alpha-bisabolol from chamomile inhibits NF-kB and COX-2. Apigenin (flavonoid) has documented antioxidant and anti-inflammatory properties. Chamazulene (responsible for the blue colour of the essential oil) is a powerful anti-inflammatory. Chamomile is one of the best-documented plants for sensitive skin and mild eczema.",
+  feedback_ko_fr: "La camomille allemande et la camomille romaine (Chamaemelum nobile) sont deux plantes différentes avec des compositions chimiques distinctes. La camomille allemande est plus riche en chamazulène et alpha-bisabolol, la rendant plus anti-inflammatoire.",
+  feedback_ko_en: "German chamomile and Roman chamomile (Chamaemelum nobile) are two different plants with distinct chemical compositions. German chamomile is richer in chamazulene and alpha-bisabolol, making it more anti-inflammatory.",
+  reformulation_fr: "La camomille allemande est-elle validée scientifiquement pour les peaux sensibles ?",
+  reformulation_en: "Is German chamomile scientifically validated for sensitive skin ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "L'alpha-bisabolol et le chamazulène de la camomille allemande ont des effets anti-inflammatoires documentés dans plusieurs études cliniques pour les peaux sensibles et l'eczéma léger.",
+  reformulation_explanation_en: "Alpha-bisabolol and chamazulene from German chamomile have documented anti-inflammatory effects in several clinical studies for sensitive skin and mild eczema."
+},
+{
+  question_fr: "PIÈGE : Les plantes médicinales sont-elles sans danger car naturelles ?",
+  question_en: "TRAP : Are medicinal plants safe because they are natural ?",
+  options: [
+    {letter:"A", text_fr:"Oui, le naturel garantit la sécurité", text_en:"Yes, natural guarantees safety"},
+    {letter:"B", text_fr:"Non, de nombreuses plantes contiennent des molécules toxiques, allergènes ou interagissent avec des médicaments", text_en:"No, many plants contain toxic molecules, allergens or interact with medications"},
+    {letter:"C", text_fr:"Oui, les plantes ne peuvent jamais nuire", text_en:"Yes, plants can never be harmful"},
+    {letter:"D", text_fr:"Non, toutes les plantes sont dangereuses", text_en:"No, all plants are dangerous"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. Le naturel ne signifie pas inoffensif. L'aconit, la belladone et la digitale sont des plantes mortelles. Le millepertuis interagit avec les contraceptifs et les anticoagulants. La consoude contient des alcaloïdes pyrrolizidiniques hépatotoxiques. La réglisse en excès provoque une hypertension. Toute plante médicinale doit être utilisée avec discernement.",
+  feedback_ok_en: "Exactly. Natural does not mean harmless. Aconite, belladonna and digitalis are deadly plants. St John's wort interacts with contraceptives and anticoagulants. Comfrey contains hepatotoxic pyrrolizidine alkaloids. Excess liquorice causes hypertension. Every medicinal plant must be used with discernement.",
+  feedback_ko_fr: "C'est le mythe le plus dangereux en phytothérapie. La toxicité dépend de la dose, de la durée d'utilisation, des interactions médicamenteuses et du terrain de la personne. Consulter un professionnel de santé avant toute phytothérapie.",
+  feedback_ko_en: "This is the most dangerous myth in herbal medicine. Toxicity depends on dose, duration of use, drug interactions and the person's health status. Consult a health professional before any herbal medicine.",
+  reformulation_fr: "Le millepertuis peut-il interagir dangereusement avec des médicaments ?",
+  reformulation_en: "Can St John's wort interact dangerously with medications ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "Le millepertuis induit le CYP3A4, accélérant le métabolisme de nombreux médicaments dont les contraceptifs oraux, les anticoagulants et les antirétroviraux, réduisant leur efficacité.",
+  reformulation_explanation_en: "St John's wort induces CYP3A4, accelerating the metabolism of many medications including oral contraceptives, anticoagulants and antiretrovirals, reducing their effectiveness."
+},
+{
+  question_fr: "La lavande (Lavandula angustifolia) a-t-elle des propriétés documentées pour la peau ?",
+  question_en: "Does lavender (Lavandula angustifolia) have documented properties for the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, uniquement aromathérapie", text_en:"No, only aromatherapy"},
+    {letter:"B", text_fr:"Oui, le linalol et l'acétate de linalyle ont des propriétés antiseptiques, cicatrisantes et anti-inflammatoires documentées, mais c'est aussi un allergène fréquent", text_en:"Yes, linalool and linalyl acetate have documented antiseptic, healing and anti-inflammatory properties, but it is also a frequent allergen"},
+    {letter:"C", text_fr:"Oui, elle guérit toutes les maladies cutanées", text_en:"Yes, it cures all skin diseases"},
+    {letter:"D", text_fr:"Non, aucune étude sérieuse", text_en:"No, no serious study"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. Le linalol et l'acétate de linalyle de la lavande ont des propriétés antiseptiques, anxiolytiques et légèrement anti-inflammatoires documentées. La lavande est efficace sur les petites plaies et brûlures légères. Mais c'est aussi l'un des allergènes de contact les plus fréquents en Europe, avec une prévalence croissante due à son usage généralisé en cosmétique.",
+  feedback_ok_en: "Exactly. Linalool and linalyl acetate from lavender have documented antiseptic, anxiolytic and mildly anti-inflammatory properties. Lavender is effective on small wounds and minor burns. But it is also one of the most frequent contact allergens in Europe, with increasing prevalence due to its widespread use in cosmetics.",
+  feedback_ko_fr: "La lavande fine de Provence (Lavandula angustifolia) est différente du lavandin (Lavandula x intermedia), un hybride moins concentré en linalol. Les produits lavande bon marché utilisent souvent du lavandin ou de la lavande de synthèse.",
+  feedback_ko_en: "Fine lavender from Provence (Lavandula angustifolia) is different from lavandin (Lavandula x intermedia), a hybrid less concentrated in linalool. Cheap lavender products often use lavandin or synthetic lavender.",
+  reformulation_fr: "La lavande est-elle l'un des allergènes de contact les plus fréquents en cosmétique ?",
+  reformulation_en: "Is lavender one of the most frequent contact allergens in cosmetics ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "La lavande figure parmi les 26 allergènes de contact réglementés en Europe obligatoirement déclarés sur les étiquettes cosmétiques au-delà de certains seuils de concentration.",
+  reformulation_explanation_en: "Lavender is among the 26 regulated contact allergens in Europe that must be declared on cosmetic labels above certain concentration thresholds."
+},
+{
+  question_fr: "Le calendula (Calendula officinalis) est-il efficace pour la peau ?",
+  question_en: "Is calendula (Calendula officinalis) effective for the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, aucune preuve", text_en:"No, no evidence"},
+    {letter:"B", text_fr:"Oui, ses flavonoïdes et triterpènes ont des effets anti-inflammatoires, cicatrisants et antifongiques documentés, particulièrement pour les peaux sèches et irritées", text_en:"Yes, its flavonoids and triterpenes have documented anti-inflammatory, healing and antifungal effects, particularly for dry and irritated skin"},
+    {letter:"C", text_fr:"Oui, il traite toutes les infections cutanées", text_en:"Yes, it treats all skin infections"},
+    {letter:"D", text_fr:"Non, il irrite systématiquement la peau", text_en:"No, it systematically irritates the skin"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. Le calendula contient des flavonoïdes (quercétine, isorhamnétine), des triterpènes (acide oléanolique) et des caroténoïdes qui lui confèrent des propriétés anti-inflammatoires, cicatrisantes et antifongiques. Des études cliniques montrent son efficacité dans la dermatite des couches, les érythèmes post-radiothérapie et les plaies chroniques. C'est l'une des plantes les mieux tolérées.",
+  feedback_ok_en: "Exactly. Calendula contains flavonoids (quercetin, isorhamnetin), triterpenes (oleanolic acid) and carotenoids that give it anti-inflammatory, healing and antifungal properties. Clinical studies show its effectiveness in nappy dermatitis, post-radiotherapy erythema and chronic wounds. It is one of the best-tolerated plants.",
+  feedback_ko_fr: "Le calendula appartient à la famille des Astéracées. Les personnes allergiques aux autres Astéracées (camomille, arnica, échinacée) doivent l'utiliser avec précaution car des réactions croisées sont possibles.",
+  feedback_ko_en: "Calendula belongs to the Asteraceae family. People allergic to other Asteraceae (chamomile, arnica, echinacea) should use it with caution as cross-reactions are possible.",
+  reformulation_fr: "Le calendula est-il adapté aux peaux sensibles et irritées ?",
+  reformulation_en: "Is calendula suitable for sensitive and irritated skin ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "Le calendula est l'une des plantes les mieux tolérées pour les peaux sensibles. Ses propriétés anti-inflammatoires et cicatrisantes en font un choix de premier plan pour les érythèmes, gerçures et peaux réactives.",
+  reformulation_explanation_en: "Calendula is one of the best-tolerated plants for sensitive skin. Its anti-inflammatory and healing properties make it a first-choice option for erythema, chapping and reactive skin."
+}
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pl1', score); window.location.href = 'plantes-niveau1-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'les plantes médicinales et leurs effets sur la peau' : 'medicinal plants and their effects on the skin',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>

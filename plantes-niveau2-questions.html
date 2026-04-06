@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Niveau 2 Questions — Plantes — BrainFest</title>
+<link rel="canonical" href="https://brainfest.eu/plantes-niveau2-questions.html">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root { --indigo-dark: #2d3d4a; --indigo-mid: #1a2535; --amber: #d4923a; --cream: #f7f3ec; --sage: #6b9e78; --blue: #2a7fa8; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-width: 375px; overflow-x: hidden; }
+body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--indigo-dark); min-width: 375px; min-height: 100vh; }
+#quiz-header { background: #f5ede8; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid rgba(0,0,0,0.06); }
+#back-arrow { background: none; border: none; color: var(--amber); font-size: 20px; cursor: pointer; min-height: 44px; min-width: 44px; display: flex; align-items: center; padding: 0; }
+#score-display { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); display: flex; align-items: center; gap: 6px; }
+#q-counter { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--blue); font-weight: 500; }
+#progress-track { width: 100%; height: 4px; background: #e0e0e0; }
+#progress-fill { height: 4px; background: var(--blue); transition: width 0.4s ease; }
+#quiz-main { padding: 16px 20px 32px; max-width: 520px; margin: 0 auto; }
+#question-card { background: #ffffff; border-radius: 16px; padding: 24px 20px; margin-bottom: 12px; }
+#question-text { font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--indigo-dark); font-weight: 500; line-height: 1.5; margin-bottom: 20px; }
+.option-btn { width: 100%; background: #f5ede8; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border: 1px solid transparent; cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; min-height: 44px; }
+.option-btn:last-child { margin-bottom: 0; }
+.option-letter { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: #ffffff; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--indigo-dark); flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; }
+.option-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); flex: 1; }
+.option-check { font-size: 16px; color: var(--blue); display: none; }
+.option-btn.selected { border-color: var(--blue); background: #eaf4f8; }
+.option-btn.selected .option-letter { border-color: var(--blue); color: var(--blue); }
+.option-btn.correct { border-color: var(--blue); background: #e8f4f0; }
+.option-btn.correct .option-letter { background: var(--blue); border-color: var(--blue); color: #fff; }
+.option-btn.correct .option-check { display: block; }
+.option-btn.wrong { border-color: #e74c3c; background: #fdecea; }
+.option-btn.wrong .option-letter { background: #e74c3c; border-color: #e74c3c; color: #fff; }
+#validate-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; margin-bottom: 12px; transition: background 0.2s; }
+#validate-btn:disabled { background: #b0c8d8; cursor: not-allowed; }
+#feedback-block { background: #e8f4f0; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: none; }
+#feedback-top { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+#feedback-text { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--indigo-dark); line-height: 1.6; }
+#reformulation-block { background: #fff8e8; border-radius: 12px; padding: 16px; margin-top: 12px; border: 1px solid rgba(212,146,58,0.3); display: none; }
+#reformulation-title { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--amber); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+#reformulation-text { font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--indigo-dark); line-height: 1.5; margin-bottom: 16px; }
+#reformulation-options { display: flex; gap: 4%; }
+.refo-btn { width: 48%; display: inline-flex; justify-content: center; align-items: center; padding: 12px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; border: 1px solid #ccc; background: #ffffff; cursor: pointer; min-height: 44px; transition: background 0.2s, border-color 0.2s, color 0.2s; gap: 6px; }
+.refo-btn.refo-correct { background: #e8f4f0; border-color: var(--blue); color: var(--blue); }
+.refo-btn.refo-wrong { background: #fdecea; border-color: #e74c3c; color: #e74c3c; }
+#reformulation-explanation { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #555; line-height: 1.6; margin-top: 12px; display: none; }
+#ask-row { display: none; margin-bottom: 12px; }
+#ask-btn { width: 100%; background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; cursor: pointer; text-align: left; min-height: 44px; }
+#ask-input-row { display: none; margin-top: 8px; flex-direction: row; gap: 8px; }
+#ask-input { flex: 1; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; min-height: 44px; }
+#ask-send { background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; min-height: 44px; }
+#ask-reply { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; margin-top: 6px; display: none; font-style: italic; }
+#pubmed-block { background: #ffffff; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; display: none; }
+#pubmed-block .pubmed-title { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+#pubmed-block a { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--blue); text-decoration: none; line-height: 1.5; margin-bottom: 6px; }
+#pubmed-block a:hover { text-decoration: underline; }
+#continuer-btn { width: 100%; background: var(--blue); color: #ffffff; border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; min-height: 44px; display: none; margin-bottom: 12px; }
+#lang-toggle { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); font-family: 'DM Sans', sans-serif; font-size: 13px; border-radius: 50px; padding: 4px 12px; cursor: pointer; min-height: 36px; }
+</style>
+</head>
+<body>
+
+<div id="quiz-header">
+  <button id="back-arrow" onclick="window.location.href='plantes.html'" aria-label="Retour">←</button>
+  <div id="score-display">🔬 <span id="score-text">Score : 0/6</span></div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span id="q-counter">1/6</span>
+    <button id="lang-toggle" onclick="toggleLang()">FR</button>
+  </div>
+</div>
+
+<div id="progress-track"><div id="progress-fill" style="width:16.6%"></div></div>
+
+<div id="quiz-main">
+  <div id="question-card">
+    <div id="question-text"></div>
+    <div id="options-list"></div>
+  </div>
+  <button id="validate-btn" disabled onclick="validate()">Valider</button>
+  <div id="feedback-block">
+    <div id="feedback-top"></div>
+    <div id="feedback-text"></div>
+    <div id="reformulation-block">
+      <div id="reformulation-title"></div>
+      <div id="reformulation-text"></div>
+      <div id="reformulation-options"></div>
+      <div id="reformulation-explanation"></div>
+    </div>
+  </div>
+  <div id="ask-row">
+    <button id="ask-btn" onclick="toggleAsk()"><span id="ask-btn-text">💬 Poser une question (3 questions restantes)</span></button>
+    <div id="ask-input-row" style="display:none;flex-direction:row;gap:8px;margin-top:8px;">
+      <input id="ask-input" type="text" placeholder="Votre question...">
+      <button id="ask-send" onclick="sendAsk()">→</button>
+    </div>
+    <div id="ask-reply"></div>
+  </div>
+  <div id="pubmed-block">
+    <div class="pubmed-title">Sources scientifiques</div>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/38442149/" target="_blank" rel="noopener">Nigella sativa thymoquinone skin review</a>
+    <a href="https://pubmed.ncbi.nlm.nih.gov/25734562/" target="_blank" rel="noopener">Rosehip oil scars clinical study</a>
+  </div>
+  <button id="continuer-btn" onclick="continuer()">Continuer</button>
+</div>
+
+<script>
+if (!sessionStorage.getItem('bf_access')) { window.location.href = 'index.html'; }
+
+var lang = 'fr';
+
+var questions = [
+{
+  question_fr: "L'échinacée (Echinacea purpurea) est-elle efficace pour la peau ?",
+  question_en: "Is echinacea (Echinacea purpurea) effective for the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, elle agit uniquement sur les infections respiratoires", text_en:"No, it only acts on respiratory infections"},
+    {letter:"B", text_fr:"Oui, ses alkylamides et polysaccharides stimulent l'immunité cutanée et accélèrent la cicatrisation, mais les preuves topiques restent limitées", text_en:"Yes, its alkylamides and polysaccharides stimulate skin immunity and accelerate healing, but topical evidence remains limited"},
+    {letter:"C", text_fr:"Oui, elle guérit l'eczéma sévère", text_en:"Yes, it cures severe eczema"},
+    {letter:"D", text_fr:"Non, elle aggrave toutes les maladies cutanées", text_en:"No, it worsens all skin diseases"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. L'échinacée stimule les macrophages cutanés et la production de cytokines pro-cicatrisantes. Ses alkylamides activent les récepteurs cannabinoïdes CB2 dans les kératinocytes, modulant l'immunité cutanée. Les preuves pour les infections respiratoires sont plus solides que pour les applications topiques cutanées. Les personnes avec maladies auto-immunes doivent l'éviter.",
+  feedback_ok_en: "Exactly. Echinacea stimulates cutaneous macrophages and production of pro-healing cytokines. Its alkylamides activate cannabinoid CB2 receptors in keratinocytes, modulating skin immunity. Evidence for respiratory infections is stronger than for topical skin applications. People with autoimmune diseases should avoid it.",
+  feedback_ko_fr: "L'échinacée est contre-indiquée dans les maladies auto-immunes (lupus, polyarthrite rhumatoïde, sclérose en plaques) car elle stimule un système immunitaire déjà hyperactif.",
+  feedback_ko_en: "Echinacea is contraindicated in autoimmune diseases (lupus, rheumatoid arthritis, multiple sclerosis) as it stimulates an already hyperactive immune system.",
+  reformulation_fr: "L'échinacée est-elle contre-indiquée dans les maladies auto-immunes ?",
+  reformulation_en: "Is echinacea contraindicated in autoimmune diseases ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "L'échinacée stimule le système immunitaire. Dans les maladies auto-immunes où ce système est déjà hyperactif, cette stimulation peut aggraver la maladie.",
+  reformulation_explanation_en: "Echinacea stimulates the immune system. In autoimmune diseases where this system is already hyperactive, this stimulation can worsen the disease."
+},
+{
+  question_fr: "L'huile de rose musquée est-elle efficace contre les cicatrices ?",
+  question_en: "Is rosehip oil effective against scars ?",
+  options: [
+    {letter:"A", text_fr:"Non, aucune preuve scientifique", text_en:"No, no scientific evidence"},
+    {letter:"B", text_fr:"Oui, sa richesse en acide linoléique et trans-rétinoïque naturel soutient la régénération cellulaire et améliore l'apparence des cicatrices récentes", text_en:"Yes, its richness in linoleic acid and natural trans-retinoic acid supports cell regeneration and improves the appearance of recent scars"},
+    {letter:"C", text_fr:"Oui, elle efface toutes les cicatrices", text_en:"Yes, it erases all scars"},
+    {letter:"D", text_fr:"Non, elle aggrave les cicatrices", text_en:"No, it worsens scars"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. L'huile de rose musquée (Rosa rubiginosa ou Rosa canina) est riche en acide linoléique (oméga-6, 40-50%) et en acide alpha-linolénique (oméga-3, 30-35%). Elle contient aussi de l'acide trans-rétinoïque naturel (vitamine A acide), un rétinoïde naturel qui stimule le renouvellement cellulaire. Des études cliniques montrent une amélioration des cicatrices et des vergetures récentes.",
+  feedback_ok_en: "Exactly. Rosehip oil (Rosa rubiginosa or Rosa canina) is rich in linoleic acid (omega-6, 40-50%) and alpha-linolenic acid (omega-3, 30-35%). It also contains natural trans-retinoic acid (retinoic acid vitamin A), a natural retinoid that stimulates cell renewal. Clinical studies show improvement of recent scars and stretch marks.",
+  feedback_ko_fr: "L'huile de rose musquée est instable et s'oxyde rapidement. Elle doit être conservée au réfrigérateur et utilisée dans les 6 mois après ouverture. Une odeur rance signale une oxydation qui rend l'huile pro-inflammatoire.",
+  feedback_ko_en: "Rosehip oil is unstable and oxidises rapidly. It should be stored in the refrigerator and used within 6 months of opening. A rancid smell signals oxidation that makes the oil pro-inflammatory.",
+  reformulation_fr: "L'huile de rose musquée contient-elle un rétinoïde naturel ?",
+  reformulation_en: "Does rosehip oil contain a natural retinoid ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "L'acide trans-rétinoïque naturellement présent dans l'huile de rose musquée est un rétinoïde qui stimule le renouvellement cellulaire et la synthèse de collagène, expliquant son action sur les cicatrices.",
+  reformulation_explanation_en: "Trans-retinoic acid naturally present in rosehip oil is a retinoid that stimulates cell renewal and collagen synthesis, explaining its action on scars."
+},
+{
+  question_fr: "L'arnica (Arnica montana) est-elle efficace en application topique ?",
+  question_en: "Is arnica (Arnica montana) effective in topical application ?",
+  options: [
+    {letter:"A", text_fr:"Non, aucune preuve", text_en:"No, no evidence"},
+    {letter:"B", text_fr:"Oui, l'héliénalide et le dihydrohéliénalide inhibent NF-kB et réduisent les hématomes et douleurs musculaires en application topique, mais l'arnica est toxique par voie orale", text_en:"Yes, helenalin and dihydrohelenalin inhibit NF-kB and reduce bruising and muscle pain in topical application, but arnica is toxic by oral route"},
+    {letter:"C", text_fr:"Oui, elle est aussi efficace en application interne", text_en:"Yes, it is also effective internally"},
+    {letter:"D", text_fr:"Non, elle irrite systématiquement la peau", text_en:"No, it systematically irritates the skin"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. Les lactones sesquiterpéniques de l'arnica (héliénalide, dihydrohéliénalide) inhibent NF-kB et réduisent l'inflammation locale. Des méta-analyses confirment l'efficacité topique sur les hématomes post-traumatiques et les douleurs musculaires. En revanche, l'arnica est toxique par voie orale (cardiotoxique) et allergène pour les personnes sensibles aux Astéracées.",
+  feedback_ok_en: "Exactly. Sesquiterpene lactones from arnica (helenalin, dihydrohelenalin) inhibit NF-kB and reduce local inflammation. Meta-analyses confirm topical effectiveness on post-traumatic bruising and muscle pain. However, arnica is toxic by oral route (cardiotoxic) and allergenic for people sensitive to Asteraceae.",
+  feedback_ko_fr: "L'arnica homéopathique (dilutions D6 et au-delà) ne contient plus de principes actifs en quantité détectable. Son efficacité dans ces dilutions relève du débat sur l'homéopathie, pas de la phytothérapie.",
+  feedback_ko_en: "Homeopathic arnica (D6 dilutions and above) no longer contains active ingredients in detectable quantities. Its effectiveness at these dilutions falls under the debate on homeopathy, not herbal medicine.",
+  reformulation_fr: "L'arnica topique est-elle efficace contre les hématomes ?",
+  reformulation_en: "Is topical arnica effective against bruising ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "Plusieurs méta-analyses confirment l'efficacité de l'arnica topique pour réduire la taille et la durée des hématomes post-traumatiques via l'inhibition de NF-kB.",
+  reformulation_explanation_en: "Several meta-analyses confirm the effectiveness of topical arnica for reducing the size and duration of post-traumatic bruising via NF-kB inhibition."
+},
+{
+  question_fr: "L'huile de nigelle (Nigella sativa) a-t-elle des effets prouvés sur la peau ?",
+  question_en: "Does black seed oil (Nigella sativa) have proven effects on the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, c'est uniquement une tradition", text_en:"No, it is purely traditional"},
+    {letter:"B", text_fr:"Oui, la thymoquinone inhibe NF-kB et a des effets anti-inflammatoires, antifongiques et antimicrobiens documentés sur la peau et dans l'eczéma", text_en:"Yes, thymoquinone inhibits NF-kB and has documented anti-inflammatory, antifungal and antimicrobial effects on the skin and in eczema"},
+    {letter:"C", text_fr:"Oui, elle guérit le psoriasis sévère", text_en:"Yes, it cures severe psoriasis"},
+    {letter:"D", text_fr:"Non, elle est dangereuse pour la peau", text_en:"No, it is dangerous for the skin"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. La thymoquinone de la nigelle inhibe NF-kB et la 5-lipoxygénase, réduisant l'inflammation cutanée. Des études cliniques montrent une amélioration de la dermatite atopique et de l'acné avec l'huile de nigelle topique. Elle est aussi antifongique contre Candida et antimicrobienne contre S. aureus. Son usage dans la médecine prophétique islamique est corroboré par la science moderne.",
+  feedback_ok_en: "Exactly. Thymoquinone from black seed inhibits NF-kB and 5-lipoxygenase, reducing skin inflammation. Clinical studies show improvement of atopic dermatitis and acne with topical black seed oil. It is also antifungal against Candida and antimicrobial against S. aureus. Its use in Islamic prophetic medicine is corroborated by modern science.",
+  feedback_ko_fr: "La nigelle est l'une des plantes médicinales les plus étudiées au monde avec plus de 1000 publications scientifiques. Son principe actif la thymoquinone a des effets documentés sur l'inflammation, le cancer et les infections.",
+  feedback_ko_en: "Black seed is one of the most studied medicinal plants in the world with more than 1000 scientific publications. Its active principle thymoquinone has documented effects on inflammation, cancer and infections.",
+  reformulation_fr: "L'huile de nigelle peut-elle améliorer la dermatite atopique ?",
+  reformulation_en: "Can black seed oil improve atopic dermatitis ?",
+  reformulation_answer: "Oui selon les données disponibles / Yes according to available data",
+  reformulation_explanation_fr: "Plusieurs essais cliniques montrent une réduction du score SCORAD avec l'application topique d'huile de nigelle dans la dermatite atopique légère à modérée.",
+  reformulation_explanation_en: "Several clinical trials show a reduction in SCORAD score with topical application of black seed oil in mild to moderate atopic dermatitis."
+},
+{
+  question_fr: "La consoude (Symphytum officinale) peut-elle être utilisée sans restriction sur la peau ?",
+  question_en: "Can comfrey (Symphytum officinale) be used without restriction on the skin ?",
+  options: [
+    {letter:"A", text_fr:"Oui, elle est totalement sûre", text_en:"Yes, it is completely safe"},
+    {letter:"B", text_fr:"Non, ses alcaloïdes pyrrolizidiniques sont hépatotoxiques et potentiellement cancérigènes. Usage topique limité à 10 jours, jamais sur plaie ouverte", text_en:"No, its pyrrolizidine alkaloids are hepatotoxic and potentially carcinogenic. Topical use limited to 10 days, never on open wound"},
+    {letter:"C", text_fr:"Oui, le naturel garantit sa sécurité", text_en:"Yes, natural guarantees its safety"},
+    {letter:"D", text_fr:"Non, elle est interdite en Europe", text_en:"No, it is banned in Europe"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. La consoude contient des alcaloïdes pyrrolizidiniques (PA) hépatotoxiques et potentiellement cancérigènes. En Europe, les préparations topiques sont autorisées mais limitées à 10 jours d'utilisation, avec une teneur maximale en PA de 100 microgrammes par jour. Elle est interdite par voie orale. Ne jamais appliquer sur peau lésée car les PA passent dans la circulation.",
+  feedback_ok_en: "Exactly. Comfrey contains hepatotoxic and potentially carcinogenic pyrrolizidine alkaloids (PAs). In Europe, topical preparations are permitted but limited to 10 days of use, with a maximum PA content of 100 micrograms per day. It is banned by oral route. Never apply to broken skin as PAs enter the circulation.",
+  feedback_ko_fr: "La consoude illustre parfaitement le paradoxe de certaines plantes : efficace (l'allantoïne cicatrisante) mais potentiellement dangereuse (alcaloïdes pyrrolizidiniques). La phytothérapie responsable intègre toujours la notion de risque.",
+  feedback_ko_en: "Comfrey perfectly illustrates the paradox of certain plants: effective (healing allantoin) but potentially dangerous (pyrrolizidine alkaloids). Responsible herbal medicine always integrates the notion of risk.",
+  reformulation_fr: "La consoude est-elle dangereuse par voie orale ?",
+  reformulation_en: "Is comfrey dangerous by oral route ?",
+  reformulation_answer: "Oui / Yes",
+  reformulation_explanation_fr: "Les alcaloïdes pyrrolizidiniques de la consoude sont hépatotoxiques et cancérigènes. Son usage oral est interdit dans de nombreux pays dont la France et l'Allemagne.",
+  reformulation_explanation_en: "Pyrrolizidine alkaloids from comfrey are hepatotoxic and carcinogenic. Its oral use is banned in many countries including France and Germany."
+},
+{
+  question_fr: "L'huile de chanvre (Cannabis sativa) sans THC est-elle utile pour la peau ?",
+  question_en: "Is hemp oil (Cannabis sativa) without THC useful for the skin ?",
+  options: [
+    {letter:"A", text_fr:"Non, elle est illégale et sans effet", text_en:"No, it is illegal and without effect"},
+    {letter:"B", text_fr:"Oui, sa richesse en acide linoléique et gamma-linolénique rééquilibre la barrière lipidique cutanée, et le CBD topique a des propriétés anti-inflammatoires et sébosuppressives", text_en:"Yes, its richness in linoleic acid and gamma-linolenic acid rebalances the cutaneous lipid barrier, and topical CBD has anti-inflammatory and sebosuppressive properties"},
+    {letter:"C", text_fr:"Non, elle provoque toujours des effets psychoactifs", text_en:"No, it always causes psychoactive effects"},
+    {letter:"D", text_fr:"Oui, elle guérit toutes les maladies cutanées", text_en:"Yes, it cures all skin diseases"}
+  ],
+  correct: "B",
+  feedback_ok_fr: "Exactement. L'huile de graines de chanvre (sans CBD ni THC) est riche en acide linoléique et GLA, des acides gras essentiels qui rééquilibrent la barrière lipidique cutanée. Le CBD topique (cannabidiol) a des propriétés anti-inflammatoires via les récepteurs CB1/CB2 des kératinocytes et sébosuppressives (réduction du sébum). Il est légal en Europe à moins de 0,3% de THC.",
+  feedback_ok_en: "Exactly. Hemp seed oil (without CBD or THC) is rich in linoleic acid and GLA, essential fatty acids that rebalance the cutaneous lipid barrier. Topical CBD (cannabidiol) has anti-inflammatory properties via CB1/CB2 receptors in keratinocytes and sebosuppressive properties (sebum reduction). It is legal in Europe at less than 0.3% THC.",
+  feedback_ko_fr: "Il faut distinguer l'huile de graines de chanvre (pressée à froid, sans CBD ni THC, légale partout) du CBD topique (légal en Europe) et du THC (illégal dans la plupart des pays). L'huile de chanvre cosmétique ne contient ni CBD ni THC.",
+  feedback_ko_en: "One must distinguish hemp seed oil (cold-pressed, without CBD or THC, legal everywhere) from topical CBD (legal in Europe) and THC (illegal in most countries). Cosmetic hemp oil contains neither CBD nor THC.",
+  reformulation_fr: "Le CBD topique a-t-il des effets anti-inflammatoires documentés sur la peau ?",
+  reformulation_en: "Does topical CBD have documented anti-inflammatory effects on the skin ?",
+  reformulation_answer: "Oui selon les données préliminaires / Yes according to preliminary data",
+  reformulation_explanation_fr: "Le CBD topique active les récepteurs CB2 dans les kératinocytes et les cellules immunitaires cutanées, réduisant la production de cytokines pro-inflammatoires. Des études cliniques préliminaires montrent des bénéfices dans l'eczéma et le psoriasis.",
+  reformulation_explanation_en: "Topical CBD activates CB2 receptors in keratinocytes and cutaneous immune cells, reducing production of pro-inflammatory cytokines. Preliminary clinical studies show benefits in eczema and psoriasis."
+}
+];
+
+var currentIndex = 0, score = 0, selectedLetter = null, validated = false, reformulationAnswered = false, questionsLeft = 3;
+
+renderQuestion();
+
+function renderQuestion() {
+  var q = questions[currentIndex];
+  selectedLetter = null; validated = false; reformulationAnswered = false;
+  document.getElementById('question-text').textContent = q['question_' + lang];
+  var list = document.getElementById('options-list');
+  list.innerHTML = '';
+  q.options.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.setAttribute('data-letter', opt.letter);
+    btn.onclick = function() { selectOption(opt.letter); };
+    btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span><span class="option-text">' + opt['text_' + lang] + '</span><span class="option-check">✓</span>';
+    list.appendChild(btn);
+  });
+  var vb = document.getElementById('validate-btn');
+  vb.disabled = true; vb.style.display = 'block';
+  vb.textContent = lang === 'fr' ? 'Valider' : 'Validate';
+  document.getElementById('feedback-block').style.display = 'none';
+  document.getElementById('reformulation-block').style.display = 'none';
+  document.getElementById('reformulation-title').textContent = '';
+  document.getElementById('reformulation-options').innerHTML = '';
+  document.getElementById('ask-row').style.display = 'none';
+  document.getElementById('ask-input-row').style.display = 'none';
+  document.getElementById('ask-reply').textContent = ''; document.getElementById('ask-reply').style.display = 'none';
+  document.getElementById('continuer-btn').style.display = 'none';
+  document.getElementById('pubmed-block').style.display = 'none';
+  updateHeader();
+}
+
+function selectOption(letter) {
+  if (validated) return;
+  selectedLetter = letter;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    btn.classList.remove('selected');
+    if (btn.getAttribute('data-letter') === letter) btn.classList.add('selected');
+  });
+  document.getElementById('validate-btn').disabled = false;
+}
+
+function validate() {
+  if (!selectedLetter || validated) return;
+  validated = true;
+  var q = questions[currentIndex];
+  var isCorrect = selectedLetter === q.correct;
+  document.querySelectorAll('.option-btn').forEach(function(btn) {
+    var letter = btn.getAttribute('data-letter');
+    btn.onclick = null;
+    if (letter === q.correct) { btn.classList.remove('selected'); btn.classList.add('correct'); }
+    else if (letter === selectedLetter && !isCorrect) { btn.classList.remove('selected'); btn.classList.add('wrong'); }
+  });
+  document.getElementById('validate-btn').style.display = 'none';
+  var fb = document.getElementById('feedback-block');
+  fb.style.display = 'block';
+  if (isCorrect) {
+    score++;
+    fb.style.background = '#e8f4f0';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#2a7fa8">✓</span> <span style="color:#2a7fa8">' + (lang === 'fr' ? 'Bonne réponse !' : 'Correct!') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ok_' + lang];
+    showPostFeedback();
+  } else {
+    fb.style.background = '#fdecea';
+    document.getElementById('feedback-top').innerHTML = '<span style="color:#e74c3c">✗</span> <span style="color:#e74c3c">' + (lang === 'fr' ? 'Pas tout à fait...' : 'Not quite...') + '</span>';
+    document.getElementById('feedback-text').textContent = q['feedback_ko_' + lang];
+    showReformulation();
+  }
+  updateHeader();
+}
+
+function showReformulation() {
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-block').style.display = 'block';
+  document.getElementById('reformulation-title').innerHTML = '🔄 ' + (lang === 'fr' ? 'Essayons autrement...' : 'Let\'s try another way...');
+  document.getElementById('reformulation-text').textContent = q['reformulation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'none';
+  var opts = document.getElementById('reformulation-options');
+  opts.innerHTML = '';
+  var refoCorrectIsOui = q.reformulation_answer.toLowerCase().indexOf('oui') === 0;
+  var choices = [
+    { text_fr: 'Oui', text_en: 'Yes', correct: refoCorrectIsOui },
+    { text_fr: 'Non', text_en: 'No', correct: !refoCorrectIsOui }
+  ];
+  choices.forEach(function(c) {
+    var btn = document.createElement('button');
+    btn.className = 'refo-btn';
+    btn.textContent = c['text_' + lang];
+    btn.setAttribute('data-correct', c.correct ? '1' : '0');
+    btn.onclick = function() { answerReformulation(c.correct, btn, opts.querySelectorAll('.refo-btn')); };
+    opts.appendChild(btn);
+  });
+}
+
+function answerReformulation(isCorrect, clickedBtn, allBtns) {
+  if (reformulationAnswered) { if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); } return; }
+  if (!isCorrect) { clickedBtn.classList.add('refo-wrong'); setTimeout(function() { clickedBtn.classList.remove('refo-wrong'); }, 600); return; }
+  reformulationAnswered = true;
+  allBtns.forEach(function(btn) {
+    btn.onclick = null;
+    if (btn.getAttribute('data-correct') === '1') { btn.classList.add('refo-correct'); btn.innerHTML += ' ✓'; }
+  });
+  var q = questions[currentIndex];
+  document.getElementById('reformulation-explanation').textContent = q['reformulation_explanation_' + lang];
+  document.getElementById('reformulation-explanation').style.display = 'block';
+  setTimeout(function() { showPostFeedback(); }, 1000);
+}
+
+function showPostFeedback() {
+  document.getElementById('ask-row').style.display = 'block';
+  if (questionsLeft > 0) { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  else { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  if (currentIndex === questions.length - 1) document.getElementById('pubmed-block').style.display = 'block';
+  document.getElementById('continuer-btn').style.display = 'block';
+  document.getElementById('continuer-btn').textContent = lang === 'fr' ? 'Continuer' : 'Continue';
+}
+
+function continuer() {
+  if (currentIndex < questions.length - 1) { currentIndex++; renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  else { sessionStorage.setItem('bf_score_pl2', score); window.location.href = 'plantes-niveau2-fin.html'; }
+}
+
+function updateHeader() {
+  document.getElementById('score-text').textContent = (lang === 'fr' ? 'Score : ' : 'Score: ') + score + '/6';
+  document.getElementById('q-counter').textContent = (currentIndex + 1) + '/6';
+  document.getElementById('progress-fill').style.width = (((currentIndex) / questions.length * 100) + (100 / questions.length)) + '%';
+}
+
+function updateAskBtn() {
+  document.getElementById('ask-btn-text').textContent = lang === 'fr'
+    ? '💬 Poser une question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's restantes' : ' restante') + ')'
+    : '💬 Ask a question (' + questionsLeft + ' question' + (questionsLeft > 1 ? 's' : '') + ' remaining)';
+}
+
+function toggleAsk() {
+  var row = document.getElementById('ask-input-row');
+  row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendAsk() {
+  if (questionsLeft <= 0) return;
+  var input = document.getElementById('ask-input');
+  var reply = document.getElementById('ask-reply');
+  var question = input.value.trim();
+  if (!question) return;
+  questionsLeft--;
+  input.value = '';
+  document.getElementById('ask-input-row').style.display = 'none';
+  if (questionsLeft === 0) { document.getElementById('ask-btn').disabled = true; document.getElementById('ask-btn-text').textContent = lang === 'fr' ? '💬 Plus de questions disponibles' : '💬 No more questions available'; }
+  else { document.getElementById('ask-btn').disabled = false; updateAskBtn(); }
+  reply.textContent = lang === 'fr' ? 'Recherche en cours...' : 'Searching...';
+  reply.style.display = 'block';
+  try {
+    var response = await fetch('https://brainfest-ai.c-piault.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: question,
+        topic: lang === 'fr' ? 'les plantes médicinales et leurs effets sur la peau' : 'medicinal plants and their effects on the skin',
+        language: lang
+      })
+    });
+    var data = await response.json();
+    reply.textContent = data.answer || (lang === 'fr' ? 'Désolé, je ne peux pas répondre.' : 'Sorry, I cannot answer.');
+  } catch (error) {
+    reply.textContent = lang === 'fr' ? 'Erreur de connexion. Réessayez.' : 'Connection error. Please try again.';
+  }
+}
+
+function toggleLang() {
+  lang = lang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = lang === 'fr' ? 'FR' : 'EN';
+  renderQuestion(); updateHeader();
+}
+</script>
+</body>
+</html>
