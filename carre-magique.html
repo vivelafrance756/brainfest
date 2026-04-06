@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Le Carré Magique — BrainFest</title>
+<meta name="description" content="Un puzzle visuel pour entraîner votre logique et votre mémoire de travail. Trouvez la case manquante.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/carre-magique.html">
+<script>if(!sessionStorage.getItem('bf_access')){window.location.href='index.html';}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue: #2a7fa8;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-width: 375px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--indigo-dark);
+  overflow-x: hidden;
+  min-width: 375px;
+}
+
+/* ── HEADER ── */
+#header {
+  width: 100%;
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+#header-logo .brain { color: var(--cream); font-weight: 400; }
+#header-logo .fest  { color: var(--amber); font-weight: 600; }
+
+#lang-toggle {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 6px 18px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 64px;
+  letter-spacing: 0.5px;
+}
+
+/* ── BACK BAR ── */
+#back-bar {
+  width: 100%;
+  background: var(--cream);
+  padding: 12px 20px;
+}
+
+#back-btn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+}
+
+/* ── HERO ── */
+#hero-illustration {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+#hero-illustration img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── INTRO BLOCK ── */
+#intro-block {
+  background: var(--cream);
+  padding: 24px 20px;
+}
+
+#intro-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+#intro-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+#intro-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ── LEVEL SELECTOR ── */
+#level-selector {
+  padding: 16px 20px 32px;
+}
+
+.level-choice-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.level-choice-card:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+.level-choice-emoji {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.level-choice-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.level-choice-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  line-height: 1.2;
+}
+
+.level-choice-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+}
+
+/* ── FOOTER ── */
+#footer {
+  background: var(--indigo-mid);
+  padding: 32px 20px;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#footer-text-top {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#newsletter-btn {
+  width: 100%;
+  background: var(--amber);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#footer-text-bottom {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+#footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--amber);
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+#footer-links a:hover { text-decoration: underline; }
+
+#footer-copyright {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── GAME SCREEN ── */
+#game-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cream);
+  z-index: 100;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+#game-screen.active {
+  display: flex;
+}
+
+#game-top-bar {
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+#game-back-btn {
+  background: none;
+  border: none;
+  color: var(--cream);
+  font-size: 22px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#game-level-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  text-align: center;
+  flex: 1;
+}
+
+#game-share-btn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#rule-reminder {
+  padding: 10px 20px;
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+#grid-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px 12px;
+}
+
+#grid-container {
+  display: grid;
+  gap: 8px;
+  margin: 0 auto;
+}
+
+.grid-cell {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+
+.grid-cell.empty {
+  background: #eaf4f8;
+  border: 2px solid #2a7fa8;
+  cursor: pointer;
+}
+
+.grid-cell.empty:active { opacity: 0.75; }
+
+.grid-cell.correct {
+  background: #e8f4f0;
+  border: 2px solid var(--sage);
+  cursor: default;
+}
+
+.grid-cell.wrong {
+  background: #fdecea;
+  border: 2px solid #e74c3c;
+  cursor: pointer;
+}
+
+#validate-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 20px 24px;
+  background: #2a7fa8;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 52px;
+  flex-shrink: 0;
+}
+
+/* ── BOTTOM SHEET ── */
+#bottom-sheet-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+}
+
+#bottom-sheet-overlay.active { display: block; }
+
+#bottom-sheet {
+  position: fixed;
+  bottom: -220px;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px 32px;
+  z-index: 201;
+  transition: bottom 0.3s ease;
+}
+
+#bottom-sheet.active { bottom: 0; }
+
+#sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+#sheet-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+#symbol-choices {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.symbol-choice-btn {
+  width: 64px;
+  height: 64px;
+  background: var(--cream);
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.symbol-choice-btn:active {
+  background: #eaf4f8;
+  border-color: #2a7fa8;
+}
+
+/* ── SUCCESS SCREEN ── */
+#success-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cream);
+  z-index: 150;
+  overflow-y: auto;
+  padding: 48px 20px 40px;
+  flex-direction: column;
+  align-items: center;
+}
+
+#success-screen.active { display: flex; }
+
+#success-confetti {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+#success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+#success-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: #2a7fa8;
+  margin-bottom: 6px;
+}
+
+#success-best {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 36px;
+}
+
+.success-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 52px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+#retry-btn { background: #2a7fa8; color: #ffffff; }
+#next-btn  { background: var(--sage); color: #ffffff; }
+#home-btn  { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); }
+
+#newsletter-cta {
+  margin-top: 16px;
+  background: #fff8e8;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(212,146,58,0.3);
+  width: 100%;
+  text-align: center;
+}
+
+#newsletter-cta-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+#newsletter-email {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d4923a;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+  outline: none;
+  background: #ffffff;
+  color: var(--indigo-dark);
+  box-sizing: border-box;
+}
+
+#newsletter-submit {
+  width: 100%;
+  background: #d4923a;
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+#newsletter-error {
+  display: none;
+  color: #e74c3c;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  margin-top: 6px;
+  text-align: left;
+}
+
+/* ── SHARE TOAST ── */
+#share-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--indigo-dark);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+#share-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="header">
+  <a href="index.html" id="header-logo">
+    <span class="brain">Brain</span><span class="fest">Fest</span>
+  </a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+</header>
+
+<!-- ── BACK BAR ── -->
+<div id="back-bar">
+  <button id="back-btn" onclick="window.location.href='index.html'">
+    ← <span data-fr="Accueil" data-en="Home">Accueil</span>
+  </button>
+</div>
+
+<!-- ── HERO ── -->
+<div id="hero-illustration">
+  <img src="images/illustration_puzzle.jpg" alt="Le Carré Magique">
+</div>
+
+<!-- ── INTRO BLOCK ── -->
+<section id="intro-block">
+  <h1 data-fr="Le Carré Magique" data-en="The Magic Square">Le Carré Magique</h1>
+  <p id="intro-subtitle"
+     data-fr="Un puzzle visuel pour entraîner votre logique et votre mémoire de travail."
+     data-en="A visual puzzle to train your logic and working memory.">
+    Un puzzle visuel pour entraîner votre logique et votre mémoire de travail.
+  </p>
+  <p id="intro-desc"
+     data-fr="Chaque symbole doit apparaître exactement une fois dans chaque ligne et chaque colonne. Trouvez la case manquante."
+     data-en="Each symbol must appear exactly once in each row and column. Find the missing cell.">
+    Chaque symbole doit apparaître exactement une fois dans chaque ligne et chaque colonne. Trouvez la case manquante.
+  </p>
+</section>
+
+<!-- ── LEVEL SELECTOR ── -->
+<section id="level-selector">
+  <div class="level-choice-card" onclick="startLevel(1)">
+    <div class="level-choice-emoji">🟢</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Logique Pure" data-en="Pure Logic">Logique Pure</div>
+      <div class="level-choice-sub" data-fr="Grille 4x4 · 2 cases vides" data-en="4x4 grid · 2 empty cells">Grille 4x4 · 2 cases vides</div>
+    </div>
+  </div>
+  <div class="level-choice-card" onclick="startLevel(2)">
+    <div class="level-choice-emoji">🟠</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Charge Mentale" data-en="Mental Load">Charge Mentale</div>
+      <div class="level-choice-sub" data-fr="Grille 4x4 · 4 cases vides" data-en="4x4 grid · 4 empty cells">Grille 4x4 · 4 cases vides</div>
+    </div>
+  </div>
+  <div class="level-choice-card" onclick="startLevel(3)">
+    <div class="level-choice-emoji">🔴</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Règle Double" data-en="Double Rule">Règle Double</div>
+      <div class="level-choice-sub" data-fr="Grille 5x5 · 5 cases vides" data-en="5x5 grid · 5 empty cells">Grille 5x5 · 5 cases vides</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="footer">
+  <p id="footer-text-top"
+     data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+     data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+    Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+  </p>
+  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+    S'inscrire à la newsletter
+  </a>
+  <p id="footer-text-bottom"
+     data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
+     data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
+    Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+  </p>
+  <div id="footer-links">
+    <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+    <a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+  </div>
+  <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+</footer>
+
+<!-- ── GAME SCREEN ── -->
+<div id="game-screen">
+  <div id="game-top-bar">
+    <button id="game-back-btn" onclick="backToSelector()">←</button>
+    <div id="game-level-name"></div>
+    <button id="game-share-btn" onclick="shareGame()">⎙</button>
+  </div>
+  <div id="rule-reminder"
+       data-fr="Chaque symbole apparaît exactement une fois par ligne et par colonne."
+       data-en="Each symbol appears exactly once per row and column.">
+    Chaque symbole apparaît exactement une fois par ligne et par colonne.
+  </div>
+  <div id="grid-area">
+    <div id="grid-container"></div>
+  </div>
+  <button id="validate-btn" onclick="validateGrid()"
+          data-fr="Valider" data-en="Validate">Valider</button>
+</div>
+
+<!-- ── BOTTOM SHEET ── -->
+<div id="bottom-sheet-overlay" onclick="closeSheet()"></div>
+<div id="bottom-sheet">
+  <div id="sheet-handle"></div>
+  <div id="sheet-title"
+       data-fr="Choisissez un symbole"
+       data-en="Choose a symbol">Choisissez un symbole</div>
+  <div id="symbol-choices"></div>
+</div>
+
+<!-- ── SUCCESS SCREEN ── -->
+<div id="success-screen">
+  <div id="success-confetti">🎉</div>
+  <div id="success-title"
+       data-fr="Votre cerveau a détecté le motif !"
+       data-en="Your brain detected the pattern!">
+    Votre cerveau a détecté le motif !
+  </div>
+  <div id="success-time"></div>
+  <div id="success-best"></div>
+  <button class="success-btn" id="retry-btn" onclick="retryLevel()"
+          data-fr="Réessayer" data-en="Try again">Réessayer</button>
+  <button class="success-btn" id="next-btn" onclick="nextLevel()"
+          data-fr="Niveau suivant" data-en="Next level">Niveau suivant</button>
+  <button class="success-btn" id="home-btn" onclick="window.location.href='index.html'"
+          data-fr="Accueil" data-en="Home">Accueil</button>
+  <div id="newsletter-cta">
+    <p id="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to BrainFest. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" id="newsletter-email" placeholder="Votre adresse email">
+    <button id="newsletter-submit" onclick="submitNewsletter()"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p id="newsletter-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
+</div>
+
+<div id="share-toast">Lien copié !</div>
+
+<script>
+// ── LANGUAGE ──────────────────────────────────────────────────────────────
+var currentLang = 'fr';
+
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+  applyLang();
+  if (currentLevel) updateGameLevelName();
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + currentLang);
+    if (val === null) return;
+    if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H1') {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+  var emailInput = document.getElementById('newsletter-email');
+  if (emailInput) {
+    emailInput.placeholder = currentLang === 'fr' ? 'Votre adresse email' : 'Your email address';
+  }
+}
+
+function submitNewsletter() {
+  var emailInput = document.getElementById('newsletter-email');
+  var errorEl = document.getElementById('newsletter-error');
+  var email = emailInput.value.trim();
+  if (!email) {
+    errorEl.style.display = 'block';
+    return;
+  }
+  errorEl.style.display = 'none';
+  window.open('https://brainfest.brevo.com?EMAIL=' + encodeURIComponent(email), '_blank');
+}
+
+// ── PUZZLES DATA (all verified as valid Latin squares) ─────────────────────
+// Level 1: rows & cols each contain 🧠🐟🫒☀️ exactly once ✓
+// Level 2: rows & cols each contain 🧠🐟🫒☀️ exactly once ✓
+// Level 3: rows & cols each contain 🧠🐟🫒☀️🌿 exactly once ✓
+var PUZZLES = [
+  null,
+  {
+    level: 1,
+    size: 4,
+    symbols: ['🧠', '🐟', '🫒', '☀️'],
+    solution: [
+      ['🧠', '🐟', '🫒', '☀️'],
+      ['🐟', '🧠', '☀️', '🫒'],
+      ['🫒', '☀️', '🧠', '🐟'],
+      ['☀️', '🫒', '🐟', '🧠']
+    ],
+    emptyPositions: [[1,2],[2,1]]
+    // [1][2]='☀️', [2][1]='☀️'
+  },
+  {
+    level: 2,
+    size: 4,
+    symbols: ['🧠', '🐟', '🫒', '☀️'],
+    solution: [
+      ['☀️', '🧠', '🐟', '🫒'],
+      ['🧠', '🫒', '☀️', '🐟'],
+      ['🐟', '☀️', '🫒', '🧠'],
+      ['🫒', '🐟', '🧠', '☀️']
+    ],
+    emptyPositions: [[0,2],[1,0],[2,3],[3,1]]
+    // [0][2]='🐟', [1][0]='🧠', [2][3]='🧠', [3][1]='🐟'
+  },
+  {
+    level: 3,
+    size: 5,
+    symbols: ['🧠', '🐟', '🫒', '☀️', '🌿'],
+    solution: [
+      ['🧠', '🐟', '🫒', '☀️', '🌿'],
+      ['🐟', '🫒', '☀️', '🌿', '🧠'],
+      ['🫒', '☀️', '🌿', '🧠', '🐟'],
+      ['☀️', '🌿', '🧠', '🐟', '🫒'],
+      ['🌿', '🧠', '🐟', '🫒', '☀️']
+    ],
+    emptyPositions: [[0,3],[1,4],[2,0],[3,2],[4,1]]
+    // [0][3]='☀️', [1][4]='🧠', [2][0]='🫒', [3][2]='🧠', [4][1]='🧠'
+  }
+];
+
+var LEVEL_NAMES = {
+  fr: ['', 'Logique Pure', 'Charge Mentale', 'Règle Double'],
+  en: ['', 'Pure Logic',   'Mental Load',   'Double Rule']
+};
+
+// ── GAME STATE ─────────────────────────────────────────────────────────────
+var currentLevel = 0;
+var currentPuzzle = null;
+var userGrid = [];
+var selectedCell = null;
+var timerInterval = null;
+var timerStarted = false;
+var elapsedSeconds = 0;
+
+// ── START LEVEL ────────────────────────────────────────────────────────────
+function startLevel(n) {
+  currentLevel = n;
+  currentPuzzle = PUZZLES[n];
+  timerStarted = false;
+  elapsedSeconds = 0;
+  clearInterval(timerInterval);
+
+  // Build userGrid: pre-fill solution, then clear empty positions
+  var sol = currentPuzzle.solution;
+  var size = currentPuzzle.size;
+  userGrid = [];
+  for (var r = 0; r < size; r++) {
+    userGrid[r] = sol[r].slice();
+  }
+  currentPuzzle.emptyPositions.forEach(function(pos) {
+    userGrid[pos[0]][pos[1]] = null;
+  });
+
+  updateGameLevelName();
+  renderGrid();
+
+  document.getElementById('success-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  applyLang();
+}
+
+function updateGameLevelName() {
+  document.getElementById('game-level-name').textContent = LEVEL_NAMES[currentLang][currentLevel];
+}
+
+function backToSelector() {
+  clearInterval(timerInterval);
+  closeSheet();
+  document.getElementById('game-screen').classList.remove('active');
+}
+
+// ── RENDER GRID ────────────────────────────────────────────────────────────
+function renderGrid() {
+  var size = currentPuzzle.size;
+  var cellSize = size === 4 ? 72 : 62;
+  var fontSize = size === 4 ? 32 : 26;
+  var container = document.getElementById('grid-container');
+
+  container.style.gridTemplateColumns = 'repeat(' + size + ', ' + cellSize + 'px)';
+  container.style.gap = '8px';
+  container.innerHTML = '';
+
+  for (var r = 0; r < size; r++) {
+    for (var c = 0; c < size; c++) {
+      (function(row, col) {
+        var cell = document.createElement('div');
+        cell.className = 'grid-cell';
+        cell.style.width = cellSize + 'px';
+        cell.style.height = cellSize + 'px';
+        cell.style.fontSize = fontSize + 'px';
+
+        if (isEmptyPos(row, col)) {
+          var val = userGrid[row][col];
+          cell.classList.add(val ? 'empty' : 'empty');
+          cell.textContent = val || '';
+          cell.onclick = function() { openSheet(row, col); };
+        } else {
+          cell.textContent = userGrid[row][col];
+        }
+
+        container.appendChild(cell);
+      })(r, c);
+    }
+  }
+}
+
+function isEmptyPos(r, c) {
+  return currentPuzzle.emptyPositions.some(function(pos) {
+    return pos[0] === r && pos[1] === c;
+  });
+}
+
+// ── TIMER ──────────────────────────────────────────────────────────────────
+function startTimerIfNeeded() {
+  if (timerStarted) return;
+  timerStarted = true;
+  timerInterval = setInterval(function() { elapsedSeconds++; }, 1000);
+}
+
+// ── SYMBOL PICKER ──────────────────────────────────────────────────────────
+function openSheet(r, c) {
+  startTimerIfNeeded();
+  selectedCell = [r, c];
+
+  var choices = document.getElementById('symbol-choices');
+  choices.innerHTML = '';
+  currentPuzzle.symbols.forEach(function(sym) {
+    var btn = document.createElement('button');
+    btn.className = 'symbol-choice-btn';
+    btn.style.fontSize = '28px';
+    btn.textContent = sym;
+    btn.onclick = function() { placeSymbol(sym); };
+    choices.appendChild(btn);
+  });
+
+  document.getElementById('bottom-sheet-overlay').classList.add('active');
+  document.getElementById('bottom-sheet').classList.add('active');
+}
+
+function closeSheet() {
+  document.getElementById('bottom-sheet-overlay').classList.remove('active');
+  document.getElementById('bottom-sheet').classList.remove('active');
+  selectedCell = null;
+}
+
+function placeSymbol(sym) {
+  if (!selectedCell) return;
+  userGrid[selectedCell[0]][selectedCell[1]] = sym;
+  closeSheet();
+  renderGrid();
+}
+
+// ── VALIDATE ───────────────────────────────────────────────────────────────
+function validateGrid() {
+  var size = currentPuzzle.size;
+  var allCorrect = true;
+  var allFilled = true;
+
+  var container = document.getElementById('grid-container');
+  var cells = container.querySelectorAll('.grid-cell');
+  var idx = 0;
+
+  for (var r = 0; r < size; r++) {
+    for (var c = 0; c < size; c++) {
+      var cell = cells[idx++];
+      if (isEmptyPos(r, c)) {
+        var val = userGrid[r][c];
+        var expected = currentPuzzle.solution[r][c];
+        cell.classList.remove('empty', 'correct', 'wrong');
+        if (!val) {
+          cell.classList.add('empty');
+          allFilled = false;
+          allCorrect = false;
+        } else if (val === expected) {
+          cell.classList.add('correct');
+          cell.textContent = val;
+          cell.onclick = null;
+        } else {
+          cell.classList.add('wrong');
+          cell.textContent = val;
+          allCorrect = false;
+          // Keep clickable so user can fix
+          cell.onclick = (function(row, col) {
+            return function() { openSheet(row, col); };
+          })(r, c);
+        }
+      }
+    }
+  }
+
+  if (allCorrect && allFilled) {
+    setTimeout(showSuccess, 600);
+  }
+}
+
+// ── SUCCESS ────────────────────────────────────────────────────────────────
+function showSuccess() {
+  clearInterval(timerInterval);
+
+  var key = 'bf_carre_best_' + currentLevel;
+  var stored = localStorage.getItem(key);
+  var best = stored ? parseInt(stored) : null;
+
+  if (!best || elapsedSeconds < best) {
+    localStorage.setItem(key, elapsedSeconds);
+    best = elapsedSeconds;
+  }
+
+  var timeLabel = currentLang === 'fr' ? 'Temps : ' : 'Time: ';
+  var bestLabel = currentLang === 'fr' ? 'Votre meilleur temps : ' : 'Your best time: ';
+
+  document.getElementById('success-time').textContent = timeLabel + elapsedSeconds + 's';
+  document.getElementById('success-best').textContent = bestLabel + best + 's';
+  document.getElementById('next-btn').style.display = currentLevel < 3 ? 'block' : 'none';
+
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('success-screen').classList.add('active');
+  applyLang();
+}
+
+function retryLevel() {
+  document.getElementById('success-screen').classList.remove('active');
+  startLevel(currentLevel);
+}
+
+function nextLevel() {
+  if (currentLevel < 3) {
+    document.getElementById('success-screen').classList.remove('active');
+    startLevel(currentLevel + 1);
+  }
+}
+
+// ── SHARE ──────────────────────────────────────────────────────────────────
+function shareGame() {
+  var text = currentLang === 'fr'
+    ? 'Je joue au Carré Magique sur BrainFest !'
+    : 'I am playing the Magic Square on BrainFest!';
+  if (navigator.share) {
+    navigator.share({ title: 'BrainFest - Le Carré Magique', text: text, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(showToast);
+  }
+}
+
+function showToast() {
+  var toast = document.getElementById('share-toast');
+  toast.textContent = currentLang === 'fr' ? 'Lien copié !' : 'Link copied!';
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2000);
+}
+</script>
+</body>
+</html>

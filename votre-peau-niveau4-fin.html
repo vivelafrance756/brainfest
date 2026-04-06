@@ -33,7 +33,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--ind
 #btn-home { width: 100%; background: transparent; color: var(--amber); border: 1.5px solid var(--amber); border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; min-height: 44px; }
 #footer { background: var(--indigo-mid); padding: 32px 20px; color: var(--cream); display: flex; flex-direction: column; gap: 20px; flex-shrink: 0; }
 #footer-text-top { font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7; }
-#newsletter-btn { width: 100%; background: var(--amber); color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; border: none; border-radius: 24px; padding: 14px; cursor: pointer; min-height: 44px; text-decoration: none; display: block; text-align: center; }
+#newsletter-cta-text { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.5; margin-bottom: 12px; }
+#newsletter-email { width: 100%; border-radius: 12px; border: 1px solid #d4923a; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px; margin-bottom: 10px; outline: none; background: #ffffff; color: var(--indigo-dark); box-sizing: border-box; }
+#newsletter-submit { width: 100%; background: #d4923a; color: #ffffff; border-radius: 24px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; border: none; cursor: pointer; }
+#newsletter-error { display: none; color: #e74c3c; font-family: 'DM Sans', sans-serif; font-size: 13px; margin-top: 6px; text-align: left; }
 #footer-text-bottom { font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7; }
 #footer-links { display: flex; flex-wrap: wrap; gap: 12px 20px; }
 #footer-links a { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--amber); text-decoration: none; min-height: 44px; display: flex; align-items: center; }
@@ -76,13 +79,26 @@ body { font-family: 'DM Sans', sans-serif; background: #f5ede8; color: var(--ind
 </div>
 <footer id="footer">
   <p id="footer-text-top" data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram." data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.</p>
-  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener" data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">S'inscrire à la newsletter</a>
+  <div id="newsletter-cta">
+    <p id="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to BrainFest. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" id="newsletter-email" placeholder="Votre adresse email">
+    <button id="newsletter-submit" onclick="submitNewsletter()"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p id="newsletter-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
   <p id="footer-text-bottom" data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement." data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.</p>
   <div id="footer-links">
     <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
-    <a href="/confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
-    <a href="/conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
-    <a href="/lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+    <a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
   </div>
   <p id="footer-copyright">© La Troisième Note / BrainFest</p>
 </footer>
@@ -106,6 +122,22 @@ function applyLang() {
     var val = el.getAttribute('data-' + lang);
     if (val !== null) el.textContent = val;
   });
+  var emailInput = document.getElementById('newsletter-email');
+  if (emailInput) {
+    emailInput.placeholder = lang === 'fr' ? 'Votre adresse email' : 'Your email address';
+  }
+}
+
+function submitNewsletter() {
+  var emailInput = document.getElementById('newsletter-email');
+  var errorEl = document.getElementById('newsletter-error');
+  var email = emailInput.value.trim();
+  if (!email) {
+    errorEl.style.display = 'block';
+    return;
+  }
+  errorEl.style.display = 'none';
+  window.open('https://brainfest.brevo.com?EMAIL=' + encodeURIComponent(email), '_blank');
 }
 function init() {
   var score = parseInt(sessionStorage.getItem('bf_score_vp4'));
