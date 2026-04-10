@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mélodie Jazz — BrainFest</title>
+<meta name="description" content="Écoutez une mélodie jazz et reproduisez-la note par note. Entraînez votre oreille musicale.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/melodie-jazz.html">
+<script>if(!sessionStorage.getItem('bf_access')){window.location.href='index.html';}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { min-width:375px; overflow-x:hidden; }
+body {
+  font-family:'DM Sans',sans-serif;
+  background: linear-gradient(135deg,#0a1628 0%,#1a0a30 50%,#0d1a3a 100%);
+  background-attachment: fixed;
+  color: var(--cream);
+  overflow-x: hidden;
+  min-width: 375px;
+  min-height: 100vh;
+}
+
+/* HEADER */
+#header {
+  width:100%; background:var(--indigo-dark);
+  padding:16px 20px; display:flex; align-items:center; justify-content:space-between;
+}
+#header-logo { font-family:'Cormorant Garamond',serif; font-size:22px; line-height:1; text-decoration:none; }
+#header-logo .brain { color:var(--cream); font-weight:400; }
+#header-logo .fest  { color:var(--amber); font-weight:600; }
+#lang-toggle {
+  background:transparent; border:1.5px solid var(--amber); color:var(--amber);
+  font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500;
+  border-radius:50px; padding:6px 18px; cursor:pointer; min-height:44px; min-width:64px; letter-spacing:0.5px;
+}
+
+/* HERO */
+#hero {
+  width:100%; height:200px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:10px; padding:0 20px;
+}
+#hero-title { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:400; color:#f7f3ec; text-align:center; }
+#hero-subtitle { font-family:'DM Sans',sans-serif; font-size:14px; color:#d4923a; text-align:center; }
+
+/* SELECTOR SCREEN */
+#selector-screen { display:flex; flex-direction:column; min-height:calc(100vh - 56px); }
+#melody-selector { flex:1; padding:20px 16px 32px; }
+#selector-title {
+  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600;
+  color:var(--amber); margin-bottom:16px; text-align:center;
+}
+.melody-card {
+  background:#232845; border-radius:12px; padding:16px; margin-bottom:10px;
+  border:1px solid rgba(212,146,58,0.3); cursor:pointer;
+  transition:border-color 0.15s, transform 0.15s;
+  display:flex; align-items:center; gap:12px;
+}
+.melody-card:active { border-color:rgba(212,146,58,0.8); transform:scale(0.98); }
+.melody-card-icon { font-size:26px; flex-shrink:0; }
+.melody-card-info { flex:1; }
+.melody-card-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:600; color:var(--cream); line-height:1.2; margin-bottom:2px; }
+.melody-card-meta { font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(212,146,58,0.85); }
+.melody-card-arrow { font-size:20px; color:rgba(212,146,58,0.5); flex-shrink:0; }
+
+/* FOOTER */
+#footer { background:var(--indigo-mid); padding:32px 20px; color:var(--cream); display:flex; flex-direction:column; gap:20px; }
+#footer-text-top,#footer-text-bottom { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.7; color:var(--cream); }
+#newsletter-btn {
+  width:100%; background:var(--amber); color:var(--cream); font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:500; border:none; border-radius:24px; padding:14px;
+  cursor:pointer; min-height:44px; text-decoration:none; display:block; text-align:center;
+}
+#footer-links { display:flex; flex-wrap:wrap; gap:12px 20px; }
+#footer-links a { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--amber); text-decoration:none; min-height:44px; display:flex; align-items:center; }
+#footer-links a:hover { text-decoration:underline; }
+#footer-copyright { font-family:'DM Sans',sans-serif; font-size:12px; color:rgba(255,255,255,0.5); }
+
+/* GAME SCREEN */
+#game-screen {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:linear-gradient(135deg,#0a1628 0%,#1a0a30 50%,#0d1a3a 100%);
+  z-index:100; flex-direction:column;
+}
+#game-screen.active { display:flex; }
+
+#game-top-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; flex-shrink:0; background:rgba(0,0,0,0.35);
+}
+#game-back-btn {
+  background:none; border:none; color:var(--cream); font-size:22px;
+  cursor:pointer; min-height:44px; min-width:44px;
+  display:flex; align-items:center; justify-content:flex-start;
+}
+#game-melody-title {
+  font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:600;
+  color:var(--cream); text-align:center; flex:1; padding:0 8px;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+#game-lives { font-size:18px; min-width:72px; text-align:right; letter-spacing:2px; flex-shrink:0; }
+
+#score-area { padding:4px 16px; text-align:center; flex-shrink:0; }
+#score-display { font-family:'DM Sans',sans-serif; font-size:16px; color:var(--amber); }
+
+#dots-area {
+  padding:6px 16px; display:flex; align-items:center; justify-content:center;
+  gap:5px; flex-shrink:0; flex-wrap:wrap; min-height:28px;
+}
+.progress-dot { width:9px; height:9px; border-radius:50%; background:rgba(212,146,58,0.25); flex-shrink:0; }
+.progress-dot.filled { background:#d4923a; }
+
+#play-btn {
+  margin:4px 12px 4px; padding:10px; flex-shrink:0;
+  background:rgba(212,146,58,0.12); border:1.5px solid rgba(212,146,58,0.45);
+  border-radius:12px; color:var(--amber); font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:500; cursor:pointer; min-height:44px; transition:background 0.15s;
+}
+#play-btn:active { background:rgba(212,146,58,0.3); }
+#play-btn:disabled { opacity:0.45; cursor:default; }
+
+/* NOTES GRID */
+#notes-grid {
+  flex:1; min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(4,1fr);
+  gap:8px; padding:8px; position:relative;
+}
+.note-btn {
+  border:none; border-radius:12px;
+  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:#f7f3ec;
+  cursor:pointer; transition:background 0.15s;
+  display:flex; align-items:center; justify-content:center;
+  user-select:none; -webkit-user-select:none; position:relative;
+}
+.note-btn:active { filter:brightness(1.25); }
+.note-btn.btn-active { background:linear-gradient(135deg,#d4923a,#c07830) !important; transition:background 0.15s; }
+.note-btn.wrong-flash { background:rgba(220,38,38,0.75) !important; }
+
+#btn-do  { background:#8B2252; grid-column:1; grid-row:1; }
+#btn-re  { background:#2E6B62; grid-column:1; grid-row:2; }
+#btn-mi  { background:#4A3B8F; grid-column:1; grid-row:3; }
+#btn-fa  { background:#B8860B; grid-column:1; grid-row:4; }
+#btn-sol { background:#1B5E8A; grid-column:2; grid-row:1; }
+#btn-la  { background:#6B3A2E; grid-column:2; grid-row:2; }
+#btn-si  { background:#2D6B3F; grid-column:2; grid-row:3/span 2; }
+
+#correct-flash {
+  position:absolute; inset:0; background:rgba(34,197,94,0.3);
+  pointer-events:none; opacity:0; z-index:5; border-radius:4px;
+}
+@keyframes correctFade { 0%{opacity:1} 100%{opacity:0} }
+#correct-flash.active { animation:correctFade 0.3s ease-out forwards; }
+
+@keyframes shake {
+  0%{transform:translateX(0)} 15%{transform:translateX(-6px)} 30%{transform:translateX(6px)}
+  45%{transform:translateX(-4px)} 60%{transform:translateX(4px)} 80%{transform:translateX(0)} 100%{transform:translateX(0)}
+}
+.shake { animation:shake 0.35s ease-out; }
+
+/* FULL OVERLAY SCREENS */
+.full-overlay {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:200; overflow-y:auto; flex-direction:column; align-items:center;
+}
+.full-overlay.active { display:flex; }
+
+/* ANECDOTE SCREEN */
+#anecdote-screen {
+  background:linear-gradient(135deg,#0a1628 0%,#1a0a30 50%,#0d1a3a 100%);
+  padding:28px 16px 40px; gap:16px;
+}
+#anecdote-card {
+  background:#232845; border-radius:16px; padding:24px;
+  border:1.5px solid var(--amber); width:100%; max-width:480px;
+}
+#anecdote-complete-icon { font-size:44px; text-align:center; margin-bottom:12px; }
+#anecdote-melody-title {
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+  color:var(--cream); text-align:center; margin-bottom:4px; line-height:1.2;
+}
+#anecdote-melody-meta { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--amber); text-align:center; margin-bottom:14px; }
+#anecdote-text { font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(247,243,236,0.85); line-height:1.7; }
+
+/* GAME OVER SCREEN */
+#game-over-screen {
+  background:linear-gradient(135deg,#0a1628 0%,#1a0a30 50%,#0d1a3a 100%);
+  justify-content:center; padding:32px 16px; gap:16px;
+}
+#game-over-icon { font-size:48px; }
+#game-over-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--cream); text-align:center; }
+#game-over-score { font-family:'DM Sans',sans-serif; font-size:18px; color:var(--amber); text-align:center; }
+
+/* OVERLAY BUTTONS */
+.overlay-btn {
+  width:100%; max-width:480px; border:none; border-radius:12px; padding:16px;
+  font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500;
+  cursor:pointer; min-height:52px; text-align:center; display:block;
+}
+.overlay-btn-primary { background:var(--amber); color:#fff; }
+.overlay-btn-secondary { background:rgba(247,243,236,0.08); border:1.5px solid rgba(247,243,236,0.25); color:var(--cream); }
+
+/* NEWSLETTER CTA (in overlays) */
+.newsletter-cta {
+  width:100%; max-width:480px;
+  background:rgba(247,243,236,0.06); border-radius:12px; padding:16px;
+  border:1px solid rgba(212,146,58,0.3); text-align:center;
+}
+.newsletter-cta-text {
+  font-family:'DM Sans',sans-serif; font-size:14px; color:rgba(247,243,236,0.7); line-height:1.5; margin-bottom:12px;
+}
+.newsletter-email-input {
+  width:100%; border-radius:12px; border:1px solid var(--amber); padding:12px 16px;
+  font-family:'DM Sans',sans-serif; font-size:15px; margin-bottom:10px; outline:none;
+  background:rgba(255,255,255,0.07); color:var(--cream); box-sizing:border-box;
+}
+.newsletter-email-input::placeholder { color:rgba(247,243,236,0.35); }
+.newsletter-submit-btn {
+  width:100%; background:var(--amber); color:var(--cream); border-radius:24px;
+  padding:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; border:none; cursor:pointer;
+}
+.newsletter-err { display:none; color:#e74c3c; font-family:'DM Sans',sans-serif; font-size:13px; margin-top:6px; text-align:left; }
+
+/* MESSAGE OVERLAY */
+#msg-overlay {
+  display:none; position:fixed; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(8,16,32,0.93); border:1px solid rgba(212,146,58,0.5);
+  border-radius:16px; padding:20px 28px; z-index:600;
+  text-align:center; pointer-events:none; max-width:300px; width:85%;
+}
+#msg-overlay.active { display:block; }
+#msg-overlay-text {
+  font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600;
+  color:var(--cream); line-height:1.4; font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <a href="index.html" id="header-logo">
+    <span class="brain">Brain</span><span class="fest">Fest</span>
+  </a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+</header>
+
+<!-- SELECTOR SCREEN -->
+<div id="selector-screen">
+  <div id="hero">
+    <h1 id="hero-title">Mélodie Jazz</h1>
+    <p id="hero-subtitle"
+       data-fr="Écoutez. Mémorisez. Reproduisez."
+       data-en="Listen. Memorize. Reproduce.">Écoutez. Mémorisez. Reproduisez.</p>
+  </div>
+  <div id="melody-selector">
+    <h2 id="selector-title" data-fr="Choisissez une mélodie" data-en="Choose a melody">Choisissez une mélodie</h2>
+    <div id="melody-list"></div>
+  </div>
+  <footer id="footer">
+    <p id="footer-text-top"
+       data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+       data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+      Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+    </p>
+    <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+       data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+      S'inscrire à la newsletter
+    </a>
+    <p id="footer-text-bottom"
+       data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
+       data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
+      Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+    </p>
+    <div id="footer-links">
+      <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+      <a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+      <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+      <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+    </div>
+    <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+  </footer>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="game-screen">
+  <div id="game-top-bar">
+    <button id="game-back-btn" onclick="backToSelector()">←</button>
+    <div id="game-melody-title"></div>
+    <div id="game-lives">🎵🎵🎵</div>
+  </div>
+  <div id="score-area">
+    <span id="score-display">Score : 0</span>
+  </div>
+  <div id="dots-area"></div>
+  <button id="play-btn" onclick="replaySequence()"
+          data-fr="▶ Écouter" data-en="▶ Listen">▶ Écouter</button>
+  <div id="notes-grid">
+    <div id="correct-flash"></div>
+    <button class="note-btn" id="btn-do"  onclick="tapNote('Do')">Do</button>
+    <button class="note-btn" id="btn-re"  onclick="tapNote('Ré')">Ré</button>
+    <button class="note-btn" id="btn-mi"  onclick="tapNote('Mi')">Mi</button>
+    <button class="note-btn" id="btn-fa"  onclick="tapNote('Fa')">Fa</button>
+    <button class="note-btn" id="btn-sol" onclick="tapNote('Sol')">Sol</button>
+    <button class="note-btn" id="btn-la"  onclick="tapNote('La')">La</button>
+    <button class="note-btn" id="btn-si"  onclick="tapNote('Si')">Si</button>
+  </div>
+</div>
+
+<!-- ANECDOTE SCREEN -->
+<div id="anecdote-screen" class="full-overlay">
+  <div id="anecdote-card">
+    <div id="anecdote-complete-icon">🎷</div>
+    <div id="anecdote-melody-title"></div>
+    <div id="anecdote-melody-meta"></div>
+    <p id="anecdote-text"></p>
+  </div>
+  <div class="newsletter-cta">
+    <p class="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to BrainFest. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" class="newsletter-email-input" id="anecdote-email" placeholder="Votre adresse email">
+    <button class="newsletter-submit-btn" onclick="submitNewsletter('anecdote-email','anecdote-error')"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p class="newsletter-err" id="anecdote-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
+  <button class="overlay-btn overlay-btn-primary" onclick="backToSelector()"
+          data-fr="Choisir une autre mélodie" data-en="Choose another melody">
+    Choisir une autre mélodie
+  </button>
+  <button class="overlay-btn overlay-btn-secondary" onclick="replayMelody()"
+          data-fr="Rejouer" data-en="Play again">Rejouer</button>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="game-over-screen" class="full-overlay">
+  <div id="game-over-icon">🎼</div>
+  <div id="game-over-title" data-fr="Partie terminée" data-en="Game Over">Partie terminée</div>
+  <div id="game-over-score"></div>
+  <div class="newsletter-cta">
+    <p class="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to BrainFest. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" class="newsletter-email-input" id="gameover-email" placeholder="Votre adresse email">
+    <button class="newsletter-submit-btn" onclick="submitNewsletter('gameover-email','gameover-error')"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p class="newsletter-err" id="gameover-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
+  <button id="go-replay-btn" class="overlay-btn overlay-btn-primary" onclick="replayMelody()"
+          data-fr="Rejouer" data-en="Play again" style="visibility:hidden">Rejouer</button>
+  <button id="go-selector-btn" class="overlay-btn overlay-btn-secondary" onclick="backToSelector()"
+          data-fr="Choisir une mélodie" data-en="Choose melody" style="visibility:hidden">Choisir une mélodie</button>
+</div>
+
+<!-- MESSAGE OVERLAY -->
+<div id="msg-overlay">
+  <div id="msg-overlay-text"></div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+var MELODIES = [
+  { title:"When the Saints Go Marching In", artist:"Louis Armstrong", year:"1938",
+    notes:["Do","Mi","Fa","Sol","Do","Mi","Fa","Sol","Do","Mi","Fa","Sol","Mi","Do","Mi","Ré","Do","Sol","Mi","Do","Ré","Do"],
+    anecdote:{ fr:"Louis Armstrong est né à La Nouvelle-Orléans le 4 août 1901. Il a enregistré cette version iconique en 1938. Enfant, il a appris la musique dans un foyer pour jeunes délinquants après avoir tiré un coup de feu en l'air un soir du Nouvel An. Ses amis l'appelaient Satchmo car sa bouche était si grande qu'elle ressemblait à une sacoche.", en:"Louis Armstrong was born in New Orleans on August 4, 1901. He recorded this iconic version in 1938. As a child, he learned music in a juvenile home after firing a gun into the air on New Year's Eve. His friends called him Satchmo because his mouth was so big it looked like a satchel." }},
+  { title:"Frankie and Johnny", artist:"Sam Cooke", year:"~1904",
+    notes:["Do","Do","Do","Mi","Sol","Sol","Sol","Mi","Do","Do","Ré","Mi","Fa","Mi","Ré","Do"],
+    anecdote:{ fr:"Sam Cooke est né à Clarksdale, Mississippi, le 22 janvier 1931. Cette ballade folk, dont la première version date d'environ 1904, s'inspire d'un fait divers réel à Saint-Louis en 1899. Plus de 250 artistes l'ont reprise, d'Elvis à Stevie Wonder. Cooke en a fait une version soul inoubliable.", en:"Sam Cooke was born in Clarksdale, Mississippi, on January 22, 1931. This folk ballad, first recorded around 1904, is based on a real crime in St. Louis in 1899. Over 250 artists have covered it, from Elvis to Stevie Wonder. Cooke turned it into an unforgettable soul version." }},
+  { title:"The Entertainer", artist:"Scott Joplin", year:"1902",
+    notes:["Ré","Ré","Ré","Do","Ré","Mi","Do","Ré","Mi","Sol","Mi","Do","Ré"],
+    anecdote:{ fr:"Scott Joplin est né à Texarkana, Texas, vers 1868. The Entertainer est publié en 1902 et redevient un tube mondial grâce au film L'Arnaque en 1973. Joplin rêvait d'être reconnu comme compositeur d'opéra, pas de ragtime. Il a écrit un opéra complet, Treemonisha, jamais joué de son vivant.", en:"Scott Joplin was born in Texarkana, Texas, around 1868. The Entertainer was published in 1902 and became a worldwide hit again thanks to the film The Sting in 1973. Joplin dreamed of being recognized as an opera composer, not a ragtime one. He wrote a full opera, Treemonisha, never performed in his lifetime." }},
+  { title:"Bill Bailey", artist:"Hughie Cannon", year:"1902",
+    notes:["Sol","Sol","Sol","Mi","Sol","La","Sol","Fa","Mi","Ré","Do","Sol","La","Sol"],
+    anecdote:{ fr:"Hughie Cannon est né à Detroit, Michigan, en 1877. Il publie ce morceau en 1902. Ironie du sort, c'est Cannon lui-même qui a quitté sa femme, pas l'inverse. Le morceau lui a rapporté si peu qu'il est mort dans la pauvreté à 35 ans.", en:"Hughie Cannon was born in Detroit, Michigan, in 1877. He published this tune in 1902. Ironically, it was Cannon himself who left his wife, not the other way around. The song earned him so little that he died in poverty at age 35." }},
+  { title:"Oh Susanna", artist:"Stephen Foster", year:"1848",
+    notes:["Do","Ré","Mi","Sol","Sol","La","Sol","Mi","Do","Ré","Mi","Mi","Ré","Do","Ré"],
+    anecdote:{ fr:"Stephen Foster est né à Lawrenceville, Pennsylvanie, le 4 juillet 1826. Oh Susanna est publiée en 1848, quand il n'avait que 22 ans. Le morceau est devenu l'hymne officieux de la ruée vers l'or en Californie. Foster a vendu les droits pour seulement 100 dollars et n'en a presque rien gagné.", en:"Stephen Foster was born in Lawrenceville, Pennsylvania, on July 4, 1826. Oh Susanna was published in 1848, when he was only 22. The song became the unofficial anthem of the California Gold Rush. Foster sold the rights for just 100 dollars and barely earned anything from it." }},
+  { title:"Maple Leaf Rag", artist:"Scott Joplin", year:"1899",
+    notes:["Mi","Mi","Mi","Do","Mi","Fa","Sol","La","Sol","Mi","Do","Ré","Mi"],
+    anecdote:{ fr:"Scott Joplin publie le Maple Leaf Rag en 1899 : c'est la première partition afro-américaine à dépasser le million d'exemplaires vendus. Joplin touchait un centime par copie vendue. Il a utilisé cet argent pour financer son rêve : composer un opéra. Aujourd'hui, ce ragtime est joué dans les conservatoires du monde entier.", en:"Scott Joplin published Maple Leaf Rag in 1899: it was the first African-American sheet music to sell over one million copies. Joplin earned one cent per copy sold. He used that money to fund his dream: composing an opera. Today, this ragtime is played in conservatories worldwide." }},
+  { title:"Summertime", artist:"George Gershwin", year:"1935",
+    notes:["Sol","La","Sol","Mi","Ré","Do","Ré","Mi","Sol","La","Sol","Mi","Sol","La","Sol"],
+    anecdote:{ fr:"George Gershwin est né à Brooklyn, New York, le 26 septembre 1898. Summertime est un air de l'opéra Porgy and Bess, créé en 1935. C'est le morceau le plus repris de l'histoire du jazz, avec plus de 33 000 versions enregistrées. Gershwin est mort à seulement 38 ans d'une tumeur au cerveau.", en:"George Gershwin was born in Brooklyn, New York, on September 26, 1898. Summertime is an aria from the opera Porgy and Bess, created in 1935. It is the most covered song in jazz history, with over 33,000 recorded versions. Gershwin died at only 38 from a brain tumor." }},
+  { title:"Take Five", artist:"Dave Brubeck", year:"1959",
+    notes:["Mi","Sol","La","Sol","Mi","Ré","Do","Ré","Mi","Sol","La","Sol","Mi"],
+    anecdote:{ fr:"Dave Brubeck est né à Concord, Californie, le 6 décembre 1920. Take Five est écrit par son saxophoniste Paul Desmond en 1959. C'est le premier disque de jazz à dépasser le million d'exemplaires vendus. Le titre en mesure à 5/4 est si inhabituel que Columbia Records refusait de le publier.", en:"Dave Brubeck was born in Concord, California, on December 6, 1920. Take Five was written by his saxophonist Paul Desmond in 1959. It was the first jazz record to sell over one million copies. The 5/4 time signature was so unusual that Columbia Records refused to release it." }},
+  { title:"What a Wonderful World", artist:"Louis Armstrong", year:"1967",
+    notes:["Do","Mi","Sol","La","Sol","Mi","Do","Ré","Mi","Fa","Mi","Ré","Do"],
+    anecdote:{ fr:"Louis Armstrong a enregistré What a Wonderful World en 1967, alors qu'il avait 66 ans et était malade. La chanson est un hymne à la beauté du monde, enregistrée pendant la guerre du Vietnam. Elle a d'abord été un flop aux États-Unis mais un succès en Europe. Elle est devenue un classique après le film Good Morning Vietnam en 1987.", en:"Louis Armstrong recorded What a Wonderful World in 1967, when he was 66 and ill. The song is a hymn to the beauty of the world, recorded during the Vietnam War. It was initially a flop in the US but a hit in Europe. It became a classic after the film Good Morning Vietnam in 1987." }},
+  { title:"Fly Me to the Moon", artist:"Frank Sinatra", year:"1964",
+    notes:["La","Sol","Fa","Mi","Ré","Do","Ré","Mi","Fa","Sol","La","Sol","Fa","Mi"],
+    anecdote:{ fr:"Frank Sinatra est né à Hoboken, New Jersey, le 12 décembre 1915. Cette version de Fly Me to the Moon, enregistrée en 1964, était la chanson préférée des astronautes d'Apollo 10, qui l'ont emportée sur la Lune en 1969. Sinatra l'a interprétée plus de 1 300 fois en concert au cours de sa carrière.", en:"Frank Sinatra was born in Hoboken, New Jersey, on December 12, 1915. This version of Fly Me to the Moon, recorded in 1964, was the favorite song of the Apollo 10 astronauts, who took it to the Moon in 1969. Sinatra performed it over 1,300 times in concert during his career." }},
+  { title:"Autumn Leaves", artist:"Joseph Kosma", year:"1945",
+    notes:["La","Sol","Fa","Mi","La","Sol","Fa","Mi","Ré","Do","Ré","Mi","Fa","Sol"],
+    anecdote:{ fr:"Joseph Kosma est né à Budapest, Hongrie, le 22 octobre 1905. Les Feuilles mortes ont été composées en 1945 sur des paroles de Jacques Prévert. C'est la chanson française la plus enregistrée au monde, avec plus de 1 400 versions. Nat King Cole l'a popularisée en anglais sous le titre Autumn Leaves en 1956.", en:"Joseph Kosma was born in Budapest, Hungary, on October 22, 1905. Autumn Leaves was composed in 1945 with lyrics by Jacques Prévert. It is the most recorded French song in the world, with over 1,400 versions. Nat King Cole popularized it in English as Autumn Leaves in 1956." }},
+  { title:"So What", artist:"Miles Davis", year:"1959",
+    notes:["Ré","Mi","Fa","Sol","La","Sol","Fa","Mi","Ré","Mi","Fa","Sol","La"],
+    anecdote:{ fr:"Miles Davis est né à Alton, Illinois, le 26 mai 1926. So What ouvre l'album Kind of Blue en 1959, considéré comme le meilleur album de jazz de tous les temps. L'album a été enregistré en deux sessions d'une seule journée. Davis donnait si peu d'instructions à ses musiciens qu'il refusait même de leur montrer les accords avant l'enregistrement.", en:"Miles Davis was born in Alton, Illinois, on May 26, 1926. So What opens the album Kind of Blue in 1959, considered the greatest jazz album of all time. The album was recorded in two single-day sessions. Davis gave his musicians so few instructions that he refused to even show them the chords before recording." }},
+  { title:"My Funny Valentine", artist:"Chet Baker", year:"1954",
+    notes:["Do","Ré","Mi","Fa","Sol","Fa","Mi","Ré","Do","Mi","Sol","Mi","Do"],
+    anecdote:{ fr:"Chet Baker est né à Yale, Oklahoma, le 23 décembre 1929. Sa version de My Funny Valentine, enregistrée en 1954, est considérée comme l'une des plus belles interprétations vocales du jazz. Baker était aussi trompettiste. Il est mort en 1988 en tombant d'une fenêtre d'hôtel à Amsterdam dans des circonstances jamais élucidées.", en:"Chet Baker was born in Yale, Oklahoma, on December 23, 1929. His version of My Funny Valentine, recorded in 1954, is considered one of the most beautiful vocal interpretations in jazz. Baker was also a trumpeter. He died in 1988 falling from a hotel window in Amsterdam under circumstances never fully explained." }}
+];
+
+var MELODY_ICONS = ['🎺','🎸','🎹','🥁','🎷','🎻','🎺','🎸','🎹','🎷','🍂','🎵','💕'];
+
+var NOTE_FREQ = { 'Do':261.63,'Ré':293.66,'Mi':329.63,'Fa':349.23,'Sol':392.00,'La':440.00,'Si':493.88 };
+var NOTE_BTN  = { 'Do':'btn-do','Ré':'btn-re','Mi':'btn-mi','Fa':'btn-fa','Sol':'btn-sol','La':'btn-la','Si':'btn-si' };
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+var currentLang = 'fr';
+var currentMelody = null;
+var currentMelodyIdx = -1;
+var currentLevel = 1;
+var lives = 3;
+var score = 0;
+var currentSeq = [];
+var inputIdx = 0;
+var isPlaying = false;
+var inputBlocked = false;
+var seqGeneration = 0;
+var shownMilestones = {};
+var audioCtx = null;
+
+// ── LANGUAGE ──────────────────────────────────────────────────────────────
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+  applyLang();
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + currentLang);
+    if (val !== null) el.innerHTML = val;
+  });
+  document.querySelectorAll('.newsletter-email-input').forEach(function(el) {
+    el.placeholder = currentLang === 'fr' ? 'Votre adresse email' : 'Your email address';
+  });
+  updateScoreDisplay();
+}
+
+function submitNewsletter(emailId, errId) {
+  var inp = document.getElementById(emailId);
+  var err = document.getElementById(errId);
+  var email = inp.value.trim();
+  if (!email) { err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  window.open('https://brainfest.brevo.com?EMAIL=' + encodeURIComponent(email), '_blank');
+}
+
+// ── AUDIO ─────────────────────────────────────────────────────────────────
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playNote(name) {
+  try {
+    var ctx = getCtx();
+    var freq = NOTE_FREQ[name];
+    var now = ctx.currentTime;
+    var master = ctx.createGain();
+    master.gain.setValueAtTime(0.4, now);
+    master.connect(ctx.destination);
+
+    var atk = 0.012, dec = 0.08, sus = 0.25, active = 0.35, rel = 0.3;
+    var end = now + active;
+
+    function addOsc(type, freqMul, gainVal) {
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.type = type;
+      o.frequency.setValueAtTime(freq * freqMul, now);
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(gainVal, now + atk);
+      g.gain.linearRampToValueAtTime(gainVal * sus, now + atk + dec);
+      g.gain.setValueAtTime(gainVal * sus, end);
+      g.gain.linearRampToValueAtTime(0, end + rel);
+      o.connect(g); g.connect(master);
+      o.start(now); o.stop(end + rel + 0.05);
+    }
+    addOsc('triangle', 1,   1);
+    addOsc('sine',     2,   0.15);
+    addOsc('sine',     3,   0.06);
+    addOsc('sine',     0.5, 0.08);
+
+    // Attack noise
+    var frames = Math.floor(ctx.sampleRate * 0.015);
+    var buf = ctx.createBuffer(1, frames, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < frames; i++) data[i] = Math.random() * 2 - 1;
+    var ns = ctx.createBufferSource(); ns.buffer = buf;
+    var nf = ctx.createBiquadFilter(); nf.type = 'bandpass'; nf.frequency.value = freq * 2; nf.Q.value = 2;
+    var ng = ctx.createGain(); ng.gain.setValueAtTime(0.2, now);
+    ns.connect(nf); nf.connect(ng); ng.connect(master);
+    ns.start(now); ns.stop(now + 0.015);
+
+    master.gain.setValueAtTime(0.4, end);
+    master.gain.linearRampToValueAtTime(0, end + rel);
+  } catch(e) {}
+}
+
+// ── MELODY LIST ───────────────────────────────────────────────────────────
+function buildMelodyList() {
+  var container = document.getElementById('melody-list');
+  MELODIES.forEach(function(m, i) {
+    var card = document.createElement('div');
+    card.className = 'melody-card';
+    card.innerHTML =
+      '<div class="melody-card-icon">' + MELODY_ICONS[i] + '</div>' +
+      '<div class="melody-card-info">' +
+        '<div class="melody-card-title">' + m.title + '</div>' +
+        '<div class="melody-card-meta">' + m.artist + ' · ' + m.year + '</div>' +
+      '</div>' +
+      '<div class="melody-card-arrow">›</div>';
+    (function(idx){ card.onclick = function(){ selectMelody(idx); }; })(i);
+    container.appendChild(card);
+  });
+}
+
+// ── GAME START ────────────────────────────────────────────────────────────
+function selectMelody(idx) {
+  currentMelodyIdx = idx;
+  currentMelody = MELODIES[idx];
+  currentLevel = 1;
+  lives = 3;
+  score = 0;
+  shownMilestones = {};
+  buildSeq();
+
+  document.getElementById('game-melody-title').textContent = currentMelody.title;
+  updateLives();
+  updateScoreDisplay();
+
+  document.getElementById('game-screen').classList.add('active');
+  document.getElementById('anecdote-screen').classList.remove('active');
+  document.getElementById('game-over-screen').classList.remove('active');
+  applyLang();
+
+  // Ensure audio context starts on user gesture
+  getCtx();
+  setTimeout(playSequence, 600);
+}
+
+function buildSeq() {
+  currentSeq = currentMelody.notes.slice(0, 1 + currentLevel);
+  inputIdx = 0;
+  updateDots();
+}
+
+function updateDots() {
+  var c = document.getElementById('dots-area');
+  c.innerHTML = '';
+  for (var i = 0; i < currentSeq.length; i++) {
+    var d = document.createElement('div');
+    d.className = 'progress-dot' + (i < inputIdx ? ' filled' : '');
+    c.appendChild(d);
+  }
+}
+
+function updateLives() {
+  var s = '';
+  for (var i = 0; i < 3; i++) s += (i < lives ? '🎵' : '💀');
+  document.getElementById('game-lives').textContent = s;
+}
+
+function updateScoreDisplay() {
+  var lbl = currentLang === 'fr' ? 'Score : ' : 'Score: ';
+  document.getElementById('score-display').textContent = lbl + score;
+}
+
+// ── SEQUENCE PLAYBACK ─────────────────────────────────────────────────────
+function playSequence() {
+  if (isPlaying) return;
+  isPlaying = true;
+  inputBlocked = true;
+  document.getElementById('play-btn').disabled = true;
+
+  var gen = ++seqGeneration;
+  var i = 0;
+
+  function step() {
+    if (gen !== seqGeneration) return;
+    if (i >= currentSeq.length) {
+      setTimeout(function() {
+        if (gen !== seqGeneration) return;
+        isPlaying = false;
+        inputBlocked = false;
+        document.getElementById('play-btn').disabled = false;
+      }, 300);
+      return;
+    }
+    var note = currentSeq[i];
+    hlBtn(note, true);
+    playNote(note);
+    setTimeout(function() { if (gen === seqGeneration) hlBtn(note, false); }, 350);
+    i++;
+    setTimeout(step, 550);
+  }
+  step();
+}
+
+function stopSequence() {
+  seqGeneration++;
+  isPlaying = false;
+  inputBlocked = false;
+  document.querySelectorAll('.note-btn').forEach(function(b){ b.classList.remove('btn-active'); });
+}
+
+function replaySequence() {
+  if (isPlaying) return;
+  playSequence();
+}
+
+function hlBtn(name, on) {
+  var b = document.getElementById(NOTE_BTN[name]);
+  if (b) b.classList.toggle('btn-active', on);
+}
+
+// ── TAP HANDLER ───────────────────────────────────────────────────────────
+function tapNote(name) {
+  if (inputBlocked || isPlaying) return;
+  playNote(name);
+
+  if (name === currentSeq[inputIdx]) {
+    // Correct
+    score += 10;
+    inputIdx++;
+    updateScoreDisplay();
+    updateDots();
+    checkMilestone(score);
+
+    if (inputIdx >= currentSeq.length) {
+      inputBlocked = true;
+      if (currentSeq.length >= currentMelody.notes.length) {
+        // Melody complete
+        flashCorrect(function(){ setTimeout(showAnecdote, 600); });
+      } else {
+        // Next level
+        flashCorrect(function(){
+          setTimeout(function(){
+            currentLevel++;
+            buildSeq();
+            setTimeout(playSequence, 600);
+          }, 200);
+        });
+      }
+    } else {
+      flashCorrect(null);
+    }
+  } else {
+    // Wrong
+    lives--;
+    updateLives();
+    var btn = document.getElementById(NOTE_BTN[name]);
+    btn.classList.add('wrong-flash','shake');
+    setTimeout(function(){ btn.classList.remove('wrong-flash','shake'); }, 400);
+
+    if (lives <= 0) {
+      inputBlocked = true;
+      showLifeMsg(0);
+      setTimeout(showGameOver, 800);
+    } else {
+      showLifeMsg(lives);
+      inputBlocked = true;
+      inputIdx = 0;
+      updateDots();
+      setTimeout(function(){
+        inputBlocked = false;
+        playSequence();
+      }, 800);
+    }
+  }
+}
+
+function flashCorrect(cb) {
+  var f = document.getElementById('correct-flash');
+  f.classList.remove('active');
+  void f.offsetWidth;
+  f.classList.add('active');
+  if (cb) setTimeout(cb, 310);
+}
+
+// ── MILESTONES ────────────────────────────────────────────────────────────
+var MILESTONES = {
+  50:  { fr:"La mélodie prend forme.", en:"The melody is taking shape." },
+  100: { fr:"Tu joues comme au Blue Note.", en:"Playing like you're at the Blue Note." },
+  150: { fr:"Miles t'écouterait.", en:"Miles would listen." },
+  200: { fr:"Le jazz coule dans tes doigts.", en:"Jazz flows through your fingers." }
+};
+
+function checkMilestone(s) {
+  [50,100,150,200].forEach(function(t){
+    if (s >= t && !shownMilestones[t]) { shownMilestones[t]=true; showMsg(MILESTONES[t][currentLang]); }
+  });
+}
+
+// ── LIFE MESSAGES ─────────────────────────────────────────────────────────
+var LIFE_MSGS = {
+  2: { fr:"Fausse note. Ça arrive même à Coltrane.", en:"Wrong note. Even Coltrane had those." },
+  1: { fr:"Dernière chance. Concentrez-vous sur la mélodie.", en:"Last chance. Focus on the melody." },
+  0: { fr:"Le club ferme ses portes. Mais il rouvre demain.", en:"The club is closing. But it reopens tomorrow." }
+};
+
+function showLifeMsg(n) {
+  if (LIFE_MSGS[n]) showMsg(LIFE_MSGS[n][currentLang]);
+}
+
+// ── MESSAGE OVERLAY ───────────────────────────────────────────────────────
+var msgTimer = null;
+function showMsg(text) {
+  document.getElementById('msg-overlay-text').textContent = text;
+  document.getElementById('msg-overlay').classList.add('active');
+  if (msgTimer) clearTimeout(msgTimer);
+  msgTimer = setTimeout(function(){ document.getElementById('msg-overlay').classList.remove('active'); }, 2000);
+}
+
+// ── ANECDOTE SCREEN ───────────────────────────────────────────────────────
+function showAnecdote() {
+  document.getElementById('anecdote-melody-title').textContent = currentMelody.title;
+  document.getElementById('anecdote-melody-meta').textContent = currentMelody.artist + ' · ' + currentMelody.year;
+  document.getElementById('anecdote-text').textContent = currentMelody.anecdote[currentLang];
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('anecdote-screen').classList.add('active');
+  applyLang();
+}
+
+// ── GAME OVER ─────────────────────────────────────────────────────────────
+function showGameOver() {
+  var lbl = currentLang === 'fr' ? 'Score final : ' : 'Final score: ';
+  document.getElementById('game-over-score').textContent = lbl + score;
+  document.getElementById('go-replay-btn').style.visibility = 'hidden';
+  document.getElementById('go-selector-btn').style.visibility = 'hidden';
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('game-over-screen').classList.add('active');
+  applyLang();
+  // Show buttons at 2500ms from wrong tap (showGameOver called after 800ms, so 1700ms more)
+  setTimeout(function(){
+    document.getElementById('go-replay-btn').style.visibility = '';
+    document.getElementById('go-selector-btn').style.visibility = '';
+  }, 1700);
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+function backToSelector() {
+  stopSequence();
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('anecdote-screen').classList.remove('active');
+  document.getElementById('game-over-screen').classList.remove('active');
+}
+
+function replayMelody() {
+  document.getElementById('anecdote-screen').classList.remove('active');
+  document.getElementById('game-over-screen').classList.remove('active');
+  selectMelody(currentMelodyIdx);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+buildMelodyList();
+applyLang();
+</script>
+</body>
+</html>
