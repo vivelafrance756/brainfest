@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mots Croisés Jolie Peau — BrainFest</title>
+<meta name="description" content="Collagène, sébum, microbiote, céramide... Retrouvez les mots clés de la santé de la peau.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/mots-croises.html">
+<script>if(!sessionStorage.getItem('bf_access')){window.location.href='index.html';}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue: #2a7fa8;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-width: 375px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--indigo-dark);
+  overflow-x: hidden;
+  min-width: 375px;
+}
+
+/* ── HEADER ── */
+#header {
+  width: 100%;
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+#header-logo .brain { color: var(--cream); font-weight: 400; }
+#header-logo .fest  { color: var(--amber); font-weight: 600; }
+
+#lang-toggle {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 50px;
+  padding: 6px 18px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 64px;
+  letter-spacing: 0.5px;
+}
+
+/* ── BACK BAR ── */
+#back-bar {
+  width: 100%;
+  background: var(--cream);
+  padding: 12px 20px;
+}
+
+#back-btn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+}
+
+/* ── HERO ── */
+#hero-illustration {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+#hero-illustration img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── INTRO BLOCK ── */
+#intro-block {
+  background: var(--cream);
+  padding: 24px 20px;
+}
+
+#intro-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+#intro-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ── LEVEL SELECTOR ── */
+#level-selector {
+  padding: 16px 20px 32px;
+}
+
+.level-btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  min-height: 52px;
+  transition: opacity 0.15s;
+}
+.level-btn:active { opacity: 0.85; }
+.level-btn-1 { background: #6b9e78; }
+.level-btn-2 { background: #d4923a; }
+.level-btn-3 { background: #2d3d4a; }
+
+/* ── FOOTER ── */
+#footer {
+  background: var(--indigo-mid);
+  padding: 32px 20px;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#footer-text-top {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#newsletter-btn {
+  width: 100%;
+  background: var(--amber);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#footer-text-bottom {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--cream);
+}
+
+#footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+
+#footer-links a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--amber);
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+#footer-links a:hover { text-decoration: underline; }
+
+#footer-copyright {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* ── GAME SCREEN ── */
+#game-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cream);
+  z-index: 100;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+#game-screen.active {
+  display: flex;
+}
+
+#game-top-bar {
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+#game-back-btn {
+  background: none;
+  border: none;
+  color: var(--cream);
+  font-size: 22px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#game-level-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--cream);
+  text-align: center;
+  flex: 1;
+}
+
+#game-timer {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--amber);
+  min-width: 44px;
+  text-align: right;
+}
+
+/* ── CROSSWORD GRID ── */
+#grid-area {
+  padding: 20px 20px 0;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#grid-container {
+  display: inline-grid;
+  gap: 2px;
+}
+
+.cw-cell {
+  width: 36px;
+  height: 36px;
+  position: relative;
+}
+
+.cw-cell.black {
+  background: #2d3d4a;
+  border-radius: 2px;
+}
+
+.cw-cell.white {
+  background: #ffffff;
+  border: 1px solid #e8c4b8;
+  border-radius: 4px;
+}
+
+.cw-cell.active {
+  background: #e8c4b8;
+  border: 2px solid #d4923a;
+}
+
+.cw-cell.word-active {
+  background: #fce8d8;
+}
+
+.cw-cell.correct {
+  background: #d4e8d4;
+  border: 1px solid #6b9e78;
+}
+
+.cw-cell.wrong {
+  background: #fdecea;
+  border: 1px solid #e74c3c;
+}
+
+.cell-number {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 9px;
+  color: #d4923a;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cell-letter {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3d4a;
+  border: none;
+  background: transparent;
+  text-transform: uppercase;
+  cursor: pointer;
+  caret-color: transparent;
+  outline: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hidden input for mobile keyboard */
+#hidden-input {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  font-size: 16px;
+}
+
+/* ── CLUES SECTION ── */
+#clues-section {
+  padding: 16px 20px;
+  flex-shrink: 0;
+}
+
+#clues-inner {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 0;
+}
+
+.clues-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.clues-col-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 8px;
+}
+
+.clue-item {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #2d3d4a;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 2px 8px;
+  margin-bottom: 2px;
+}
+
+.clue-item.active-clue {
+  background: #fce8d8;
+}
+
+.clue-num {
+  color: #d4923a;
+  font-weight: 600;
+}
+
+/* ── VALIDATE BUTTON ── */
+#validate-btn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 0 20px 24px;
+  background: #2d3d4a;
+  color: #f7f3ec;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 52px;
+  flex-shrink: 0;
+}
+
+/* ── SUCCESS SCREEN ── */
+#success-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--cream);
+  z-index: 150;
+  overflow-y: auto;
+  padding: 48px 20px 40px;
+  flex-direction: column;
+  align-items: center;
+}
+
+#success-screen.active { display: flex; }
+
+#success-confetti {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+#success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+#success-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: #2a7fa8;
+  margin-bottom: 6px;
+}
+
+#success-best {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 36px;
+}
+
+.success-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 52px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+#retry-btn { background: #2a7fa8; color: #ffffff; }
+#next-btn  { background: var(--sage); color: #ffffff; }
+#home-btn  { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); }
+
+#newsletter-cta {
+  margin-top: 16px;
+  background: #fff8e8;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(212,146,58,0.3);
+  width: 100%;
+  text-align: center;
+}
+
+#newsletter-cta-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+#newsletter-email {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d4923a;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+  outline: none;
+  background: #ffffff;
+  color: var(--indigo-dark);
+  box-sizing: border-box;
+}
+
+#newsletter-submit {
+  width: 100%;
+  background: #d4923a;
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+#newsletter-error {
+  display: none;
+  color: #e74c3c;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  margin-top: 6px;
+  text-align: left;
+}
+
+/* ── SHARE TOAST ── */
+#share-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--indigo-dark);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+#share-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="header">
+  <a href="index.html" id="header-logo">
+    <span class="brain">Brain</span><span class="fest">Fest</span>
+  </a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+</header>
+
+<!-- ── BACK BAR ── -->
+<div id="back-bar">
+  <button id="back-btn" onclick="window.location.href='index.html'">
+    ← <span data-fr="Accueil" data-en="Home">Accueil</span>
+  </button>
+</div>
+
+<!-- ── HERO ── -->
+<div id="hero-illustration">
+  <img src="images/mot-croises.jpg" alt="Mots Croisés Jolie Peau">
+</div>
+
+<!-- ── INTRO BLOCK ── -->
+<section id="intro-block">
+  <h1 data-fr="Mots Croisés Jolie Peau" data-en="Skin Health Crossword">Mots Croisés Jolie Peau</h1>
+  <p id="intro-desc"
+     data-fr="Collagène, sébum, microbiote, céramide... Retrouvez les mots clés de la santé de la peau. Trois niveaux de difficulté."
+     data-en="Collagen, sebum, microbiome, ceramide... Find the key words of skin health. Three difficulty levels.">
+    Collagène, sébum, microbiote, céramide... Retrouvez les mots clés de la santé de la peau. Trois niveaux de difficulté.
+  </p>
+</section>
+
+<!-- ── LEVEL SELECTOR ── -->
+<section id="level-selector">
+  <button class="level-btn level-btn-1" onclick="startLevel(1)"
+          data-fr="Débutant" data-en="Beginner">Débutant</button>
+  <button class="level-btn level-btn-2" onclick="startLevel(2)"
+          data-fr="Intermédiaire" data-en="Intermediate">Intermédiaire</button>
+  <button class="level-btn level-btn-3" onclick="startLevel(3)"
+          data-fr="Expert" data-en="Expert">Expert</button>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="footer">
+  <p id="footer-text-top"
+     data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+     data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+    Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+  </p>
+  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+    S'inscrire à la newsletter
+  </a>
+  <p id="footer-text-bottom"
+     data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
+     data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
+    Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+  </p>
+  <div id="footer-links">
+    <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+    <a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+  </div>
+  <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+</footer>
+
+<!-- ── GAME SCREEN ── -->
+<div id="game-screen">
+  <div id="game-top-bar">
+    <button id="game-back-btn" onclick="backToSelector()">←</button>
+    <div id="game-level-name"></div>
+    <div id="game-timer">0:00</div>
+  </div>
+
+  <div id="grid-area">
+    <div id="grid-container"></div>
+  </div>
+
+  <!-- Clues section -->
+  <div id="clues-section">
+    <div id="clues-inner">
+      <div class="clues-columns">
+        <div id="clues-across">
+          <div class="clues-col-title" data-fr="Horizontalement" data-en="Across">Horizontalement</div>
+          <div id="across-list"></div>
+        </div>
+        <div id="clues-down">
+          <div class="clues-col-title" data-fr="Verticalement" data-en="Down">Verticalement</div>
+          <div id="down-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button id="validate-btn" onclick="validateGrid()"
+          data-fr="Vérifier" data-en="Check">Vérifier</button>
+</div>
+
+<!-- Hidden input for mobile typing -->
+<input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+
+<!-- ── SUCCESS SCREEN ── -->
+<div id="success-screen">
+  <div id="success-confetti">🎉</div>
+  <div id="success-title"
+       data-fr="Félicitations ! Vous maîtrisez le vocabulaire de la peau !"
+       data-en="Congratulations! You master skin vocabulary!">
+    Félicitations ! Vous maîtrisez le vocabulaire de la peau !
+  </div>
+  <div id="success-time"></div>
+  <div id="success-best"></div>
+  <button class="success-btn" id="retry-btn" onclick="retryLevel()"
+          data-fr="Réessayer" data-en="Try again">Réessayer</button>
+  <button class="success-btn" id="next-btn" onclick="nextLevel()"
+          data-fr="Niveau suivant" data-en="Next level">Niveau suivant</button>
+  <button class="success-btn" id="home-btn" onclick="window.location.href='index.html'"
+          data-fr="Accueil" data-en="Home">Accueil</button>
+  <div id="newsletter-cta">
+    <p id="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to BrainFest. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à BrainFest. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" id="newsletter-email" placeholder="Votre adresse email">
+    <button id="newsletter-submit" onclick="submitNewsletter()"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p id="newsletter-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
+</div>
+
+<div id="share-toast"></div>
+
+<script>
+// ── LANGUAGE ──────────────────────────────────────────────────────────────
+var currentLang = 'fr';
+
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+  applyLang();
+  if (currentLevel && currentPuzzle) {
+    updateGameLevelName();
+    var langData = PUZZLES[currentLang];
+    if (langData && langData[currentLevel]) {
+      currentPuzzle.words = langData[currentLevel].words;
+      gridLetters = {};
+      selectedWord = null;
+      buildGridMap();
+      renderGrid();
+    }
+    renderClues();
+  }
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + currentLang);
+    if (val === null) return;
+    if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'H1') {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+  var emailInput = document.getElementById('newsletter-email');
+  if (emailInput) {
+    emailInput.placeholder = currentLang === 'fr' ? 'Votre adresse email' : 'Your email address';
+  }
+}
+
+function submitNewsletter() {
+  var emailInput = document.getElementById('newsletter-email');
+  var errorEl = document.getElementById('newsletter-error');
+  var email = emailInput.value.trim();
+  if (!email) {
+    errorEl.style.display = 'block';
+    return;
+  }
+  errorEl.style.display = 'none';
+  window.open('https://brainfest.brevo.com?EMAIL=' + encodeURIComponent(email), '_blank');
+}
+
+// ── PUZZLE DATA ──────────────────────────────────────────────────────────
+const PUZZLES = {
+  fr: {
+    1: { words: [
+      {word:"COLLAGENE", clue:"Protéine qui donne sa fermeté à la peau", row:3, col:0, direction:"across"},
+      {word:"PORE", clue:"Ouverture de la peau par où sort le sébum", row:2, col:1, direction:"down"},
+      {word:"OMEGA", clue:"Acide gras essentiel anti-inflammatoire", row:0, col:5, direction:"down"},
+      {word:"ZINC", clue:"Minéral qui régule la production de sébum", row:1, col:7, direction:"down"},
+      {word:"SEBUM", clue:"Substance grasse produite par la peau", row:2, col:6, direction:"down"},
+      {word:"FOIE", clue:"Organe qui filtre les toxines de l organisme", row:0, col:8, direction:"down"}
+    ]},
+    2: { words: [
+      {word:"MICROBIOTE", clue:"Ensemble des bactéries de l intestin", row:0, col:0, direction:"across"},
+      {word:"COLLAGENE", clue:"Protéine qui donne sa fermeté à la peau", row:0, col:2, direction:"down"},
+      {word:"CERAMIDE", clue:"Lipide qui renforce la barrière cutanée", row:6, col:1, direction:"across"},
+      {word:"CORTISOL", clue:"Hormone du stress qui aggrave l acné", row:1, col:1, direction:"across"},
+      {word:"KERATINE", clue:"Protéine structurelle de la peau et des cheveux", row:8, col:1, direction:"across"},
+      {word:"ZINC", clue:"Minéral qui régule la production de sébum", row:7, col:0, direction:"across"},
+      {word:"PORE", clue:"Ouverture de la peau par où sort le sébum", row:3, col:8, direction:"down"},
+      {word:"FOIE", clue:"Organe qui filtre les toxines de l organisme", row:4, col:7, direction:"across"},
+      {word:"OMEGA", clue:"Acide gras essentiel anti-inflammatoire", row:2, col:4, direction:"down"},
+      {word:"SEBUM", clue:"Substance grasse produite par la peau", row:7, col:8, direction:"down"}
+    ]},
+    3: { words: [
+      {word:"INFLAMMATION", clue:"Processus que les oméga-3 aident à réduire", row:0, col:0, direction:"across"},
+      {word:"MICROBIOTE", clue:"Ensemble des bactéries de l intestin", row:0, col:5, direction:"down"},
+      {word:"COLLAGENE", clue:"Protéine qui donne sa fermeté à la peau", row:4, col:4, direction:"across"},
+      {word:"CERAMIDE", clue:"Lipide qui renforce la barrière cutanée", row:1, col:0, direction:"across"},
+      {word:"CORTISOL", clue:"Hormone du stress qui aggrave l acné", row:2, col:5, direction:"across"},
+      {word:"KERATINE", clue:"Protéine structurelle de la peau et des cheveux", row:3, col:3, direction:"across"},
+      {word:"DYSBIOSE", clue:"Déséquilibre du microbiote intestinal", row:5, col:2, direction:"across"},
+      {word:"MELANINE", clue:"Pigment qui donne sa couleur à la peau", row:6, col:0, direction:"across"},
+      {word:"BARRIERE", clue:"Structure protectrice de l intestin et de la peau", row:9, col:0, direction:"across"},
+      {word:"SEBUM", clue:"Substance grasse produite par la peau", row:8, col:7, direction:"down"},
+      {word:"OMEGA", clue:"Acide gras essentiel anti-inflammatoire", row:7, col:5, direction:"across"},
+      {word:"ZINC", clue:"Minéral qui régule la production de sébum", row:8, col:4, direction:"down"},
+      {word:"PORE", clue:"Ouverture de la peau par où sort le sébum", row:3, col:1, direction:"down"},
+      {word:"FOIE", clue:"Organe qui filtre les toxines de l organisme", row:4, col:1, direction:"across"}
+    ]}
+  },
+  en: {
+    1: { words: [
+      {word:"COLLAGEN", clue:"Protein that gives skin its firmness", row:3, col:0, direction:"across"},
+      {word:"PORE", clue:"Skin opening through which sebum exits", row:2, col:1, direction:"down"},
+      {word:"OMEGA", clue:"Essential anti-inflammatory fatty acid", row:0, col:5, direction:"down"},
+      {word:"ZINC", clue:"Mineral that regulates sebum production", row:1, col:7, direction:"down"},
+      {word:"SEBUM", clue:"Oily substance produced by the skin", row:2, col:6, direction:"down"},
+      {word:"LIVER", clue:"Organ that filters toxins from the body", row:3, col:2, direction:"down"}
+    ]},
+    2: { words: [
+      {word:"MICROBIOME", clue:"Community of gut bacteria", row:0, col:0, direction:"across"},
+      {word:"COLLAGEN", clue:"Protein that gives skin its firmness", row:0, col:2, direction:"down"},
+      {word:"CERAMIDE", clue:"Lipid that strengthens the skin barrier", row:6, col:1, direction:"across"},
+      {word:"CORTISOL", clue:"Stress hormone that worsens acne", row:1, col:1, direction:"across"},
+      {word:"KERATIN", clue:"Structural protein of skin and hair", row:3, col:4, direction:"down"},
+      {word:"SEBUM", clue:"Oily substance produced by the skin", row:5, col:8, direction:"down"},
+      {word:"OMEGA", clue:"Essential anti-inflammatory fatty acid", row:5, col:5, direction:"down"},
+      {word:"LIVER", clue:"Organ that filters toxins from the body", row:2, col:2, direction:"across"},
+      {word:"ZINC", clue:"Mineral that regulates sebum production", row:3, col:1, direction:"down"},
+      {word:"PORE", clue:"Skin opening through which sebum exits", row:4, col:3, direction:"down"}
+    ]},
+    3: { words: [
+      {word:"INFLAMMATION", clue:"Process that omega-3 helps reduce", row:0, col:0, direction:"across"},
+      {word:"MICROBIOME", clue:"Community of gut bacteria", row:0, col:5, direction:"down"},
+      {word:"DYSBIOSIS", clue:"Imbalance of the gut microbiome", row:1, col:1, direction:"across"},
+      {word:"COLLAGEN", clue:"Protein that gives skin its firmness", row:4, col:4, direction:"across"},
+      {word:"CERAMIDE", clue:"Lipid that strengthens the skin barrier", row:3, col:3, direction:"across"},
+      {word:"CORTISOL", clue:"Stress hormone that worsens acne", row:6, col:1, direction:"across"},
+      {word:"KERATIN", clue:"Structural protein of skin and hair", row:9, col:4, direction:"across"},
+      {word:"MELANIN", clue:"Pigment that gives skin its color", row:8, col:5, direction:"across"},
+      {word:"SEBUM", clue:"Oily substance produced by the skin", row:5, col:3, direction:"across"},
+      {word:"OMEGA", clue:"Essential anti-inflammatory fatty acid", row:7, col:5, direction:"across"},
+      {word:"ZINC", clue:"Mineral that regulates sebum production", row:7, col:10, direction:"down"},
+      {word:"PORE", clue:"Skin opening through which sebum exits", row:5, col:2, direction:"down"},
+      {word:"LIVER", clue:"Organ that filters toxins from the body", row:4, col:0, direction:"down"}
+    ]}
+  }
+};
+
+var LEVEL_NAMES = {
+  fr: ['', 'Débutant', 'Intermédiaire', 'Expert'],
+  en: ['', 'Beginner', 'Intermediate', 'Expert']
+};
+
+// ── GAME STATE ────────────────────────────────────────────────────────────
+var currentLevel = 0;
+var currentPuzzle = null;
+var gridLetters = {};      // key: "r,c" => letter entered
+var selectedCell = null;   // {r, c}
+var selectedDir = 'across';
+var selectedWord = null;   // word object currently selected
+var timerInterval = null;
+var timerStarted = false;
+var elapsedSeconds = 0;
+
+// ── START LEVEL ────────────────────────────────────────────────────────────
+function startLevel(n) {
+  var langData = PUZZLES[currentLang];
+  if (!langData || !langData[n]) { alert('Puzzle ' + n + ' coming soon!'); return; }
+  currentLevel = n;
+  var words = langData[n].words;
+  var maxRow = 0, maxCol = 0;
+  words.forEach(function(w) {
+    var endRow = w.direction === 'across' ? w.row : w.row + w.word.length - 1;
+    var endCol = w.direction === 'across' ? w.col + w.word.length - 1 : w.col;
+    if (endRow > maxRow) maxRow = endRow;
+    if (endCol > maxCol) maxCol = endCol;
+  });
+  currentPuzzle = { words: words, rows: maxRow + 1, cols: maxCol + 1 };
+  gridLetters = {};
+  selectedCell = null;
+  selectedDir = 'across';
+  selectedWord = null;
+  timerStarted = false;
+  elapsedSeconds = 0;
+  clearInterval(timerInterval);
+  document.getElementById('game-timer').textContent = '0:00';
+
+  updateGameLevelName();
+  buildGridMap();
+  renderGrid();
+  renderClues();
+
+  document.getElementById('success-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  applyLang();
+}
+
+function updateGameLevelName() {
+  document.getElementById('game-level-name').textContent = LEVEL_NAMES[currentLang][currentLevel];
+}
+
+function backToSelector() {
+  clearInterval(timerInterval);
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('success-screen').classList.remove('active');
+}
+
+// ── GRID MAP ──────────────────────────────────────────────────────────────
+var gridMap = {};   // key "r,c" => {isWhite, wordAcross, wordDown, number}
+var numberedCells = {};  // number => {r, c}
+
+function buildGridMap() {
+  gridMap = {};
+  numberedCells = {};
+
+  var words = currentPuzzle.words;
+  var rows = currentPuzzle.rows;
+  var cols = currentPuzzle.cols;
+
+  // Mark white cells
+  words.forEach(function(w) {
+    for (var i = 0; i < w.word.length; i++) {
+      var r = w.direction === 'across' ? w.row : w.row + i;
+      var c = w.direction === 'across' ? w.col + i : w.col;
+      var key = r + ',' + c;
+      if (!gridMap[key]) gridMap[key] = {isWhite: true, wordAcross: null, wordDown: null, number: 0};
+      if (w.direction === 'across') gridMap[key].wordAcross = w;
+      else gridMap[key].wordDown = w;
+    }
+  });
+
+  // Assign numbers: a cell gets a number if it starts an across or down word
+  var num = 1;
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < cols; c++) {
+      var key = r + ',' + c;
+      if (!gridMap[key]) continue;
+      var startsAcross = words.some(function(w){ return w.direction==='across' && w.row===r && w.col===c; });
+      var startsDown   = words.some(function(w){ return w.direction==='down'   && w.row===r && w.col===c; });
+      if (startsAcross || startsDown) {
+        gridMap[key].number = num;
+        numberedCells[num] = {r: r, c: c};
+        // Assign number to words starting here
+        words.forEach(function(w) {
+          if (w.direction==='across' && w.row===r && w.col===c) w.number = num;
+          if (w.direction==='down'   && w.row===r && w.col===c) w.number = num;
+        });
+        num++;
+      }
+    }
+  }
+}
+
+// ── RENDER GRID ──────────────────────────────────────────────────────────
+function renderGrid() {
+  var rows = currentPuzzle.rows;
+  var cols = currentPuzzle.cols;
+  var container = document.getElementById('grid-container');
+  container.style.gridTemplateColumns = 'repeat(' + cols + ', 36px)';
+  container.innerHTML = '';
+
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < cols; c++) {
+      (function(row, col) {
+        var key = row + ',' + col;
+        var cell = document.createElement('div');
+        cell.className = 'cw-cell';
+        cell.id = 'cell-' + key;
+
+        if (!gridMap[key]) {
+          cell.classList.add('black');
+        } else {
+          cell.classList.add('white');
+          var info = gridMap[key];
+
+          if (info.number) {
+            var numEl = document.createElement('div');
+            numEl.className = 'cell-number';
+            numEl.textContent = info.number;
+            cell.appendChild(numEl);
+          }
+
+          var letterEl = document.createElement('div');
+          letterEl.className = 'cell-letter';
+          letterEl.textContent = gridLetters[key] || '';
+          cell.appendChild(letterEl);
+
+          cell.onclick = function() { onCellTap(row, col); };
+        }
+        container.appendChild(cell);
+      })(r, c);
+    }
+  }
+  highlightSelection();
+}
+
+// ── CELL TAP ──────────────────────────────────────────────────────────────
+function onCellTap(r, c) {
+  startTimerIfNeeded();
+  var key = r + ',' + c;
+  var info = gridMap[key];
+  if (!info) return;
+
+  // Toggle direction if tapping same cell
+  if (selectedCell && selectedCell.r === r && selectedCell.c === c) {
+    if (info.wordAcross && info.wordDown) {
+      selectedDir = selectedDir === 'across' ? 'down' : 'across';
+    }
+  } else {
+    selectedCell = {r: r, c: c};
+    // Pick direction: prefer across if available
+    if (info.wordAcross) selectedDir = 'across';
+    else selectedDir = 'down';
+  }
+
+  selectedWord = selectedDir === 'across' ? info.wordAcross : info.wordDown;
+  highlightSelection();
+  renderClues();
+  focusHiddenInput();
+}
+
+function focusHiddenInput() {
+  var inp = document.getElementById('hidden-input');
+  inp.value = '';
+  inp.focus();
+}
+
+// ── HIGHLIGHT ──────────────────────────────────────────────────────────────
+function highlightSelection() {
+  // Reset all white cells
+  document.querySelectorAll('.cw-cell.white, .cw-cell.active, .cw-cell.word-active').forEach(function(el) {
+    el.classList.remove('active', 'word-active');
+    // Keep correct/wrong classes if present
+  });
+
+  if (!selectedCell || !selectedWord) return;
+
+  // Highlight word cells
+  var w = selectedWord;
+  for (var i = 0; i < w.word.length; i++) {
+    var r = w.direction === 'across' ? w.row : w.row + i;
+    var c = w.direction === 'across' ? w.col + i : w.col;
+    var el = document.getElementById('cell-' + r + ',' + c);
+    if (el && !el.classList.contains('correct') && !el.classList.contains('wrong')) {
+      el.classList.add('word-active');
+    }
+  }
+
+  // Active cell
+  var activeEl = document.getElementById('cell-' + selectedCell.r + ',' + selectedCell.c);
+  if (activeEl) {
+    activeEl.classList.remove('word-active');
+    if (!activeEl.classList.contains('correct') && !activeEl.classList.contains('wrong')) {
+      activeEl.classList.add('active');
+    }
+  }
+}
+
+// ── HIDDEN INPUT HANDLER ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('hidden-input');
+
+  inp.addEventListener('keydown', function(e) {
+    if (!selectedCell || !selectedWord) return;
+
+    if (e.key === 'Backspace') {
+      e.preventDefault();
+      var key = selectedCell.r + ',' + selectedCell.c;
+      if (gridLetters[key]) {
+        gridLetters[key] = '';
+        updateCellDisplay(selectedCell.r, selectedCell.c);
+      } else {
+        moveCursor(-1);
+      }
+      inp.value = '';
+      return;
+    }
+
+    if (e.key === 'ArrowRight') { e.preventDefault(); selectedDir = 'across'; selectedWord = gridMap[selectedCell.r+','+selectedCell.c].wordAcross || selectedWord; highlightSelection(); renderClues(); return; }
+    if (e.key === 'ArrowDown')  { e.preventDefault(); selectedDir = 'down';   selectedWord = gridMap[selectedCell.r+','+selectedCell.c].wordDown   || selectedWord; highlightSelection(); renderClues(); return; }
+  });
+
+  inp.addEventListener('input', function(e) {
+    if (!selectedCell || !selectedWord) return;
+    var val = inp.value.replace(/[^a-zA-ZÀ-ÿ]/g, '').toUpperCase();
+    inp.value = '';
+    if (!val) return;
+    var letter = val[val.length - 1];
+    var key = selectedCell.r + ',' + selectedCell.c;
+    gridLetters[key] = letter;
+    updateCellDisplay(selectedCell.r, selectedCell.c);
+    moveCursor(1);
+  });
+});
+
+function updateCellDisplay(r, c) {
+  var el = document.getElementById('cell-' + r + ',' + c);
+  if (!el) return;
+  var letterEl = el.querySelector('.cell-letter');
+  if (letterEl) letterEl.textContent = gridLetters[r + ',' + c] || '';
+}
+
+function moveCursor(delta) {
+  if (!selectedWord || !selectedCell) return;
+  var w = selectedWord;
+  var len = w.word.length;
+  // Find position in word
+  var pos = -1;
+  for (var i = 0; i < len; i++) {
+    var r = w.direction === 'across' ? w.row : w.row + i;
+    var c = w.direction === 'across' ? w.col + i : w.col;
+    if (r === selectedCell.r && c === selectedCell.c) { pos = i; break; }
+  }
+  var nextPos = pos + delta;
+  if (nextPos < 0) nextPos = 0;
+  if (nextPos >= len) nextPos = len - 1;
+  var nr = w.direction === 'across' ? w.row : w.row + nextPos;
+  var nc = w.direction === 'across' ? w.col + nextPos : w.col;
+  selectedCell = {r: nr, c: nc};
+  highlightSelection();
+}
+
+// ── TIMER ──────────────────────────────────────────────────────────────────
+function startTimerIfNeeded() {
+  if (timerStarted) return;
+  timerStarted = true;
+  timerInterval = setInterval(function() {
+    elapsedSeconds++;
+    var m = Math.floor(elapsedSeconds / 60);
+    var s = elapsedSeconds % 60;
+    document.getElementById('game-timer').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+}
+
+// ── CLUES ──────────────────────────────────────────────────────────────────
+function renderClues() {
+  if (!currentPuzzle) return;
+  var words = currentPuzzle.words;
+  var acrossWords = words.filter(function(w){ return w.direction === 'across'; }).sort(function(a,b){ return a.number - b.number; });
+  var downWords   = words.filter(function(w){ return w.direction === 'down';   }).sort(function(a,b){ return a.number - b.number; });
+
+  var acrossList = document.getElementById('across-list');
+  var downList   = document.getElementById('down-list');
+  acrossList.innerHTML = '';
+  downList.innerHTML   = '';
+
+  function makeClueItem(w) {
+    var div = document.createElement('div');
+    div.className = 'clue-item';
+    var isActive = selectedWord && selectedWord === w;
+    if (isActive) div.classList.add('active-clue');
+    div.innerHTML = '<span class="clue-num">' + w.number + '.</span> ' + w.clue;
+    div.onclick = function() { selectWordFromClue(w); };
+    return div;
+  }
+
+  acrossWords.forEach(function(w){ acrossList.appendChild(makeClueItem(w)); });
+  downWords.forEach(function(w){ downList.appendChild(makeClueItem(w)); });
+}
+
+function selectWordFromClue(w) {
+  startTimerIfNeeded();
+  selectedWord = w;
+  selectedDir = w.direction;
+  // Find first empty cell in word, or first cell
+  var firstEmpty = null;
+  for (var i = 0; i < w.word.length; i++) {
+    var r = w.direction === 'across' ? w.row : w.row + i;
+    var c = w.direction === 'across' ? w.col + i : w.col;
+    if (!gridLetters[r + ',' + c]) { firstEmpty = {r: r, c: c}; break; }
+  }
+  selectedCell = firstEmpty || {r: w.row, c: w.col};
+  highlightSelection();
+  renderClues();
+  focusHiddenInput();
+}
+
+// ── VALIDATE ───────────────────────────────────────────────────────────────
+function validateGrid() {
+  if (!currentPuzzle) return;
+  var words = currentPuzzle.words;
+  var allCorrect = true;
+
+  words.forEach(function(w) {
+    for (var i = 0; i < w.word.length; i++) {
+      var r = w.direction === 'across' ? w.row : w.row + i;
+      var c = w.direction === 'across' ? w.col + i : w.col;
+      var key = r + ',' + c;
+      var el = document.getElementById('cell-' + key);
+      if (!el) continue;
+      var entered = (gridLetters[key] || '').toUpperCase();
+      var expected = w.word[i].toUpperCase();
+      el.classList.remove('correct', 'wrong', 'active', 'word-active');
+      if (entered === expected) {
+        el.classList.add('correct');
+      } else {
+        el.classList.add('wrong');
+        allCorrect = false;
+      }
+    }
+  });
+
+  if (allCorrect) {
+    setTimeout(showSuccess, 600);
+  }
+}
+
+// ── SUCCESS ────────────────────────────────────────────────────────────────
+function showSuccess() {
+  clearInterval(timerInterval);
+
+  var key = 'bf_mots_best_' + currentLevel;
+  var stored = localStorage.getItem(key);
+  var best = stored ? parseInt(stored) : null;
+
+  if (!best || elapsedSeconds < best) {
+    localStorage.setItem(key, elapsedSeconds);
+    best = elapsedSeconds;
+  }
+
+  function fmt(s) { var m = Math.floor(s/60); var ss = s%60; return m + ':' + (ss<10?'0':'') + ss; }
+
+  var timeLabel = currentLang === 'fr' ? 'Temps : ' : 'Time: ';
+  var bestLabel = currentLang === 'fr' ? 'Votre meilleur temps : ' : 'Your best time: ';
+
+  document.getElementById('success-time').textContent = timeLabel + fmt(elapsedSeconds);
+  document.getElementById('success-best').textContent = bestLabel + fmt(best);
+  document.getElementById('next-btn').style.display = currentLevel < 3 ? 'block' : 'none';
+
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('success-screen').classList.add('active');
+  applyLang();
+}
+
+function retryLevel() {
+  document.getElementById('success-screen').classList.remove('active');
+  startLevel(currentLevel);
+}
+
+function nextLevel() {
+  if (currentLevel < 3) {
+    document.getElementById('success-screen').classList.remove('active');
+    startLevel(currentLevel + 1);
+  }
+}
+</script>
+</body>
+</html>
