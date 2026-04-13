@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Votre peau a une histoire — BrainFest</title>
+<title>Votre peau a une histoire — Nutrilexic</title>
 <meta name="description" content="Acné, eczéma, psoriasis, rosacée : votre peau raconte une histoire. Quiz adaptatif en 4 niveaux.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://brainfest.eu/votre-peau.html">
@@ -346,9 +346,9 @@ body {
 
 <!-- ── HEADER ── -->
 <header id="header">
-  <a href="index.html" id="header-logo">
-    <span class="brain">Brain</span><span class="fest">Fest</span>
-  </a>
+  <a href="index.html" class="logo-link" style="text-decoration:none;">
+  <img src="images/nutrilexic-logo.svg" alt="Nutrilexic" style="height:44px;width:auto;">
+</a>
   <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
 </header>
 
@@ -503,9 +503,9 @@ body {
     S'inscrire à la newsletter
   </a>
   <p id="footer-text-bottom"
-     data-fr="Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement."
-     data-en="Welcome to your brain festival. BrainFest is where memory gets stronger, curiosity awakens and natural health knowledge sharpens durably.">
-    Bienvenue au festival de votre cerveau. BrainFest, c'est l'endroit où la mémoire se muscle, la curiosité s'éveille et les connaissances en santé naturelle s'aiguisent durablement.
+     data-fr="Nutrilexic, la plateforme d'apprentissage en santé naturelle et micronutrition. Cultivez vos connaissances. Entraînez votre mémoire."
+     data-en="Nutrilexic, the natural health and micronutrition learning platform. Cultivate your knowledge. Train your memory.">
+    Nutrilexic, la plateforme d'apprentissage en santé naturelle et micronutrition. Cultivez vos connaissances. Entraînez votre mémoire.
   </p>
   <div id="footer-links">
     <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
@@ -513,7 +513,7 @@ body {
     <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
     <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
   </div>
-  <p id="footer-copyright">© La Troisième Note / BrainFest</p>
+  <p id="footer-copyright">© La Troisième Note / Nutrilexic</p>
 </footer>
 
 <div id="share-toast" data-fr="Lien copié !" data-en="Link copied!">Lien copié !</div>
@@ -543,7 +543,7 @@ function applyLang() {
 
 function sharePage() {
   if (navigator.share) {
-    navigator.share({ title: 'BrainFest - Votre peau a une histoire', url: window.location.href });
+    navigator.share({ title: 'Nutrilexic - Votre peau a une histoire', url: window.location.href });
   } else {
     navigator.clipboard.writeText(window.location.href).then(function() { showToast(); });
   }

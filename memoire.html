@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Jeux de mémoire gratuits — BrainFest</title>
+<title>Jeux de mémoire gratuits — Nutrilexic</title>
 <meta name="description" content="Entraînez votre mémoire avec des jeux cognitifs gratuits : séquences de couleurs, notes de musique, paires de plantes. Sans limite. Bilingue FR/EN.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://brainfest.eu/memoire.html">
-<meta property="og:title" content="Jeux de mémoire gratuits — BrainFest">
+<meta property="og:title" content="Jeux de mémoire gratuits — Nutrilexic">
 <meta property="og:description" content="Entraînez votre mémoire avec des jeux cognitifs gratuits. Sans limite. Bilingue.">
 <meta property="og:url" content="https://brainfest.eu/memoire.html">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -148,7 +148,7 @@ body{min-height:100vh;}
   <!-- CROSS-SELL -->
   <div class="crossell" onclick="goTo('sante')">
     <div class="crossell-text">
-      <div class="crossell-label" id="xsLabel">Aussi sur BrainFest</div>
+      <div class="crossell-label" id="xsLabel">Aussi sur Nutrilexic</div>
       <div class="crossell-title" id="xsTitle">🌿 Cultivez vos savoirs santé →</div>
     </div>
     <div class="crossell-arrow">›</div>
@@ -191,7 +191,7 @@ var TX={
     featDesc:'Mémorisez une séquence de couleurs, reproduisez-la dans l\'ordre. La séquence grandit à chaque niveau — sans limite.',
     featBtn:'▶ Jouer',
     shareLabel:'Partager',backLabel:'Retour',langBtn:'🇬🇧 EN',
-    xsLabel:'Aussi sur BrainFest',xsTitle:'🌿 Cultivez vos savoirs santé →',
+    xsLabel:'Aussi sur Nutrilexic',xsTitle:'🌿 Cultivez vos savoirs santé →',
     footerLine:'Nouveaux jeux à venir · ',footerLinkTxt:'Inscrivez-vous à la newsletter',
     footerSub:'pour être notifié·e en avant-première',
   },
@@ -206,7 +206,7 @@ var TX={
     featDesc:'Memorise a colour sequence and reproduce it in order. The sequence grows with each level — no limit.',
     featBtn:'▶ Play',
     shareLabel:'Share',backLabel:'Back',langBtn:'🇫🇷 FR',
-    xsLabel:'Also on BrainFest',xsTitle:'🌿 Discover natural health →',
+    xsLabel:'Also on Nutrilexic',xsTitle:'🌿 Discover natural health →',
     footerLine:'New games coming · ',footerLinkTxt:'Subscribe to the newsletter',
     footerSub:'to be notified first',
   }
@@ -252,7 +252,7 @@ function closeGame(){
 }
 function shareGame(file){
   var url=BASE+file;
-  if(navigator.share){navigator.share({title:'BrainFest',url:url});}
+  if(navigator.share){navigator.share({title:'Nutrilexic',url:url});}
   else{navigator.clipboard&&navigator.clipboard.writeText(url);alert('Lien copié !');}
 }
 function shareCurrentGame(){

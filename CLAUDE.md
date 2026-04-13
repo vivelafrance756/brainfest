@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BrainFest is a 100% static bilingual (FR/EN) educational quiz and memory-games site deployed to GitHub Pages at `brainfest.eu`. There is no build system, no npm, no framework — every page is a self-contained HTML file with embedded CSS and JS.
+Nutrilexic is a 100% static bilingual (FR/EN) educational quiz and memory-games site deployed to GitHub Pages at `brainfest.eu`. There is no build system, no npm, no framework — every page is a self-contained HTML file with embedded CSS and JS.
 
 ## Deployment
 
@@ -68,7 +68,7 @@ AI chatbot endpoint: `https://brainfest-ai.c-piault.workers.dev` (POST with `{qu
 ### Fin Pages
 
 Levels 1–3: "Niveau N →" button + "Retour au chapitre" button.
-Level 4: `#fin-congrats` italic amber quote + "Retour au chapitre" + "Accueil BrainFest" buttons. No "Niveau 5" button.
+Level 4: `#fin-congrats` italic amber quote + "Retour au chapitre" + "Accueil Nutrilexic" buttons. No "Niveau 5" button.
 
 Score messages array (index 0–6): `['Continuez à explorer !', 'Continuez à explorer !', 'Pas mal, continuez !', 'Bien joué !', 'Très bien !', 'Excellent !', 'Parfait !']`
 
@@ -104,3 +104,6 @@ Quiz pages background: `#f5ede8`. Intro/hub pages background: `#fdf9f6`.
 Fonts: Cormorant Garamond (headings) + DM Sans (body), loaded from Google Fonts.
 
 All CSS and JS is embedded inline — no external `.css` or `.js` files.
+
+## OUTPUT RULES
+Keep responses under 200 words. Write code to FILES only, never inline. No explanations unless explicitly asked.

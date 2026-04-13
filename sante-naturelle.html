@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Quiz santé naturelle gratuits — BrainFest</title>
+<title>Quiz santé naturelle gratuits — Nutrilexic</title>
 <meta name="description" content="Quiz adaptatifs en santé naturelle et naturopathie : peau, microbiote, stress, sommeil, immunité. 4 niveaux progressifs. Bilingue FR/EN.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://brainfest.eu/sante-naturelle.html">
-<meta property="og:title" content="Quiz santé naturelle gratuits — BrainFest">
+<meta property="og:title" content="Quiz santé naturelle gratuits — Nutrilexic">
 <meta property="og:description" content="Quiz adaptatifs en naturopathie. 4 niveaux progressifs. Bilingue FR/EN.">
 <meta property="og:url" content="https://brainfest.eu/sante-naturelle.html">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -137,7 +137,7 @@ body{min-height:100vh;}
 
   <div class="crossell" onclick="goTo('memoire')">
     <div>
-      <div class="crossell-label" id="xsLabel">Aussi sur BrainFest</div>
+      <div class="crossell-label" id="xsLabel">Aussi sur Nutrilexic</div>
       <div class="crossell-title" id="xsTitle">🧠 Entraînez votre mémoire →</div>
     </div>
     <div class="crossell-arrow">›</div>
@@ -177,7 +177,7 @@ var TX={
     featDesc:'Quiz adaptatif sur la peau en naturopathie. 4 niveaux progressifs — le parcours s\'adapte à vos réponses.',
     featBtn:'▶ Commencer',
     shareLabel:'Partager',backLabel:'Retour',langBtn:'🇬🇧 EN',
-    xsLabel:'Aussi sur BrainFest',xsTitle:'🧠 Entraînez votre mémoire →',
+    xsLabel:'Aussi sur Nutrilexic',xsTitle:'🧠 Entraînez votre mémoire →',
     footerTxt:'Nouveaux quiz à venir · ',footerLinkTxt:'Inscrivez-vous à la newsletter',
     footerSub:'pour être notifié·e en avant-première',
   },
@@ -192,7 +192,7 @@ var TX={
     featDesc:'Adaptive quiz on skin in naturopathy. 4 progressive levels — the path adapts to your answers.',
     featBtn:'▶ Start',
     shareLabel:'Share',backLabel:'Back',langBtn:'🇫🇷 FR',
-    xsLabel:'Also on BrainFest',xsTitle:'🧠 Train your memory →',
+    xsLabel:'Also on Nutrilexic',xsTitle:'🧠 Train your memory →',
     footerTxt:'New quizzes coming · ',footerLinkTxt:'Subscribe to the newsletter',
     footerSub:'to be notified first',
   }
@@ -236,7 +236,7 @@ function closeGame(){
 }
 function shareGame(file){
   var url=BASE+file;
-  if(navigator.share){navigator.share({title:'BrainFest',url:url});}
+  if(navigator.share){navigator.share({title:'Nutrilexic',url:url});}
   else{navigator.clipboard&&navigator.clipboard.writeText(url);alert('Lien copié !');}
 }
 function shareCurrentGame(){if(!currentFile)return;shareGame(currentFile);}
