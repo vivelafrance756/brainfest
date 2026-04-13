@@ -18,8 +18,6 @@
   --amber: #d4923a;
   --cream: #f7f3ec;
   --sage: #6b9e78;
-  --blue-light: #ADD8E6;
-  --blue-mid: #7ab8cc;
   --blue-dark: #1a3a5c;
 }
 
@@ -45,254 +43,287 @@ body {
 
 /* ── HEADER ── */
 #header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   background: var(--indigo-dark);
-  padding: 16px 20px;
+  height: 56px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-}
-
-#header-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  line-height: 1;
-}
-
-#header-logo .brain {
-  color: var(--cream);
-  font-weight: 400;
-}
-
-#header-logo .fest {
-  color: var(--amber);
-  font-weight: 600;
-}
-
-#header-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
+  padding: 0 20px;
+  z-index: 100;
 }
 
 #lang-toggle {
   background: transparent;
-  border: 1.5px solid var(--amber);
+  border: 1px solid var(--amber);
   color: var(--amber);
   font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 50px;
-  padding: 6px 18px;
-  cursor: pointer;
-  min-height: 44px;
-  min-width: 64px;
-  letter-spacing: 0.5px;
-}
-
-#new-this-week {
-  background: var(--amber);
-  color: var(--cream);
-  border: none;
-  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 24px;
-  padding: 10px 28px;
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 6px 16px;
   cursor: pointer;
-  min-height: 44px;
-  animation: pulse 2.2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212,146,58,0.5); }
-  50% { box-shadow: 0 0 0 8px rgba(212,146,58,0); }
+  min-height: 36px;
 }
 
 /* ── HERO ── */
 #hero {
-  background: var(--indigo-dark);
-  padding: 32px 20px 28px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
+  background: var(--indigo-mid);
+  padding: 48px 20px;
+  text-align: center;
+  margin-top: 56px;
 }
 
-#hero-text {
-  flex: 1;
+#hero-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--cream);
+  opacity: 0.45;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 
-#hero-text h1 {
+#hero h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 400;
   color: var(--cream);
-  line-height: 1.2;
-  margin-bottom: 8px;
+  line-height: 1.3;
 }
 
-#hero-tagline {
+#hero h2 {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--amber);
-  letter-spacing: 3px;
-  text-align: center;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
-#hero-brain {
-  width: 140px;
-  height: 140px;
-  min-width: 140px;
-  flex-shrink: 0;
+#hero-btn {
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 24px;
+  padding: 10px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 20px;
+  min-height: 44px;
+}
+
+/* ── PASSWORD OVERLAY ── */
+#pw-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--indigo-dark);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 9999;
 }
 
-/* ── THEME SENTENCE ── */
-#theme-sentence {
-  background: var(--indigo-dark);
-  padding: 16px 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+#pw-overlay .pw-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  line-height: 1;
 }
 
-#theme-sentence p {
+#pw-overlay .pw-logo .brain { color: var(--cream); font-weight: 400; }
+#pw-overlay .pw-logo .fest  { color: var(--amber); font-weight: 600; }
+
+#pw-overlay .pw-subtitle {
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
-  color: var(--blue-light);
-  font-style: italic;
-  text-align: center;
-  line-height: 1.6;
+  color: #ADD8E6;
+  margin-top: 8px;
 }
 
-#theme-sentence strong {
+#pw-input {
+  margin-top: 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
   color: var(--cream);
-  font-style: normal;
+  width: 200px;
+  text-align: center;
+  outline: none;
 }
 
-/* ── TWO COLUMNS ── */
-#two-columns {
-  background: #f0f4f8;
+#pw-input::placeholder { color: rgba(247,243,236,0.5); }
+
+#pw-submit {
+  margin-top: 12px;
+  background: var(--amber);
+  color: var(--cream);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+#pw-error {
+  margin-top: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #e74c3c;
+  display: none;
+}
+
+/* ── SECTIONS ── */
+.section-gauche {
+  background: var(--cream);
   padding: 24px 16px;
 }
 
-.columns-row {
-  display: flex;
-  flex-direction: row;
-  gap: 4%;
-  align-items: stretch;
+.section-droite {
+  background: #ffffff;
+  padding: 24px 16px;
 }
 
-.column {
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 4px;
+}
+
+.section-title-underline {
+  width: 40px;
+  height: 2px;
+  background: var(--amber);
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* ── CARD ROW ── */
+.card-row-wrapper {
   display: flex;
   flex-direction: column;
-}
-
-.column {
-  width: 48%;
-  flex-shrink: 0;
-  flex: 1;
-}
-
-.column-header {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--amber);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  line-height: 1.25;
-  margin-bottom: 14px;
-  white-space: pre-line;
-}
-
-.card-row-wrapper {
-  position: relative;
 }
 
 .card-row {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
-  height: 180px;
   overflow-x: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding-bottom: 4px;
-  gap: 0;
+  gap: 12px;
+  padding-bottom: 8px;
 }
 
-.card-row::-webkit-scrollbar {
-  display: none;
-}
+.card-row::-webkit-scrollbar { display: none; }
 
+/* ── CARD ── */
 .card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 16px 12px;
+  border-radius: 12px;
+  border: 0.5px solid #e0d8cc;
   min-width: 160px;
-  max-width: 180px;
-  height: 160px;
-  border: 0.5px solid rgba(0,0,0,0.08);
-  margin-right: 12px;
+  width: 160px;
   flex-shrink: 0;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 6px;
   overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s;
 }
 
-.card-emoji {
-  font-size: 20px;
+.card:hover { transform: scale(1.02); }
+.card:active { opacity: 0.85; }
+
+.card-img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 10px 12px;
 }
 
 .card-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--indigo-dark);
   line-height: 1.3;
+  margin-bottom: 2px;
 }
 
 .card-desc {
   font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--sage);
+  font-size: 11px;
+  color: #888;
   line-height: 1.4;
 }
 
+.card-btn {
+  display: inline-block;
+  background: var(--amber);
+  color: #fff;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.card-soon-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--amber);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 2px 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+a.card-link { text-decoration: none; display: block; min-width: 160px; width: 160px; flex-shrink: 0; }
+a.card-link .card { width: 100%; min-width: unset; }
+
+/* ── SCROLL ARROWS ── */
 .card-nav {
   display: flex;
   gap: 10px;
-  margin-top: auto;
-  padding-top: 12px;
-  flex-shrink: 0;
-}
-
-.card-row-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  margin-top: 12px;
 }
 
 .card-nav button {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 44px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
   border-radius: 50%;
-  background: var(--cream);
+  background: transparent;
   border: 1px solid var(--amber);
   color: var(--amber);
   font-size: 16px;
@@ -303,104 +334,22 @@ body {
   flex-shrink: 0;
 }
 
-/* ── SONOCERVEAU ── */
+/* ── SONOCERVEAU BAND ── */
 #sonocerveau {
-  width: 100%;
-  background: var(--blue-light);
+  background: var(--blue-dark);
   padding: 20px 16px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 16px;
 }
 
 #sono-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 60px;
-  padding-top: 6px;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-#sono-label span.note-icon {
-  font-size: 22px;
-  color: var(--blue-dark);
-}
-
-#sono-label span.sono-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--blue-dark);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  letter-spacing: 1px;
-  line-height: 1;
-}
-
-#sono-cards {
-  flex: 1;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: row;
-  gap: 12px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding-bottom: 4px;
-}
-
-#sono-cards::-webkit-scrollbar {
-  display: none;
-}
-
-.sono-card {
-  background: var(--blue-mid);
-  border-radius: 16px;
-  padding: 16px 12px;
-  min-width: 160px;
-  max-width: 180px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.sono-card-img {
-  background: #5a9ab5;
-  border-radius: 8px;
-  height: 80px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-}
-
-.sono-card-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 16px;
-  font-weight: 600;
-  color: var(--indigo-dark);
-  line-height: 1.3;
-}
-
-.sono-card-desc {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--blue-dark);
-  line-height: 1.4;
+  color: var(--amber);
+  margin-bottom: 14px;
 }
 
 /* ── FOOTER ── */
 #footer {
-  background: var(--indigo-mid);
+  background: var(--indigo-dark);
   padding: 32px 20px;
   color: var(--cream);
   display: flex;
@@ -414,6 +363,26 @@ body {
   line-height: 1.7;
   color: var(--cream);
 }
+
+#newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#newsletter-email {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: var(--cream);
+  outline: none;
+  width: 100%;
+}
+
+#newsletter-email::placeholder { color: rgba(247,243,236,0.5); }
 
 #newsletter-btn {
   width: 100%;
@@ -455,37 +424,12 @@ body {
   align-items: center;
 }
 
-#footer-links a:hover {
-  text-decoration: underline;
-}
+#footer-links a:hover { text-decoration: underline; }
 
 #footer-copyright {
   font-family: 'DM Sans', sans-serif;
   font-size: 12px;
   color: rgba(255,255,255,0.5);
-}
-
-/* ── CARD CLICKABLE ── */
-.card { cursor: pointer; position: relative; transition: transform 0.2s; }
-.card:hover { transform: scale(1.02); }
-.card:active { opacity: 0.85; }
-.sono-card { cursor: pointer; position: relative; transition: transform 0.2s; }
-.sono-card:hover { transform: scale(1.02); }
-.sono-card:active { opacity: 0.85; }
-a.card-link { text-decoration: none; display: block; }
-
-.card-soon-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--amber);
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  border-radius: 6px;
-  padding: 2px 6px;
-  pointer-events: none;
 }
 
 #soon-toast {
@@ -507,101 +451,6 @@ a.card-link { text-decoration: none; display: block; }
 }
 
 #soon-toast.show { opacity: 1; }
-
-/* ── ANIMATIONS ── */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 15px rgba(212,146,58,0.2); }
-  50% { box-shadow: 0 0 30px rgba(212,146,58,0.5); }
-}
-
-/* ── PASSWORD OVERLAY ── */
-#pw-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--indigo-dark);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-#pw-overlay .pw-logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 32px;
-  line-height: 1;
-}
-
-#pw-overlay .pw-logo .brain { color: var(--cream); font-weight: 400; }
-#pw-overlay .pw-logo .fest  { color: var(--amber); font-weight: 600; }
-
-#pw-overlay .pw-subtitle {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  color: var(--blue-light);
-  margin-top: 8px;
-}
-
-#pw-input {
-  margin-top: 32px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.1);
-  color: var(--cream);
-  width: 200px;
-  text-align: center;
-  outline: none;
-}
-
-#pw-input::placeholder { color: rgba(247,243,236,0.5); }
-
-#pw-submit {
-  margin-top: 12px;
-  background: var(--amber);
-  color: var(--cream);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  cursor: pointer;
-  min-height: 44px;
-}
-
-#pw-error {
-  margin-top: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: #e74c3c;
-  display: none;
-}
-
-/* ── MOBILE ── */
-@media (max-width: 500px) {
-  #hero {
-    flex-direction: column-reverse;
-    align-items: flex-start;
-  }
-
-  #hero-brain {
-    align-self: flex-end;
-    width: 100px;
-    height: 100px;
-    min-width: 100px;
-  }
-
-  #hero-text h1 {
-    font-size: 28px;
-  }
-}
 </style>
 </head>
 <body>
@@ -618,167 +467,218 @@ a.card-link { text-decoration: none; display: block; }
 
 <!-- ── HEADER ── -->
 <header id="header">
-  <a href="index.html" class="logo-link" style="text-decoration:none;">
-  <img src="images/nutrilexic-logo.svg" alt="Nutrilexic" style="height:44px;width:auto;">
-</a>
-  <div id="header-right">
-    <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
-    <button id="new-this-week" onclick="scrollToMelodie()">
-      <span data-fr="NOUVEAU CETTE SEMAINE" data-en="NEW THIS WEEK">NOUVEAU CETTE SEMAINE</span>
-    </button>
-  </div>
+  <a href="index.html" style="text-decoration:none;">
+    <img src="images/nutrilexic-logo.svg" alt="Nutrilexic" style="height:44px;width:auto;">
+  </a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
 </header>
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div id="hero-text">
-    <h1 data-fr="Cultivez vos connaissances en santé naturelle et micronutrition" data-en="Cultivate your knowledge in natural health and micronutrition">
-      Cultivez vos connaissances en santé naturelle et micronutrition
-    </h1>
-    <h1 style="margin-top:10px;" data-fr="Entraînez votre mémoire en jouant." data-en="Train your memory through play.">
-      Entraînez votre mémoire en jouant.
-    </h1>
-    <p id="hero-tagline" data-fr="Vitalité · Longévité · Mémoire" data-en="Vitality · Longevity · Memory">Vitalité · Longévité · Mémoire</p>
-  </div>
-  <img src="images/brain-hero.jpg" alt="Nutrilexic" id="hero-brain" style="width:140px;height:140px;object-fit:cover;border-radius:50%;border:1px solid rgba(212,146,58,0.3);flex-shrink:0;animation:float 4s ease-in-out infinite,pulse-glow 4s ease-in-out infinite;">
+  <p id="hero-subtitle" data-fr="Vitalité · Longévité · Mémoire" data-en="Vitality · Longevity · Memory">Vitalité · Longévité · Mémoire</p>
+  <h1 data-fr="Cultivez vos connaissances en santé naturelle et micronutrition" data-en="Cultivate your knowledge in natural health and micronutrition">Cultivez vos connaissances en santé naturelle et micronutrition</h1>
+  <h2 data-fr="Entraînez votre mémoire en jouant." data-en="Train your memory through play.">Entraînez votre mémoire en jouant.</h2>
+  <button id="hero-btn" onclick="document.getElementById('section-savoirs').scrollIntoView({behavior:'smooth'})" data-fr="Commencer" data-en="Start">Commencer</button>
 </section>
 
-<!-- ── THEME SENTENCE ── -->
-<section id="theme-sentence">
-  <p data-fr='Les jeux de mémoire sont conçus pour ancrer ce que vous apprenez dans les questionnaires santé. Le thème du moment : <strong>la peau</strong>.'
-     data-en='The memory games are designed to reinforce what you learn in the health quizzes. Current theme : <strong>skin</strong>.'>
-    Les jeux de mémoire sont conçus pour ancrer ce que vous apprenez dans les questionnaires santé. Le thème du moment : <strong>la peau</strong>.
-  </p>
-</section>
+<!-- ── SECTION GAUCHE : CULTIVEZ VOS SAVOIRS ── -->
+<section class="section-gauche" id="section-savoirs">
+  <h2 class="section-title" data-fr="Cultivez vos savoirs" data-en="Explore health topics">Cultivez vos savoirs</h2>
+  <div class="section-title-underline"></div>
+  <p class="section-subtitle" data-fr="7 explorations santé, par niveaux. Posez vos questions. Lexique santé intégré. Nouveaux thèmes régulièrement." data-en="7 health explorations, by level. Ask your questions. Health glossary included. New topics regularly.">7 explorations santé, par niveaux. Posez vos questions. Lexique santé intégré. Nouveaux thèmes régulièrement.</p>
+  <div class="card-row-wrapper">
+    <div class="card-row" id="row-savoirs">
 
-<!-- ── TWO COLUMNS ── -->
-<section id="two-columns">
-  <div class="columns-row">
-
-    <!-- CULTIVEZ VOS SAVOIRS -->
-    <div class="column">
-      <div class="column-header" data-fr="CULTIVEZ&#10;VOS&#10;SAVOIRS" data-en="CULTIVATE&#10;YOUR&#10;KNOWLEDGE">CULTIVEZ&#10;VOS&#10;SAVOIRS</div>
-      <div class="card-row-wrapper">
-        <div class="card-row" id="row-savoirs">
-          <a href="nutriments-et-peau.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🍊</div>
-            <div class="card-title">Nutriments et Peau</div>
-            <div class="card-desc" data-fr="Votre peau mange ce que vous mangez" data-en="Your skin eats what you eat">Votre peau mange ce que vous mangez</div>
+      <a href="nutriments-et-peau.html" class="card-link">
+        <div class="card">
+          <img src="images/nutriments-et-peau.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Nutriments et Peau" data-en="Skin Nutrients">Nutriments et Peau</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
           </div>
-          </a>
-          <a href="votre-peau.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🧬</div>
+        </div>
+      </a>
+
+      <a href="peau-microbiote.html" class="card-link">
+        <div class="card">
+          <img src="images/peau-microbiote.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Peau et Microbiote" data-en="Skin &amp; Microbiome">Peau et Microbiote</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <a href="peau-et-foie.html" class="card-link">
+        <div class="card">
+          <img src="images/peau-et-foie.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Peau et Foie" data-en="Skin &amp; Liver">Peau et Foie</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <a href="magnesium.html" class="card-link">
+        <div class="card">
+          <img src="images/magnesium.png" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Magnésium" data-en="Magnesium">Magnésium</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <a href="anti-inflammatoire.html" class="card-link">
+        <div class="card">
+          <img src="images/anti-inflammatoire.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Stratège Anti-Inflammatoire" data-en="Anti-Inflammatory">Stratège Anti-Inflammatoire</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <a href="votre-peau.html" class="card-link">
+        <div class="card">
+          <img src="images/peau-histoire.png" alt="" class="card-img">
+          <div class="card-content">
             <div class="card-title" data-fr="Votre peau a une histoire" data-en="Your skin has a story">Votre peau a une histoire</div>
-            <div class="card-desc" data-fr="Acné, eczéma, psoriasis : comprenez votre peau" data-en="Acne, eczema, psoriasis: understand your skin">Acné, eczéma, psoriasis : comprenez votre peau</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
           </div>
-          </a>
-          <a href="peau-microbiote.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🦠</div>
-            <div class="card-title">Peau et Microbiote</div>
-            <div class="card-desc" data-fr="Votre intestin parle à votre peau" data-en="Your gut talks to your skin">Votre intestin parle à votre peau</div>
-          </div>
-          </a>
-          <a href="peau-et-foie.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🫁</div>
-            <div class="card-title">Peau et Foie</div>
-            <div class="card-desc" data-fr="Quand le foie déborde, la peau réagit" data-en="When the liver overflows, the skin reacts">Quand le foie déborde, la peau réagit</div>
-          </div>
-          </a>
-          <a href="magnesium.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">💊</div>
-            <div class="card-title" data-fr="Magnésium : oui mais lequel ?" data-en="Magnesium: yes but which one?">Magnésium : oui mais lequel ?</div>
-            <div class="card-desc" data-fr="Toutes les formes ne se valent pas" data-en="Not all forms are equal">Toutes les formes ne se valent pas</div>
-          </div>
-          </a>
-          <a href="anti-inflammatoire.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🔥</div>
-            <div class="card-title" data-fr="Stratège Anti-Inflammatoire" data-en="Anti-Inflammatory Strategy">Stratège Anti-Inflammatoire</div>
-            <div class="card-desc" data-fr="L'alimentation comme bouclier" data-en="Diet as your shield">L'alimentation comme bouclier</div>
-          </div>
-          </a>
-          <a href="plantes.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🌿</div>
+        </div>
+      </a>
+
+      <a href="plantes.html" class="card-link">
+        <div class="card">
+          <img src="images/plantes-remedes-legendes.jpg" alt="" class="card-img">
+          <div class="card-content">
             <div class="card-title" data-fr="Plantes : Remèdes ou Légendes ?" data-en="Plants: Remedies or Legends?">Plantes : Remèdes ou Légendes ?</div>
-            <div class="card-desc" data-fr="La science tranche" data-en="Science decides">La science tranche</div>
+            <div class="card-desc" data-fr="4 niveaux · IA incluse" data-en="4 levels · AI included">4 niveaux · IA incluse</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
           </div>
-          </a>
         </div>
-        <div class="card-nav">
-          <button onclick="scrollRow('row-savoirs', -1)" aria-label="Précédent">&#8592;</button>
-          <button onclick="scrollRow('row-savoirs', 1)" aria-label="Suivant">&#8594;</button>
-        </div>
-      </div>
-    </div>
+      </a>
 
-    <!-- ENTRAÎNEZ VOTRE MÉMOIRE -->
-    <div class="column">
-      <div class="column-header" data-fr="ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE" data-en="TRAIN&#10;YOUR&#10;MEMORY">ENTRAÎNEZ&#10;VOTRE&#10;MÉMOIRE</div>
-      <div class="card-row-wrapper">
-        <div class="card-row" id="row-memoire">
-          <a href="carre-magique.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">🧩</div>
-            <div class="card-title" data-fr="Le Carré Magique" data-en="The Magic Square">Le Carré Magique</div>
-            <div class="card-desc" data-fr="Votre cerveau adore qu'on le mette au défi" data-en="Your brain loves a challenge">Votre cerveau adore qu'on le mette au défi</div>
-          </div>
-          </a>
-          <a href="mots-croises.html" class="card-link">
-          <div class="card">
-            <div class="card-emoji">✏️</div>
-            <div class="card-title" data-fr="Mots Croisés Jolie Peau" data-en="Lovely Skin Crosswords">Mots Croisés Jolie Peau</div>
-            <div class="card-desc" data-fr="Le vocabulaire de la peau en jeu" data-en="Skin vocabulary at play">Le vocabulaire de la peau en jeu</div>
-          </div>
-          </a>
-          <div class="card" onclick="soon()">
-            <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
-            <div class="card-emoji">🃏</div>
-            <div class="card-title" data-fr="Paires Santé" data-en="Health Pairs">Paires Santé</div>
-            <div class="card-desc" data-fr="Associez plantes et effets" data-en="Match plants and effects">Associez plantes et effets</div>
-          </div>
-        </div>
-        <div class="card-nav">
-          <button onclick="scrollRow('row-memoire', -1)" aria-label="Précédent">&#8592;</button>
-          <button onclick="scrollRow('row-memoire', 1)" aria-label="Suivant">&#8594;</button>
-        </div>
-      </div>
     </div>
-
+    <div class="card-nav">
+      <button onclick="scrollRow('row-savoirs', -1)" aria-label="Précédent">&#8592;</button>
+      <button onclick="scrollRow('row-savoirs', 1)" aria-label="Suivant">&#8594;</button>
+    </div>
   </div>
 </section>
 
-<!-- ── SONOCERVEAU ── -->
-<section id="sonocerveau">
-  <div id="sono-label">
-    <span class="note-icon">♪</span>
-    <span class="sono-title">SonoCerveau</span>
+<!-- ── SECTION DROITE : ENTRAÎNEZ VOTRE MÉMOIRE ── -->
+<section class="section-droite" id="section-memoire">
+  <h2 class="section-title" data-fr="Entraînez votre mémoire" data-en="Train your memory">Entraînez votre mémoire</h2>
+  <div class="section-title-underline"></div>
+  <p class="section-subtitle" data-fr="Mots croisés, paires à reconstituer, carré magique... Pour ancrer vos savoirs en jouant." data-en="Crosswords, matching pairs, magic square... To anchor your knowledge through play.">Mots croisés, paires à reconstituer, carré magique... Pour ancrer vos savoirs en jouant.</p>
+  <div class="card-row-wrapper">
+    <div class="card-row" id="row-memoire">
+
+      <a href="carre-magique.html" class="card-link">
+        <div class="card">
+          <img src="images/illustration_puzzle.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Le Carré Magique" data-en="The Magic Square">Le Carré Magique</div>
+            <div class="card-desc" data-fr="3 niveaux" data-en="3 levels">3 niveaux</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <a href="mots-croises.html" class="card-link">
+        <div class="card">
+          <img src="images/mot-croises.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Mots Croisés Jolie Peau" data-en="Skin Health Crossword">Mots Croisés Jolie Peau</div>
+            <div class="card-desc" data-fr="3 niveaux" data-en="3 levels">3 niveaux</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <div class="card" style="background:#f7f3ec;opacity:0.7;" onclick="soon()">
+        <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+        <img src="images/home-page-paire-peau-calendula.jpg" alt="" class="card-img">
+        <div class="card-content">
+          <div class="card-title" data-fr="Paires Peau" data-en="Skin Pairs">Paires Peau</div>
+          <div class="card-desc" data-fr="3 niveaux · Bientôt" data-en="3 levels · Coming soon">3 niveaux · Bientôt</div>
+        </div>
+      </div>
+
+      <div class="card" style="opacity:0.7;" onclick="soon()">
+        <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+        <img src="images/melodie-miroir.png" alt="" class="card-img">
+        <div class="card-content">
+          <div class="card-title" data-fr="Mélodie Miroir" data-en="Melody Mirror">Mélodie Miroir</div>
+          <div class="card-desc" data-fr="Bientôt" data-en="Coming soon">Bientôt</div>
+        </div>
+      </div>
+
+      <div class="card" style="opacity:0.7;" onclick="soon()">
+        <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+        <img src="images/beat-memory.jpg" alt="" class="card-img">
+        <div class="card-content">
+          <div class="card-title" data-fr="Beat Memory" data-en="Beat Memory">Beat Memory</div>
+          <div class="card-desc" data-fr="Bientôt" data-en="Coming soon">Bientôt</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="card-nav">
+      <button onclick="scrollRow('row-memoire', -1)" aria-label="Précédent">&#8592;</button>
+      <button onclick="scrollRow('row-memoire', 1)" aria-label="Suivant">&#8594;</button>
+    </div>
   </div>
-  <div id="sono-cards">
-    <div class="sono-card" id="melodie-miroir-card" onclick="soon()">
-      <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
-      <img src="images/melody_miroir.png" alt="Mélodie Miroir" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
-      <div class="sono-card-title">Mélodie Miroir</div>
-      <div class="sono-card-desc" data-fr="Comparez deux mélodies et trouvez la différence" data-en="Compare two melodies and find the difference">Comparez deux mélodies et trouvez la différence</div>
+</section>
+
+<!-- ── SONOCERVEAU BAND ── -->
+<section id="sonocerveau">
+  <div id="sono-label">SonoCerveau</div>
+  <div class="card-row-wrapper">
+    <div class="card-row" id="row-sono">
+
+      <a href="melodie-jazz.html" class="card-link">
+        <div class="card" style="background:#ffffff;">
+          <img src="images/melodie-jazz.jpg" alt="" class="card-img">
+          <div class="card-content">
+            <div class="card-title" data-fr="Mélodie Jazz" data-en="Jazz Melody">Mélodie Jazz</div>
+            <div class="card-desc" data-fr="13 mélodies" data-en="13 melodies">13 mélodies</div>
+            <button class="card-btn" data-fr="Explorer" data-en="Explore">Explorer</button>
+          </div>
+        </div>
+      </a>
+
+      <div class="card" style="background:#ffffff;opacity:0.7;" onclick="soon()">
+        <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+        <img src="images/melodie-miroir.png" alt="" class="card-img">
+        <div class="card-content">
+          <div class="card-title" data-fr="Mélodie Miroir" data-en="Melody Mirror">Mélodie Miroir</div>
+          <div class="card-desc" data-fr="Bientôt" data-en="Coming soon">Bientôt</div>
+        </div>
+      </div>
+
+      <div class="card" style="background:#ffffff;opacity:0.7;" onclick="soon()">
+        <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
+        <img src="images/beat-memory.jpg" alt="" class="card-img">
+        <div class="card-content">
+          <div class="card-title" data-fr="Beat Memory" data-en="Beat Memory">Beat Memory</div>
+          <div class="card-desc" data-fr="Bientôt" data-en="Coming soon">Bientôt</div>
+        </div>
+      </div>
+
     </div>
-    <div class="sono-card" onclick="soon()">
-      <span class="card-soon-badge" data-fr="Bientôt" data-en="Soon">Bientôt</span>
-      <img src="images/beat-memory.jpg" alt="Beat Memory" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
-      <div class="sono-card-title">Beat Memory</div>
-      <div class="sono-card-desc" data-fr="Reproduisez des rythmes de jazz" data-en="Reproduce jazz rhythms">Reproduisez des rythmes de jazz</div>
+    <div class="card-nav">
+      <button onclick="scrollRow('row-sono', -1)" aria-label="Précédent">&#8592;</button>
+      <button onclick="scrollRow('row-sono', 1)" aria-label="Suivant">&#8594;</button>
     </div>
-    <a href="melodie-jazz.html" style="text-decoration:none;">
-    <div class="sono-card">
-      <img src="images/melodie-jazz.jpg" alt="Mélodie Jazz" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:10px;">
-      <div class="sono-card-title" data-fr="Mélodie Jazz" data-en="Jazz Melody">Mélodie Jazz</div>
-      <div class="sono-card-desc" data-fr="Apprenez les mélodies note par note" data-en="Learn melodies note by note">Apprenez les mélodies note par note</div>
-    </div>
-    </a>
   </div>
 </section>
 
@@ -791,8 +691,8 @@ a.card-link { text-decoration: none; display: block; }
   </p>
 
   <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
-     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
-    S'inscrire à la newsletter
+     data-fr="Rester informé" data-en="Stay informed">
+    Rester informé
   </a>
 
   <p id="footer-text-bottom"
@@ -816,7 +716,7 @@ a.card-link { text-decoration: none; display: block; }
 <script>
 // ── PASSWORD PROTECTION ──
 (function() {
-  if (sessionStorage.getItem('bf_access') === 'granted') {
+  if (sessionStorage.getItem('bf_access') === 'granted' || sessionStorage.getItem('bf_access') === 'dev') {
     document.getElementById('pw-overlay').style.display = 'none';
   }
 })();
@@ -844,43 +744,23 @@ function toggleLang() {
 }
 
 function applyLang() {
-  var lang = currentLang;
   var els = document.querySelectorAll('[data-fr][data-en]');
   els.forEach(function(el) {
-    var val = el.getAttribute('data-' + lang);
-    if (val !== null) {
-      el.innerHTML = val;
-    }
+    var val = el.getAttribute('data-' + currentLang);
+    if (val !== null) el.innerHTML = val;
   });
-  // Theme sentence needs innerHTML for the <strong> tag
-  var ts = document.querySelector('#theme-sentence p');
-  if (ts) {
-    var val = ts.getAttribute('data-' + lang);
-    if (val) ts.innerHTML = val;
-  }
 }
 
 function scrollRow(rowId, dir) {
   var row = document.getElementById(rowId);
-  var cardWidth = 172; // min-width 160 + margin 12
-  row.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
-}
-
-function goTo(url) {
-  window.location.href = url;
+  row.scrollBy({ left: dir * 180, behavior: 'smooth' });
 }
 
 function soon() {
-  alert(currentLang === 'fr' ? 'Ce contenu arrive bientôt' : 'This content is coming soon');
-}
-
-function scrollToMelodie() {
-  var el = document.getElementById('melodie-miroir-card');
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    el.style.outline = '2px solid ' + getComputedStyle(document.documentElement).getPropertyValue('--amber');
-    setTimeout(function() { el.style.outline = ''; }, 1800);
-  }
+  var toast = document.getElementById('soon-toast');
+  toast.textContent = currentLang === 'fr' ? 'Ce contenu arrive bientôt !' : 'This content is coming soon!';
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2000);
 }
 </script>
 </body>
