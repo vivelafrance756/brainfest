@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Paires Peau — Nutrilexic</title>
+<meta name="description" content="Jeu de mémoire bilingue : associez chaque actif à sa fonction sur la peau.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://brainfest.eu/paires-peau.html">
+<script>if(!sessionStorage.getItem('bf_access')){window.location.href='index.html';}</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo-dark: #2d3d4a;
+  --indigo-mid: #1a2535;
+  --amber: #d4923a;
+  --cream: #f7f3ec;
+  --sage: #6b9e78;
+  --blue: #2a7fa8;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html { min-width: 375px; overflow-x: hidden; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--indigo-dark);
+  overflow-x: hidden;
+  min-width: 375px;
+}
+
+/* ── HEADER ── */
+#header {
+  width: 100%;
+  background: var(--indigo-dark);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#lang-toggle {
+  background: var(--amber);
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ── BACK BAR ── */
+#back-bar {
+  width: 100%;
+  background: var(--cream);
+  padding: 12px 20px;
+}
+
+#back-btn {
+  background: none;
+  border: none;
+  color: var(--amber);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+}
+
+/* ── HERO ── */
+#hero-illustration { width: 100%; height: 200px; overflow: hidden; }
+#hero-illustration img { width: 100%; height: 200px; object-fit: cover; display: block; }
+
+/* ── INTRO BLOCK ── */
+#intro-block { background: var(--cream); padding: 24px 20px; }
+
+#intro-block h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+#intro-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ── LEVEL SELECTOR ── */
+#level-selector { padding: 16px 20px 32px; }
+
+.level-choice-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.level-choice-card:active { transform: scale(0.97); box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+.level-choice-emoji { font-size: 28px; flex-shrink: 0; }
+.level-choice-info { display: flex; flex-direction: column; gap: 4px; }
+
+.level-choice-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  line-height: 1.2;
+}
+
+.level-choice-sub { font-family: 'DM Sans', sans-serif; font-size: 13px; color: #888; }
+
+/* ── FOOTER ── */
+#footer { background: var(--indigo-mid); padding: 32px 20px; color: var(--cream); display: flex; flex-direction: column; gap: 20px; }
+#footer-text-top { font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7; color: var(--cream); }
+
+#newsletter-btn {
+  width: 100%;
+  background: var(--amber);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 24px;
+  padding: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+#footer-text-bottom { font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7; color: var(--cream); }
+#footer-links { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+#footer-links a { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--amber); text-decoration: none; min-height: 44px; display: flex; align-items: center; }
+#footer-links a:hover { text-decoration: underline; }
+#footer-copyright { font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.5); }
+
+/* ── GAME SCREEN ── */
+#game-screen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--cream);
+  z-index: 100;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+#game-screen.active { display: flex; }
+
+#game-top-bar {
+  background: var(--indigo-dark);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+#game-back-btn {
+  background: none;
+  border: none;
+  color: var(--cream);
+  font-size: 22px;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#game-level-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+  text-align: center;
+  flex: 1;
+}
+
+#game-score {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--amber);
+  text-align: right;
+  min-width: 72px;
+  line-height: 1.4;
+}
+
+/* ── CARD GRID ── */
+#grid-area { padding: 14px 12px 24px; }
+
+#card-grid {
+  display: grid;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+@media (max-width: 540px) {
+  .grid-4, .grid-5 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ── CARD FLIP ── */
+.card-wrapper {
+  perspective: 700px;
+  cursor: pointer;
+  border-radius: 12px;
+  min-height: 120px;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+  border-radius: 12px;
+}
+
+.card-inner.flipped { transform: rotateY(180deg); }
+
+.card-face {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Card back (face down) */
+.card-face-back {
+  background: var(--indigo-dark);
+}
+
+/* Card front (content side) — initially hidden */
+.card-face-front {
+  transform: rotateY(180deg);
+}
+
+/* Type A — Illustration card */
+.card-type-a {
+  background: #ffffff;
+  border: 1px solid #e8c4b8;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.card-type-a .card-img-wrap {
+  width: 100%;
+  height: 80px;
+  padding: 8px 8px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-type-a .card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.card-type-a .card-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  text-align: center;
+  padding: 2px 6px 8px;
+  line-height: 1.2;
+  width: 100%;
+  word-break: break-word;
+}
+
+/* Type B — Function card */
+.card-type-b {
+  background: #fff8f0;
+  border: 1px solid var(--amber);
+  justify-content: center;
+  padding: 10px 8px;
+  gap: 7px;
+}
+
+.card-type-b .card-line {
+  width: 30px;
+  height: 2px;
+  background: var(--amber);
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.card-type-b .card-fn {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--indigo-dark);
+  text-align: center;
+  line-height: 1.4;
+  word-break: break-word;
+  padding: 0 4px;
+}
+
+/* Matched pair — green */
+.card-inner.matched .card-type-a,
+.card-inner.matched .card-type-b {
+  background: #d4e8d4 !important;
+  border-color: #6b9e78 !important;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes greenPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(107, 158, 120, 0.7); }
+  60%  { box-shadow: 0 0 0 10px rgba(107, 158, 120, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(107, 158, 120, 0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(4px); }
+}
+
+.card-wrapper.correct-pulse {
+  animation: greenPulse 0.6s ease-out;
+}
+
+.card-wrapper.shake {
+  animation: shake 0.4s ease;
+}
+
+/* ── SUCCESS SCREEN ── */
+#success-screen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--cream);
+  z-index: 150;
+  overflow-y: auto;
+  padding: 48px 20px 40px;
+  flex-direction: column;
+  align-items: center;
+}
+
+#success-screen.active { display: flex; }
+#success-confetti { font-size: 60px; margin-bottom: 20px; }
+
+#success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--indigo-dark);
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+#success-time { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--blue); margin-bottom: 6px; }
+#success-best { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #888; margin-bottom: 36px; }
+
+.success-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 52px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+#retry-btn { background: var(--blue); color: #ffffff; }
+#next-btn  { background: var(--sage); color: #ffffff; }
+#home-btn  { background: transparent; border: 1.5px solid var(--amber); color: var(--amber); }
+
+#newsletter-cta {
+  margin-top: 16px;
+  background: #fff8e8;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(212,146,58,0.3);
+  width: 100%;
+  text-align: center;
+}
+
+#newsletter-cta-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+#newsletter-email {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--amber);
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+  outline: none;
+  background: #ffffff;
+  color: var(--indigo-dark);
+  box-sizing: border-box;
+}
+
+#newsletter-submit {
+  width: 100%;
+  background: var(--amber);
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+#newsletter-error {
+  display: none;
+  color: #e74c3c;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  margin-top: 6px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header id="header">
+  <a href="index.html" style="text-decoration:none;display:flex;align-items:center;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 56" width="160" height="44">
+  <ellipse cx="28" cy="28" rx="20" ry="19" fill="none" stroke="#f7f3ec" stroke-width="0.8" opacity="0.15"/>
+  <ellipse cx="28" cy="28" rx="14" ry="13" fill="none" stroke="#f7f3ec" stroke-width="1" opacity="0.3"/>
+  <ellipse cx="28" cy="28" rx="8" ry="7" fill="none" stroke="#f7f3ec" stroke-width="1.5" opacity="0.65"/>
+  <circle cx="28" cy="9" r="2.5" fill="#d4923a"/>
+  <circle cx="42" cy="18" r="1.8" fill="#d4923a" opacity="0.6"/>
+  <circle cx="41" cy="39" r="1.8" fill="#f7f3ec" opacity="0.3"/>
+  <circle cx="28" cy="47" r="2" fill="#d4923a" opacity="0.65"/>
+  <circle cx="15" cy="39" r="1.8" fill="#f7f3ec" opacity="0.3"/>
+  <circle cx="14" cy="18" r="1.8" fill="#d4923a" opacity="0.6"/>
+  <circle cx="28" cy="28" r="5" fill="#d4923a"/>
+  <circle cx="28" cy="28" r="2.5" fill="#2d3d4a"/>
+  <text x="48" y="25" font-family="Georgia, serif" font-size="16" font-weight="500" fill="#f7f3ec">nutri</text>
+  <text x="83" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="400" fill="#d4923a">lexic</text>
+  <text x="48" y="38" font-family="Arial, sans-serif" font-size="7" fill="#f7f3ec" opacity="0.4" letter-spacing="0.8">santé · mémoire · longévité</text>
+</svg>
+</a>
+  <button id="lang-toggle" onclick="toggleLang()" aria-label="Changer de langue">FR</button>
+</header>
+
+<!-- ── BACK BAR ── -->
+<div id="back-bar">
+  <button id="back-btn" onclick="window.location.href='index.html'">
+    ← <span data-fr="Accueil" data-en="Home">Accueil</span>
+  </button>
+</div>
+
+<!-- ── HERO ── -->
+<div id="hero-illustration">
+  <img src="images/home-page-paire-peau-calendula.jpg" alt="Paires Peau">
+</div>
+
+<!-- ── INTRO BLOCK ── -->
+<section id="intro-block">
+  <h1 data-fr="Paires Peau" data-en="Skin Pairs">Paires Peau</h1>
+  <p id="intro-desc"
+     data-fr="Rapprochez chaque actif de sa fonction sur la peau. Collagène, zinc, oméga-3... Saurez-vous les associer ?"
+     data-en="Match each active ingredient with its skin function. Collagen, zinc, omega-3... Can you pair them all?">
+    Rapprochez chaque actif de sa fonction sur la peau. Collagène, zinc, oméga-3... Saurez-vous les associer ?
+  </p>
+</section>
+
+<!-- ── LEVEL SELECTOR ── -->
+<section id="level-selector">
+  <div class="level-choice-card" onclick="startLevel(1)">
+    <div class="level-choice-emoji">🟢</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Découverte — 6 paires" data-en="Discovery — 6 pairs">Découverte — 6 paires</div>
+    </div>
+  </div>
+  <div class="level-choice-card" onclick="startLevel(2)">
+    <div class="level-choice-emoji">🟠</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Connaissance — 10 paires" data-en="Knowledge — 10 pairs">Connaissance — 10 paires</div>
+    </div>
+  </div>
+  <div class="level-choice-card" onclick="startLevel(3)">
+    <div class="level-choice-emoji">🔴</div>
+    <div class="level-choice-info">
+      <div class="level-choice-title" data-fr="Expert — 15 paires" data-en="Expert — 15 pairs">Expert — 15 paires</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer id="footer">
+  <p id="footer-text-top"
+     data-fr="Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram."
+     data-en="Content is regularly updated with new games and topics to explore. Sign up to stay informed and follow us on Instagram.">
+    Le contenu est renouvelé souvent avec de nouveaux jeux et des matières à étudier. Inscrivez-vous pour être tenus au courant et suivez-nous sur Instagram.
+  </p>
+  <a id="newsletter-btn" href="https://brainfest.brevo.com" target="_blank" rel="noopener"
+     data-fr="S'inscrire à la newsletter" data-en="Sign up for the newsletter">
+    S'inscrire à la newsletter
+  </a>
+  <p id="footer-text-bottom"
+     data-fr="Nutrilexic, la plateforme d'apprentissage en santé naturelle et micronutrition. Cultivez vos connaissances. Entraînez votre mémoire."
+     data-en="Nutrilexic, the natural health and micronutrition learning platform. Cultivate your knowledge. Train your memory.">
+    Nutrilexic, la plateforme d'apprentissage en santé naturelle et micronutrition. Cultivez vos connaissances. Entraînez votre mémoire.
+  </p>
+  <div id="footer-links">
+    <a href="https://www.instagram.com/catherine_piault/" target="_blank" rel="noopener">Instagram @catherine_piault</a>
+    <a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a>
+    <a href="conditions.html" data-fr="Conditions générales" data-en="Terms">Conditions générales</a>
+    <a href="lexique.html" data-fr="Lexique Santé" data-en="Health Glossary">Lexique Santé</a>
+  </div>
+  <p id="footer-copyright">© La Troisième Note / Nutrilexic</p>
+</footer>
+
+<!-- ── GAME SCREEN ── -->
+<div id="game-screen">
+  <div id="game-top-bar">
+    <button id="game-back-btn" onclick="backToSelector()">←</button>
+    <div id="game-level-name"></div>
+    <div id="game-score"></div>
+  </div>
+  <div id="grid-area">
+    <div id="card-grid"></div>
+  </div>
+</div>
+
+<!-- ── SUCCESS SCREEN ── -->
+<div id="success-screen">
+  <div id="success-confetti">🎉</div>
+  <div id="success-title"
+       data-fr="Bravo ! Vous connaissez vos actifs peau !"
+       data-en="Well done! You know your skin ingredients!">
+    Bravo ! Vous connaissez vos actifs peau !
+  </div>
+  <div id="success-time"></div>
+  <div id="success-best"></div>
+  <button class="success-btn" id="retry-btn" onclick="retryLevel()"
+          data-fr="Rejouer" data-en="Try again">Rejouer</button>
+  <button class="success-btn" id="next-btn" onclick="nextLevel()"
+          data-fr="Niveau suivant" data-en="Next level">Niveau suivant</button>
+  <button class="success-btn" id="home-btn" onclick="window.location.href='index.html'"
+          data-fr="Accueil" data-en="Home">Accueil</button>
+  <div id="newsletter-cta">
+    <p id="newsletter-cta-text"
+       data-fr="Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à Nutrilexic. Et revenez tester si vos scores s'améliorent 🧠"
+       data-en="Every month, discover the new games and chapters added to Nutrilexic. Come back and see if your scores improve 🧠">
+      Chaque mois, découvrez les nouveaux jeux et chapitres ajoutés à Nutrilexic. Et revenez tester si vos scores s'améliorent 🧠
+    </p>
+    <input type="email" id="newsletter-email" placeholder="Votre adresse email">
+    <button id="newsletter-submit" onclick="submitNewsletter()"
+            data-fr="Rester informé" data-en="Stay informed">Rester informé</button>
+    <p id="newsletter-error"
+       data-fr="Veuillez entrer votre adresse email." data-en="Please enter your email address.">
+      Veuillez entrer votre adresse email.
+    </p>
+  </div>
+</div>
+
+<script>
+// ── LANGUAGE ──────────────────────────────────────────────────────────────
+var currentLang = 'fr';
+
+function toggleLang() {
+  currentLang = currentLang === 'fr' ? 'en' : 'fr';
+  document.getElementById('lang-toggle').textContent = currentLang === 'fr' ? 'FR' : 'EN';
+  applyLang();
+  if (currentLevel > 0) {
+    updateGameLevelName();
+    updateScoreDisplay();
+  }
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-fr][data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + currentLang);
+    if (val === null) return;
+    el.innerHTML = val;
+  });
+  var emailInput = document.getElementById('newsletter-email');
+  if (emailInput) emailInput.placeholder = currentLang === 'fr' ? 'Votre adresse email' : 'Your email address';
+}
+
+function submitNewsletter() {
+  var emailInput = document.getElementById('newsletter-email');
+  var errorEl = document.getElementById('newsletter-error');
+  var email = emailInput.value.trim();
+  if (!email) { errorEl.style.display = 'block'; return; }
+  errorEl.style.display = 'none';
+  window.open('https://brainfest.brevo.com?EMAIL=' + encodeURIComponent(email), '_blank');
+}
+
+// ── DATA ──────────────────────────────────────────────────────────────────
+var ALL_PAIRS = [
+  {id:0,  img:'paire-peau-collagene.jpg',    nameFr:'Collagène',    nameEn:'Collagen',
+   fnFr:'Donne fermeté et élasticité à la peau', fnEn:'Gives skin firmness and elasticity'},
+  {id:1,  img:'paire-peau-vitamine-c.jpg',   nameFr:'Vitamine C',   nameEn:'Vitamin C',
+   fnFr:'Stimule la synthèse de collagène',       fnEn:'Stimulates collagen synthesis'},
+  {id:2,  img:'paire-peau-vitamine-d.jpg',   nameFr:'Vitamine D',   nameEn:'Vitamin D',
+   fnFr:'Régule l\'immunité cutanée',             fnEn:'Regulates skin immunity'},
+  {id:3,  img:'paire-peau-zinc.jpg',         nameFr:'Zinc',         nameEn:'Zinc',
+   fnFr:'Régule le sébum et combat l\'acné',      fnEn:'Regulates sebum and fights acne'},
+  {id:4,  img:'paire-peau-omega3.jpg',       nameFr:'Oméga-3',      nameEn:'Omega-3',
+   fnFr:'Réduit l\'inflammation cutanée',         fnEn:'Reduces skin inflammation'},
+  {id:5,  img:'paire-peau-magnesium.jpg',    nameFr:'Magnésium',    nameEn:'Magnesium',
+   fnFr:'Réduit le stress oxydatif cutané',       fnEn:'Reduces cutaneous oxidative stress'},
+  {id:6,  img:'paire-peau-retinol.jpg',      nameFr:'Rétinol',      nameEn:'Retinol',
+   fnFr:'Accélère le renouvellement cellulaire',  fnEn:'Accelerates cell renewal'},
+  {id:7,  img:'paire-peau-probiotiques.jpg', nameFr:'Probiotiques', nameEn:'Probiotics',
+   fnFr:'Rééquilibrent le microbiote cutané',     fnEn:'Rebalance the skin microbiome'},
+  {id:8,  img:'paire-peau-curcuma.jpg',      nameFr:'Curcuma',      nameEn:'Turmeric',
+   fnFr:'Puissant anti-inflammatoire cutané',     fnEn:'Powerful cutaneous anti-inflammatory'},
+  {id:9,  img:'paire-peau-calendula.jpg',    nameFr:'Calendula',    nameEn:'Calendula',
+   fnFr:'Cicatrise et apaise les peaux sensibles', fnEn:'Heals and soothes sensitive skin'},
+  {id:10, img:'paire-peau-aloe-vera.jpg',    nameFr:'Aloe Vera',    nameEn:'Aloe Vera',
+   fnFr:'Hydrate et apaise les peaux irritées',   fnEn:'Hydrates and soothes irritated skin'},
+  {id:11, img:'paire-peau-niacinamide.jpg',  nameFr:'Niacinamide',  nameEn:'Niacinamide',
+   fnFr:'Resserre les pores et unifie le teint',  fnEn:'Tightens pores and evens skin tone'},
+  {id:12, img:'paire-peau-silymarine.jpg',   nameFr:'Silymarine',   nameEn:'Silymarin',
+   fnFr:'Protège le foie pour une peau plus nette', fnEn:'Protects the liver for clearer skin'},
+  {id:13, img:'paire-peau-sulforaphane.jpg', nameFr:'Sulforaphane', nameEn:'Sulforaphane',
+   fnFr:'Active les défenses antioxydantes via Nrf2', fnEn:'Activates antioxidant defences via Nrf2'},
+  {id:14, img:'paire-peau-ceramides.jpg',    nameFr:'Céramides',    nameEn:'Ceramides',
+   fnFr:'Imperméabilisent la barrière cutanée',   fnEn:'Waterproof the skin barrier'}
+];
+
+var LEVEL_PAIR_IDS = {
+  1: [0, 1, 3, 4, 9, 10],
+  2: [0, 1, 3, 4, 9, 10, 5, 6, 7, 8],
+  3: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+};
+
+var LEVEL_NAMES = {
+  fr: ['', 'Découverte', 'Connaissance', 'Expert'],
+  en: ['', 'Discovery',  'Knowledge',   'Expert']
+};
+
+var LEVEL_COLS = { 1: 4, 2: 4, 3: 5 };
+
+// ── GAME STATE ─────────────────────────────────────────────────────────────
+var currentLevel = 0;
+var deck = [];
+var flippedCards = [];
+var matchedCount = 0;
+var totalPairs = 0;
+var locked = false;
+var timerStarted = false;
+var timerInterval = null;
+var elapsedSeconds = 0;
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function fontSizeA(name) {
+  var l = name.length;
+  if (l <= 5)  return '16px';
+  if (l <= 9)  return '14px';
+  if (l <= 14) return '13px';
+  return '12px';
+}
+
+function fontSizeB(fn) {
+  var l = fn.length;
+  if (l <= 22) return '15px';
+  if (l <= 36) return '13px';
+  if (l <= 50) return '12px';
+  return '12px';
+}
+
+var BACK_SVG = '<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">'
+  + '<circle cx="15" cy="15" r="12" stroke="#d4923a" stroke-width="1.5"/>'
+  + '<circle cx="15" cy="15" r="6" stroke="#d4923a" stroke-width="1.5"/>'
+  + '<circle cx="15" cy="15" r="2.5" fill="#d4923a"/>'
+  + '<line x1="15" y1="3" x2="15" y2="9" stroke="#d4923a" stroke-width="1.2"/>'
+  + '<line x1="15" y1="21" x2="15" y2="27" stroke="#d4923a" stroke-width="1.2"/>'
+  + '<line x1="3" y1="15" x2="9" y2="15" stroke="#d4923a" stroke-width="1.2"/>'
+  + '<line x1="21" y1="15" x2="27" y2="15" stroke="#d4923a" stroke-width="1.2"/>'
+  + '</svg>';
+
+// ── START LEVEL ────────────────────────────────────────────────────────────
+function startLevel(n) {
+  currentLevel = n;
+  matchedCount = 0;
+  locked = false;
+  flippedCards = [];
+  timerStarted = false;
+  elapsedSeconds = 0;
+  clearInterval(timerInterval);
+
+  var pairIds = LEVEL_PAIR_IDS[n];
+  totalPairs = pairIds.length;
+
+  // Build deck: 2 cards per pair (type A illustration + type B function)
+  var cards = [];
+  pairIds.forEach(function(pid) {
+    var p = ALL_PAIRS[pid];
+    cards.push({ pairId: pid, type: 'A', data: p });
+    cards.push({ pairId: pid, type: 'B', data: p });
+  });
+  deck = shuffle(cards);
+
+  var grid = document.getElementById('card-grid');
+  grid.className = 'grid-' + LEVEL_COLS[n];
+  grid.innerHTML = '';
+
+  deck.forEach(function(card, index) {
+    var wrapper = document.createElement('div');
+    wrapper.className = 'card-wrapper';
+    wrapper.dataset.index = index;
+
+    (function(i) {
+      wrapper.addEventListener('click', function() { onCardClick(i); });
+    })(index);
+
+    var inner = document.createElement('div');
+    inner.className = 'card-inner';
+    inner.id = 'ci-' + index;
+
+    // Back face
+    var backFace = document.createElement('div');
+    backFace.className = 'card-face card-face-back';
+    backFace.innerHTML = BACK_SVG;
+
+    // Front face
+    var frontFace = document.createElement('div');
+    frontFace.className = 'card-face card-face-front';
+
+    if (card.type === 'A') {
+      frontFace.classList.add('card-type-a');
+      var name = currentLang === 'fr' ? card.data.nameFr : card.data.nameEn;
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'card-img-wrap';
+      var img = document.createElement('img');
+      img.src = 'images/' + card.data.img;
+      img.alt = name;
+      img.loading = 'lazy';
+      imgWrap.appendChild(img);
+      var nameEl = document.createElement('div');
+      nameEl.className = 'card-name';
+      nameEl.style.fontSize = fontSizeA(name);
+      nameEl.textContent = name;
+      frontFace.appendChild(imgWrap);
+      frontFace.appendChild(nameEl);
+    } else {
+      frontFace.classList.add('card-type-b');
+      var fn = currentLang === 'fr' ? card.data.fnFr : card.data.fnEn;
+      var line = document.createElement('div');
+      line.className = 'card-line';
+      var fnEl = document.createElement('div');
+      fnEl.className = 'card-fn';
+      fnEl.style.fontSize = fontSizeB(fn);
+      fnEl.textContent = fn;
+      frontFace.appendChild(line);
+      frontFace.appendChild(fnEl);
+    }
+
+    inner.appendChild(backFace);
+    inner.appendChild(frontFace);
+    wrapper.appendChild(inner);
+    grid.appendChild(wrapper);
+  });
+
+  updateGameLevelName();
+  updateScoreDisplay();
+
+  document.getElementById('success-screen').classList.remove('active');
+  document.getElementById('game-screen').classList.add('active');
+  applyLang();
+  document.getElementById('game-screen').scrollTop = 0;
+}
+
+function updateGameLevelName() {
+  document.getElementById('game-level-name').textContent = LEVEL_NAMES[currentLang][currentLevel];
+}
+
+function updateScoreDisplay() {
+  var el = document.getElementById('game-score');
+  if (currentLang === 'fr') {
+    el.innerHTML = matchedCount + ' paires<br>trouvées';
+  } else {
+    el.innerHTML = matchedCount + ' pairs<br>found';
+  }
+}
+
+function backToSelector() {
+  clearInterval(timerInterval);
+  document.getElementById('game-screen').classList.remove('active');
+  currentLevel = 0;
+}
+
+// ── CARD CLICK ─────────────────────────────────────────────────────────────
+function onCardClick(index) {
+  if (locked) return;
+
+  var inner = document.getElementById('ci-' + index);
+  if (!inner) return;
+  if (inner.classList.contains('flipped') || inner.classList.contains('matched')) return;
+
+  // Start timer on first tap
+  if (!timerStarted) {
+    timerStarted = true;
+    timerInterval = setInterval(function() { elapsedSeconds++; }, 1000);
+  }
+
+  // Flip this card
+  inner.classList.add('flipped');
+  flippedCards.push({ index: index, card: deck[index], inner: inner, wrapper: inner.parentElement });
+
+  if (flippedCards.length < 2) return;
+
+  // Two cards face-up: check after animation settles
+  locked = true;
+  var c1 = flippedCards[0];
+  var c2 = flippedCards[1];
+  flippedCards = [];
+
+  setTimeout(function() {
+    if (c1.card.pairId === c2.card.pairId && c1.card.type !== c2.card.type) {
+      // ✓ Match
+      c1.inner.classList.add('matched');
+      c2.inner.classList.add('matched');
+      c1.wrapper.classList.add('correct-pulse');
+      c2.wrapper.classList.add('correct-pulse');
+      setTimeout(function() {
+        c1.wrapper.classList.remove('correct-pulse');
+        c2.wrapper.classList.remove('correct-pulse');
+      }, 700);
+      matchedCount++;
+      updateScoreDisplay();
+      locked = false;
+      if (matchedCount === totalPairs) {
+        setTimeout(showSuccess, 600);
+      }
+    } else {
+      // ✗ No match — shake then flip back
+      c1.wrapper.classList.add('shake');
+      c2.wrapper.classList.add('shake');
+      setTimeout(function() {
+        c1.inner.classList.remove('flipped');
+        c2.inner.classList.remove('flipped');
+        c1.wrapper.classList.remove('shake');
+        c2.wrapper.classList.remove('shake');
+        locked = false;
+      }, 700);
+    }
+  }, 500);
+}
+
+// ── SUCCESS ────────────────────────────────────────────────────────────────
+function showSuccess() {
+  clearInterval(timerInterval);
+
+  var key = 'bf_paires_best_' + currentLevel;
+  var stored = localStorage.getItem(key);
+  var best = stored ? parseInt(stored) : null;
+  if (!best || elapsedSeconds < best) {
+    localStorage.setItem(key, elapsedSeconds);
+    best = elapsedSeconds;
+  }
+
+  var timeLabel = currentLang === 'fr' ? 'Temps : ' : 'Time: ';
+  var bestLabel = currentLang === 'fr' ? 'Meilleur temps : ' : 'Best time: ';
+
+  document.getElementById('success-time').textContent = timeLabel + elapsedSeconds + 's';
+  document.getElementById('success-best').textContent = bestLabel + best + 's';
+  document.getElementById('next-btn').style.display = currentLevel < 3 ? 'block' : 'none';
+
+  document.getElementById('game-screen').classList.remove('active');
+  document.getElementById('success-screen').classList.add('active');
+  applyLang();
+}
+
+function retryLevel() {
+  document.getElementById('success-screen').classList.remove('active');
+  startLevel(currentLevel);
+}
+
+function nextLevel() {
+  if (currentLevel < 3) {
+    document.getElementById('success-screen').classList.remove('active');
+    startLevel(currentLevel + 1);
+  }
+}
+</script>
+</body>
+</html>
